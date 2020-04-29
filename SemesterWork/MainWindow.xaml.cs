@@ -8,6 +8,7 @@
         public MainWindow()
         {
             InitializeComponent();
+            var a = "var";
         }
     }
 }
