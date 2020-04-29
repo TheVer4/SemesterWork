@@ -1,4 +1,6 @@
-﻿namespace SemesterWork
+﻿using System;
+
+namespace SemesterWork
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -9,6 +11,7 @@
         {
             InitializeComponent();
             var a = "var";
+            int b = Int32.MaxValue;
         }
     }
 }
