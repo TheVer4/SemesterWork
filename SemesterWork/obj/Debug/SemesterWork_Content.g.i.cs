@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("databases/warehouse.mdf")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("databases/warehouse_log.ldf")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/cross.png")]
 
 

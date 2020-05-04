@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -127,20 +128,13 @@ namespace SemesterWork
             numberField.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(10, GridUnitType.Star)});
             numberField.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(5, GridUnitType.Star)});
             TextBox number = new TextBox() {FontSize = 48};
-            Image crossImage = new Image();
-            BitmapImage crossBitmap = new BitmapImage();
-            crossBitmap.BeginInit();
-            crossBitmap.UriSource = new Uri(@"..\..\Images\cross.png", UriKind.Relative);
-            crossBitmap.EndInit();
-            crossImage.Stretch = Stretch.Fill;
-            crossImage.Source = crossBitmap;
+            Image crossImage = new Image() {Width = 50, Height = 50, Source = getBitmapSource(@"images/cross.png") };
             Button clear = new Button() { Content = crossImage};
             numberField.Children.Add(number);
             numberField.Children.Add(clear);
             Grid.SetColumn(clear, 1);
             Grid.SetColumn(numberField, 1);
             invoiceControls.Children.Add(numberField);
-
             DataGrid positions = new DataGrid()
             {
                 FontSize = 20, AutoGenerateColumns = false,
@@ -161,6 +155,13 @@ namespace SemesterWork
             Grid.Children.Clear();
             Grid.ColumnDefinitions.Clear();
             Grid.RowDefinitions.Clear();
+        }
+
+        private BitmapSource getBitmapSource(string path)
+        {
+            Stream imageStreamSource = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            return decoder.Frames[0];
         }
     }
 }

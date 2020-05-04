@@ -13,7 +13,7 @@ namespace SemesterWork
             var res = DBController.Execute("SELECT * FROM WareHouse");
             InitializeComponent();
             printInvoice = new PrintInvoice();     
-            LoginActivity();
+            FastInvoiceActivity();
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
