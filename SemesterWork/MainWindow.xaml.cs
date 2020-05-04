@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 
 namespace SemesterWork
 {
@@ -12,6 +10,7 @@ namespace SemesterWork
         PrintInvoice printInvoice;
         public MainWindow()
         {
+            var res = DBController.Execute("SELECT * FROM WareHouse");
             InitializeComponent();
             printInvoice = new PrintInvoice();     
             LoginActivity();
