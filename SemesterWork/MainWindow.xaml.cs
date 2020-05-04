@@ -13,8 +13,7 @@ namespace SemesterWork
         public MainWindow()
         {
             InitializeComponent();
-            printInvoice = new PrintInvoice();
-            
+            printInvoice = new PrintInvoice();           
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
