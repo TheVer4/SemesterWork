@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace SemesterWork
@@ -120,16 +122,34 @@ namespace SemesterWork
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
-            TextBox number = new TextBox() { FontSize = 48 };
-            invoiceControls.Children.Add(number);
-            Grid.SetColumn(number, 1);
-            DataGrid positions = new DataGrid() { FontSize = 20, AutoGenerateColumns=false, 
+            
+            Grid numberField = new Grid();
+            numberField.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(10, GridUnitType.Star)});
+            numberField.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(5, GridUnitType.Star)});
+            TextBox number = new TextBox() {FontSize = 48};
+            Image crossImage = new Image();
+            BitmapImage crossBitmap = new BitmapImage();
+            crossBitmap.BeginInit();
+            crossBitmap.UriSource = new Uri(@"..\..\Images\cross.png", UriKind.Relative);
+            crossBitmap.EndInit();
+            crossImage.Stretch = Stretch.Fill;
+            crossImage.Source = crossBitmap;
+            Button clear = new Button() { Content = crossImage};
+            numberField.Children.Add(number);
+            numberField.Children.Add(clear);
+            Grid.SetColumn(clear, 1);
+            Grid.SetColumn(numberField, 1);
+            invoiceControls.Children.Add(numberField);
+
+            DataGrid positions = new DataGrid()
+            {
+                FontSize = 20, AutoGenerateColumns = false,
                 Columns =
                 {
-                    new DataGridTextColumn() {Header = "Позиция", Binding = new Binding("Name"), MinWidth = 500}, 
-                    new DataGridTextColumn() {Header = "Цена", Binding = new Binding("Price")}, 
-                    new DataGridTextColumn() {Header = "Кол-во", Binding = new Binding("Amount")}, 
-                    new DataGridTextColumn() {Header = "Стоимость",  Binding = new Binding("FullPrice")}
+                    new DataGridTextColumn() { Header = "Позиция", Binding = new Binding("Name"), MinWidth = 500 },
+                    new DataGridTextColumn() { Header = "Цена", Binding = new Binding("Price") },
+                    new DataGridTextColumn() { Header = "Кол-во", Binding = new Binding("Amount") },
+                    new DataGridTextColumn() { Header = "Стоимость", Binding = new Binding("FullPrice") }
                 }
             };
             invoiceControls.Children.Add(positions);

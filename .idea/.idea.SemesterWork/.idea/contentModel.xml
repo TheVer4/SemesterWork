@@ -12,22 +12,16 @@
         <e p="App.xaml.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="CheckLine.cs" t="Include" />
-        <e p="DataBases" t="Include">
-          <e p="WareHouse.mdf" t="Include" />
-          <e p="WareHouse_log.ldf" t="Include" />
-          <e p="WareHouseDataSet.Designer.cs" t="Include" />
-          <e p="WareHouseDataSet.xsc" t="Include" />
-          <e p="WareHouseDataSet.xsd" t="Include" />
-          <e p="WareHouseDataSet.xss" t="Include" />
-        </e>
+        <e p="DataBases" t="Include" />
+        <e p="DBController.cs" t="Include" />
         <e p="Encoder866.cs" t="Include" />
+        <e p="Images" t="Include" />
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="App.g.cs" t="Include" />
             <e p="MainWindow.g.cs" t="Include" />
-            <e p="SemesterWork_Content.g.cs" t="Include" />
           </e>
         </e>
         <e p="packages.config" t="Include" />
