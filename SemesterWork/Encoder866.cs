@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SemesterWork
 {
-    public static class Encoder
+    public static class Encoder866
     {
         public static Encoding Encoding = Encoding.GetEncoding(866);
 

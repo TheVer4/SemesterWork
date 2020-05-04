@@ -3,3 +3,13 @@ C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\MainWi
 C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\App.g.cs
 C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.cache
 C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.lref
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.exe.config
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.exe
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.pdb
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\MainWindow.baml
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.g.resources
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.Properties.Resources.resources
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csproj.GenerateResource.cache
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csproj.CoreCompileInputs.cache
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.exe
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.pdb
