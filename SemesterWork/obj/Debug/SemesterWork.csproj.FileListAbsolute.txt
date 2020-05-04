@@ -1,0 +1,5 @@
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csprojAssemblyReference.cache
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\MainWindow.g.cs
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\App.g.cs
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.cache
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.lref
