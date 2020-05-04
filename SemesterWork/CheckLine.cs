@@ -4,9 +4,10 @@
     {
         private readonly int _EAN13;
 
-        public readonly string Name;
-        public readonly double Price;
-        public readonly string Units;
+        public string Name { get; private set; }
+        public double Price { get; private set; }
+        public string Units { get; private set; }
+        public string EAN13 { get; }
         public double FullPrice 
         { 
             get => Price * Amount;

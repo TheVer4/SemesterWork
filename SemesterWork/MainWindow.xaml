@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SemesterWork"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button Click="ButtonBase_OnClick" Content="Try"></Button>
+        Title="MainWindow"
+        WindowState="Maximized" WindowStyle="None">
+    <Grid Name="Grid" ShowGridLines="False">
+        
     </Grid>
 </Window>

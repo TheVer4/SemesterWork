@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 
 namespace SemesterWork
 {
@@ -14,13 +12,11 @@ namespace SemesterWork
         {
             InitializeComponent();
             printInvoice = new PrintInvoice();
-            
+            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'";
+            LoginActivity();
         }
-
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'";
-
             printInvoice.Print();
         }
     }

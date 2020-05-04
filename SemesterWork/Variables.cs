@@ -4,6 +4,7 @@ namespace SemesterWork
 {
     public static class Variables
     {
+        public static string ProgramName { get => "SemesterWork"; }
         private static string machineName = Environment.MachineName;
         private static string printerName;
         private static string printerPath = "\\\\Windows\\POS";
