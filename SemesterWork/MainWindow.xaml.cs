@@ -11,8 +11,6 @@ namespace SemesterWork
         public MainWindow()
         {
             InitializeComponent();
-            var a = "var";
-            int b = Int32.MaxValue;
         }
     }
 }
