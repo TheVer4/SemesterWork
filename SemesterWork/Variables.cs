@@ -20,6 +20,7 @@ namespace SemesterWork
 
         public static string PrinterPath { get => printerPath; }
 
+        public static string BarcodeScannerPort { get; set; }
         public static string InstitutionName { get; set; }
         public static string InstitutionAddress { get; set; }
         public static string WelcomeMotd { get => welcomeMotd; set => welcomeMotd = value; }

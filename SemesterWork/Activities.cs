@@ -12,6 +12,7 @@ namespace SemesterWork
 {
     public partial class MainWindow
     {
+        private List<CheckLine> invoicePositions = new List<CheckLine>();
         public void LoginActivity()
         {
             ClearScreen();
@@ -138,6 +139,7 @@ namespace SemesterWork
             invoiceControls.Children.Add(numberField);
             DataGrid positions = new DataGrid()
             {
+                ItemsSource = invoicePositions,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
