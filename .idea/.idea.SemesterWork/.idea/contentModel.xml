@@ -17,6 +17,7 @@
         <e p="DataBases" t="Include" />
         <e p="DBController.cs" t="Include" />
         <e p="Encoder866.cs" t="Include" />
+        <e p="EventHandler.cs" t="Include" />
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">

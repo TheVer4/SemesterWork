@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -91,7 +92,7 @@ namespace SemesterWork
             Grid topBar = new Grid();
             Grid.Children.Add(topBar);
             Grid.SetRow(topBar, 0);
-            Grid invoiceControls = new Grid() { ShowGridLines = true };
+            Grid invoiceControls = new Grid();
             Grid.Children.Add(invoiceControls);
             Grid.SetRow(invoiceControls, 1);
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
@@ -137,7 +138,7 @@ namespace SemesterWork
             invoiceControls.Children.Add(numberField);
             DataGrid positions = new DataGrid()
             {
-                FontSize = 20, AutoGenerateColumns = false,
+                FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
                     new DataGridTextColumn() { Header = "Позиция", Binding = new Binding("Name"), MinWidth = 500 },
@@ -147,7 +148,36 @@ namespace SemesterWork
                 }
             };
             invoiceControls.Children.Add(positions);
-            Grid.SetRow(positions, 1);         
+            Grid.SetRow(positions, 1);
+            
+            StackPanel controls = new StackPanel();
+            Grid keyboard = new Grid() {ShowGridLines = false};
+            keyboard.ColumnDefinitions.Add(new ColumnDefinition());
+            keyboard.ColumnDefinitions.Add(new ColumnDefinition());
+            keyboard.ColumnDefinitions.Add(new ColumnDefinition());
+            keyboard.RowDefinitions.Add(new RowDefinition());
+            keyboard.RowDefinitions.Add(new RowDefinition());
+            keyboard.RowDefinitions.Add(new RowDefinition());
+            keyboard.RowDefinitions.Add(new RowDefinition());
+            for (int i = 9; i >= 0; i--)
+            {
+                Button key = new Button() {Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
+                keyboard.Children.Add(key);
+                Grid.SetColumn(key, 2 - i % 3 );
+                Grid.SetRow(key, i / 3);
+            }
+            controls.Children.Add(keyboard);
+            Button payment = new Button() { Content = "Оплата", FontSize = 40,  Height = 100};
+            Button amount = new Button() { Content = "Кол", FontSize = 40, Height = 100};
+            Button storn = new Button() { Content = "Сторно", FontSize = 40,  Height = 100};
+            TextBlock total = new TextBlock() { Text = "ИТОГО: 0", FontSize = 40, Margin = new Thickness(15, 20, 0, 0)};
+            controls.Children.Add(payment);
+            controls.Children.Add(amount);
+            controls.Children.Add(storn);
+            controls.Children.Add(total);
+            invoiceControls.Children.Add(controls);
+            Grid.SetColumn(controls, 1);
+            Grid.SetRow(controls, 1);
         }
         
         public void ClearScreen()

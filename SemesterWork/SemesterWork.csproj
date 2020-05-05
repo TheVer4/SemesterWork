@@ -91,6 +91,7 @@
     </ApplicationDefinition>
     <Compile Include="Activities.cs" />
     <Compile Include="DBController.cs" />
+    <Compile Include="EventHandler.cs" />
     <Compile Include="PrintInvoice.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
