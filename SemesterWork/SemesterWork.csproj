@@ -90,8 +90,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Activities.cs" />
+    <Compile Include="BarcodeReader.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="EventHandler.cs" />
+    <Compile Include="Initialize.cs" />
     <Compile Include="PrintInvoice.cs" />
     <Compile Include="ProductData.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
