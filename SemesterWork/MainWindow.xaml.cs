@@ -10,7 +10,7 @@ namespace SemesterWork
         PrintInvoice printInvoice;
         public MainWindow()
         {
-            var res = DBController.Execute("SELECT Name FROM WareHouse WHERE EAN13=4660003400250");
+            var a = new CheckLine("1231231231231", 2);
             InitializeComponent();
             printInvoice = new PrintInvoice();
             //FastInvoiceActivity();

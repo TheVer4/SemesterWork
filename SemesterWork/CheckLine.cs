@@ -1,18 +1,15 @@
-﻿namespace SemesterWork
+﻿using System.Linq;
+
+namespace SemesterWork
 {
     public class CheckLine
     {
-        private readonly int _EAN13;
-
-        public string Name { get; private set; }
+        public string EAN13 { get; private set; }
         public double Price { get; private set; }
+        public double FullAmount { get; private set; }
         public string Units { get; private set; }
-        public string EAN13 { get; }
-        public double FullPrice 
-        { 
-            get => Price * Amount;
-            private set { }
-        }
+        public string ShortName { get; private set; }
+
         private double _amount;
         public double Amount
         {
@@ -24,25 +21,28 @@
             }
         }
 
-        public CheckLine(int code, double amount)
-        {
-            // Здесь должен быть запрос в базу данных по EAN13
-            //
-            // var info = ...(code);
-            //
-            // _EAN13 = info.Code;
-            // Name = info.ShortName;
-            // Price = info.Price;
-            // FullPrice = Price * amount;
-            // Units = info.Units;
+        public double FullPrice 
+        { 
+            get => Price * Amount;
+            private set { }
+        }
 
+        public CheckLine(string code, double amount)
+        {
+            var info = DBController.Find(code); ;
+            
+            EAN13 = info[0].ToString();
+            Price = (double)info[2];
+            FullAmount = (double)info[3];
+            Units = info[4].ToString();
+            ShortName = info[5].ToString();
             Amount = amount;
         }
 
         public override string ToString()
         {
-            var firstLine = Name + ' ' + Price + " руб.";
-            var secondLine = 'x' + Amount + ' ' + Units + " = " + FullPrice + " руб.";
+            var firstLine = ShortName + " " + Price + " руб.";
+            var secondLine = "x" + Amount + ' ' + Units + " = " + FullPrice + " руб.";
             return firstLine + new string(' ', 32 - firstLine.Length)
                 + new string(' ', secondLine.Length) + secondLine;
         }
