@@ -1,4 +1,7 @@
-﻿namespace SemesterWork
+﻿using System.Linq;
+using System.Windows;
+
+namespace SemesterWork
 {
     public class CheckLine
     {
@@ -22,8 +25,11 @@
         }
 
         public CheckLine(string code, double amount)
-        {
-            var info = DBController.Find(code); ;
+        {        
+            var info = DBController.Find(code);
+            if (!info.Any())
+                MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
+                    "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             Data = new ProductData(info);
             Amount = amount;
         }
