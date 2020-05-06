@@ -8,18 +8,18 @@ namespace SemesterWork
         
         public BarcodeReader(string comPort, int baudRate)
         {
-            this._port = new SerialPort(comPort, baudRate);
+            _port = new SerialPort(comPort, baudRate);
             _port.Open();
         }
 
         public void AddReader(SerialDataReceivedEventHandler deleg)
         {
-            this._port.DataReceived += deleg;
+            _port.DataReceived += deleg;
         }
 
         ~BarcodeReader()
         {
-            this._port.Close();
+            _port.Close();
         }
     }
 }

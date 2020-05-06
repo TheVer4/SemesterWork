@@ -4,27 +4,26 @@ namespace SemesterWork
 {
     public static class Variables
     {
-        public static string ProgramName { get => "SemesterWork"; }
-        private static string machineName = Environment.MachineName;
-        private static string printerName;
-        private static string printerPath = "\\\\Windows\\POS";
-        private static string welcomeMotd = "!НЕ ЯВЛЯЕТСЯ ДОКУМЕНТОМ!";
+        private static string _machineName = Environment.MachineName;
+        public static string MachineName { get => _machineName; }
 
-        public static string MachineName { get => machineName; }
-
+        private static string _printerName;
         public static string PrinterName
         {
-            get => printerName;
-            set { printerName = value; }
+            get => _printerName;
+            set { _printerName = value; }
         }
 
-        public static string PrinterPath { get => printerPath; }
+        private static string _printerPath = "\\\\Windows\\POS";
+        public static string PrinterPath { get => _printerPath; }
 
+        private static string _welcomeMotd = "!НЕ ЯВЛЯЕТСЯ ДОКУМЕНТОМ!";
+        public static string WelcomeMotd { get => _welcomeMotd; set => _welcomeMotd = value; }
+
+        public static string ProgramName { get => "SemesterWork"; }
         public static string BarcodeScannerPort { get; set; }
         public static string InstitutionName { get; set; }
         public static string InstitutionAddress { get; set; }
-        public static string WelcomeMotd { get => welcomeMotd; set => welcomeMotd = value; }
         public static string DBConnectionString { get => @"Data Source = ..\..\DataBases\DataBase.db; Version=3"; private set { } }
-
     }
 }

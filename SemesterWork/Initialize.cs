@@ -5,7 +5,6 @@
         PrintInvoice printInvoice;
         private void InitializeEnvironment()
         {
-            var res = DBController.Execute("SELECT Name FROM WareHouse WHERE EAN13=4660003400250");
             printInvoice = new PrintInvoice();
             //FastInvoiceActivity();
             LoginActivity();

@@ -43,10 +43,6 @@ namespace SemesterWork
         public static void DecreaseAmountBy(string code, double amount)
         {
             var data = new ProductData(Find(code));
-            if (data.Amount < amount)
-            { 
-                return;  //отображение ошибки
-            }
             Update(code, "Amount", data.Amount - amount);
         }
 
@@ -80,7 +76,8 @@ namespace SemesterWork
             {
                 connection.Open();
                 var command = new SQLiteCommand(
-                    $"SELECT * FROM {table} WHERE {column}='{value}'",
+                    $"SELECT * FROM {table}" +
+                    $"WHERE {column}='{value}'",
                     connection);
                 var reader = command.ExecuteReader();
                 while (reader.Read())
@@ -115,7 +112,8 @@ namespace SemesterWork
             {
                 connection.Open();
                 var command = new SQLiteCommand(
-                    $"UPDATE {table} SET {udatableColumn}='{newValue}' WHERE {mainColumn}='{mainValue}'",
+                    $"UPDATE {table} SET {udatableColumn}='{newValue}'" +
+                    $"WHERE {mainColumn}='{mainValue}'",
                     connection);
                 var number = command.ExecuteNonQuery();
             }
@@ -127,7 +125,8 @@ namespace SemesterWork
             {
                 connection.Open();
                 var command = new SQLiteCommand(
-                    $"DELETE FROM {table} WHERE {column}='{value}'",
+                    $"DELETE FROM {table}" +
+                    $"WHERE {column}='{value}'",
                     connection);
                 var number = command.ExecuteNonQuery();
             }

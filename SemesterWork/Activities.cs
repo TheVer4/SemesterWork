@@ -127,11 +127,11 @@ namespace SemesterWork
             invoiceControls.Children.Add(barcodeInput);
             
             Grid numberField = new Grid();
-            numberField.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(10, GridUnitType.Star)});
-            numberField.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(5, GridUnitType.Star)});
-            TextBox number = new TextBox() {FontSize = 48};
-            Image crossImage = new Image() {Width = 50, Height = 50, Source = getBitmapSource(@"images/cross.png") };
-            Button clear = new Button() { Content = crossImage};
+            numberField.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
+            numberField.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
+            TextBox number = new TextBox() { FontSize = 48 };
+            Image crossImage = new Image() { Width = 50, Height = 50, Source = getBitmapSource(@"images/cross.png") };
+            Button clear = new Button() { Content = crossImage };
             numberField.Children.Add(number);
             numberField.Children.Add(clear);
             Grid.SetColumn(clear, 1);
@@ -153,7 +153,7 @@ namespace SemesterWork
             Grid.SetRow(positions, 1);
             
             StackPanel controls = new StackPanel();
-            Grid keyboard = new Grid() {ShowGridLines = false};
+            Grid keyboard = new Grid() { ShowGridLines = false };
             keyboard.ColumnDefinitions.Add(new ColumnDefinition());
             keyboard.ColumnDefinitions.Add(new ColumnDefinition());
             keyboard.ColumnDefinitions.Add(new ColumnDefinition());
@@ -163,16 +163,16 @@ namespace SemesterWork
             keyboard.RowDefinitions.Add(new RowDefinition());
             for (int i = 9; i >= 0; i--)
             {
-                Button key = new Button() {Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
+                Button key = new Button() { Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
                 keyboard.Children.Add(key);
                 Grid.SetColumn(key, 2 - i % 3 );
                 Grid.SetRow(key, i / 3);
             }
             controls.Children.Add(keyboard);
-            Button payment = new Button() { Content = "Оплата", FontSize = 40,  Height = 100};
-            Button amount = new Button() { Content = "Кол", FontSize = 40, Height = 100};
-            Button storn = new Button() { Content = "Сторно", FontSize = 40,  Height = 100};
-            TextBlock total = new TextBlock() { Text = "ИТОГО: 0", FontSize = 40, Margin = new Thickness(15, 20, 0, 0)};
+            Button payment = new Button() { Content = "Оплата", FontSize = 40,  Height = 100 };
+            Button amount = new Button() { Content = "Кол", FontSize = 40, Height = 100 };
+            Button storn = new Button() { Content = "Сторно", FontSize = 40,  Height = 100 };
+            TextBlock total = new TextBlock() { Text = "ИТОГО: 0", FontSize = 40, Margin = new Thickness(15, 20, 0, 0) };
             controls.Children.Add(payment);
             controls.Children.Add(amount);
             controls.Children.Add(storn);
