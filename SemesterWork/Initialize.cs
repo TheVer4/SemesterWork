@@ -6,11 +6,9 @@
         private void InitializeEnvironment()
         {
             printInvoice = new PrintInvoice();
+            Variables.BarcodeScannerPort = "COM4";
             //FastInvoiceActivity();
             LoginActivity();
-            Variables.BarcodeScannerPort = "COM4";
-            BarcodeReader barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
-            barcodeReader.AddReader(BarcodeReaded);
         }
     }
 }

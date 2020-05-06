@@ -1,4 +1,4 @@
-﻿using System.IO.Ports;
+﻿﻿using System.IO.Ports;
 
 namespace SemesterWork
 {
@@ -17,9 +17,9 @@ namespace SemesterWork
             _port.DataReceived += deleg;
         }
 
-        ~BarcodeReader()
+        /*~BarcodeReader()
         {
             _port.Close();
-        }
+        }*/
     }
 }

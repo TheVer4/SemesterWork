@@ -31,6 +31,7 @@
         <e p="packages.config" t="Include" />
         <e p="Printer.cs" t="Include" />
         <e p="PrintInvoice.cs" t="Include" />
+        <e p="ProductData.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
           <e p="Resources.Designer.cs" t="Include" />

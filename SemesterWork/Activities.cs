@@ -12,7 +12,9 @@ namespace SemesterWork
 {
     public partial class MainWindow
     {
+        private DataGrid positions;
         private List<CheckLine> invoicePositions = new List<CheckLine>();
+        private BarcodeReader barcodeReader;
         public void LoginActivity()
         {
             ClearScreen();
@@ -58,6 +60,7 @@ namespace SemesterWork
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 2);
             Grid.SetRow(panel, 1);
+            
         }
 
         public void MainMenuActivity()
@@ -132,19 +135,20 @@ namespace SemesterWork
             TextBox number = new TextBox() { FontSize = 48 };
             Image crossImage = new Image() { Width = 50, Height = 50, Source = getBitmapSource(@"images/cross.png") };
             Button clear = new Button() { Content = crossImage };
+            clear.Click += ClearOnClick;
             numberField.Children.Add(number);
             numberField.Children.Add(clear);
             Grid.SetColumn(clear, 1);
             Grid.SetColumn(numberField, 1);
             invoiceControls.Children.Add(numberField);
-            DataGrid positions = new DataGrid()
+            positions = new DataGrid()
             {
                 ItemsSource = invoicePositions,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = "Позиция", Binding = new Binding("Name"), MinWidth = 500 },
-                    new DataGridTextColumn() { Header = "Цена", Binding = new Binding("Price") },
+                    new DataGridTextColumn() { Header = "Позиция", Binding = new Binding("Data.Name"), MinWidth = 500 },
+                    new DataGridTextColumn() { Header = "Цена", Binding = new Binding("Data.Price") },
                     new DataGridTextColumn() { Header = "Кол-во", Binding = new Binding("Amount") },
                     new DataGridTextColumn() { Header = "Стоимость", Binding = new Binding("FullPrice") }
                 }
@@ -180,6 +184,22 @@ namespace SemesterWork
             invoiceControls.Children.Add(controls);
             Grid.SetColumn(controls, 1);
             Grid.SetRow(controls, 1);
+            
+            
+            barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
+            barcodeReader.AddReader(BarcodeReaded);
+            DispatcherTimer updateSmth = new DispatcherTimer();
+            updateSmth.Interval = TimeSpan.FromMilliseconds(500);
+            updateSmth.Tick += (sender, args) =>
+            {
+                if (updatedSomeValue)
+                {
+                    updatedSomeValue = false;
+                    positions.Items.Refresh();
+                }
+            };
+            updateSmth.Start();
+            
         }
         
         public void ClearScreen()
