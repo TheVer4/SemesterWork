@@ -76,7 +76,7 @@ namespace SemesterWork
             {
                 connection.Open();
                 var command = new SQLiteCommand(
-                    $"SELECT * FROM {table}" +
+                    $"SELECT * FROM {table} " +
                     $"WHERE {column}='{value}'",
                     connection);
                 var reader = command.ExecuteReader();
@@ -94,7 +94,7 @@ namespace SemesterWork
             {
                 connection.Open();
                 var command = new SQLiteCommand(
-                    $"INSERT INTO {table} ({columns})" +
+                    $"INSERT INTO {table} ({columns}) " +
                     $"VALUES ({values})",
                     connection);
                 var number = command.ExecuteNonQuery();
@@ -112,7 +112,7 @@ namespace SemesterWork
             {
                 connection.Open();
                 var command = new SQLiteCommand(
-                    $"UPDATE {table} SET {udatableColumn}='{newValue}'" +
+                    $"UPDATE {table} SET {udatableColumn}='{newValue}' " +
                     $"WHERE {mainColumn}='{mainValue}'",
                     connection);
                 var number = command.ExecuteNonQuery();
@@ -125,7 +125,7 @@ namespace SemesterWork
             {
                 connection.Open();
                 var command = new SQLiteCommand(
-                    $"DELETE FROM {table}" +
+                    $"DELETE FROM {table} " +
                     $"WHERE {column}='{value}'",
                     connection);
                 var number = command.ExecuteNonQuery();
