@@ -1,15 +1,19 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace SemesterWork
 {
     public partial class MainWindow
     {
 
-        private bool updatedSomeValue;
+        private bool _updatedSomeValue;
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
@@ -26,16 +30,29 @@ namespace SemesterWork
         {
             SerialPort e = (SerialPort) sender;
             var scanned = e.ReadTo("\r");
+           AddPosition(scanned);
+        }
+
+        private void AddPosition(string code)
+        {
+            int amount = 1;
+            //if (_number.Text.Length != 0) amount = int.Parse(_number.Text);
             try 
             { 
-                invoicePositions.Add(new CheckLine(scanned, 1)); 
+                _invoicePositions.Add(new CheckLine(code, amount)); 
             }
             catch
             {
-                MessageBox.Show($"Позиция с кодом {scanned} не найдена, попробуте повторить операцию",
+                MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
                 "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            updatedSomeValue = true;
+            _updatedSomeValue = true;
+        }
+        
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
 
         private void Authorize(string login, string password)

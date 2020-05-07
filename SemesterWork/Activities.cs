@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -11,9 +13,10 @@ namespace SemesterWork
 {
     public partial class MainWindow
     {
-        private DataGrid positions;
-        private List<CheckLine> invoicePositions = new List<CheckLine>();
-        private BarcodeReader barcodeReader;
+        private DataGrid _positions;
+        private List<CheckLine> _invoicePositions = new List<CheckLine>();
+        private BarcodeReader _barcodeReader;
+        private TextBox _number;
         private User currentUser;
         public void LoginActivity()
         {
@@ -133,21 +136,12 @@ namespace SemesterWork
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
             
-            Grid numberField = new Grid();
-            numberField.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
-            numberField.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             TextBox number = new TextBox() { FontSize = 48 };
-            Image crossImage = new Image() { Width = 50, Height = 50, Source = getBitmapSource(@"images/cross.png") };
-            Button clear = new Button() { Content = crossImage };
-            clear.Click += ClearOnClick;
-            numberField.Children.Add(number);
-            numberField.Children.Add(clear);
-            Grid.SetColumn(clear, 1);
-            Grid.SetColumn(numberField, 1);
-            invoiceControls.Children.Add(numberField);
-            positions = new DataGrid()
+            Grid.SetColumn(number, 1);
+            invoiceControls.Children.Add(number);
+            _positions = new DataGrid()
             {
-                ItemsSource = invoicePositions,
+                ItemsSource = _invoicePositions,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
@@ -157,8 +151,8 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = "Стоимость", Binding = new Binding("FullPrice") }
                 }
             };
-            invoiceControls.Children.Add(positions);
-            Grid.SetRow(positions, 1);
+            invoiceControls.Children.Add(_positions);
+            Grid.SetRow(_positions, 1);
             
             StackPanel controls = new StackPanel();
             Grid keyboard = new Grid() { ShowGridLines = false };
@@ -169,13 +163,26 @@ namespace SemesterWork
             keyboard.RowDefinitions.Add(new RowDefinition());
             keyboard.RowDefinitions.Add(new RowDefinition());
             keyboard.RowDefinitions.Add(new RowDefinition());
-            for (int i = 9; i >= 0; i--)
+            for (int i = 8; i >= 0; i--)
             {
                 Button key = new Button() { Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
                 keyboard.Children.Add(key);
                 Grid.SetColumn(key, 2 - i % 3 );
                 Grid.SetRow(key, i / 3);
             }
+            Button zero = new Button() { Content = "0", FontSize = 40, Height = 100 };
+            keyboard.Children.Add(zero);
+            Grid.SetRow(zero, 3);
+            Button dot = new Button() { Content = ".", FontSize = 40, Height = 100 };
+            keyboard.Children.Add(dot);
+            Grid.SetColumn(dot, 1);
+            Grid.SetRow(dot, 3);
+            Image crossImage = new Image() { Width = 50, Height = 50, Source = getBitmapSource(@"images/cross.png") };
+            Button clear = new Button() { Content = crossImage };
+            clear.Click += ClearOnClick;
+            keyboard.Children.Add(clear);
+            Grid.SetColumn(clear, 2);
+            Grid.SetRow(clear, 3);
             controls.Children.Add(keyboard);
             Button payment = new Button() { Content = "Оплата", FontSize = 40,  Height = 100 };
             Button amount = new Button() { Content = "Кол", FontSize = 40, Height = 100 };
@@ -190,16 +197,17 @@ namespace SemesterWork
             Grid.SetRow(controls, 1);
             
             
-            barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
-            barcodeReader.AddReader(BarcodeReaded);
+            _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
+            _barcodeReader.AddReader(BarcodeReaded);
             DispatcherTimer updateSmth = new DispatcherTimer();
             updateSmth.Interval = TimeSpan.FromMilliseconds(500);
             updateSmth.Tick += (sender, args) =>
             {
-                if (updatedSomeValue)
+                if (_updatedSomeValue)
                 {
-                    updatedSomeValue = false;
-                    positions.Items.Refresh();
+                    _updatedSomeValue = false;
+                    _positions.Items.Refresh();
+                    total.Text = $"ИТОГО: {_invoicePositions.Select(x => x.FullPrice).Sum()}";
                 }
             };
             updateSmth.Start();
