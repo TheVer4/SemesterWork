@@ -1,7 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO.Ports;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
 using System.Windows;
 
 namespace SemesterWork
@@ -33,9 +33,25 @@ namespace SemesterWork
             catch
             {
                 MessageBox.Show($"Позиция с кодом {scanned} не найдена, попробуте повторить операцию",
-               "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             updatedSomeValue = true;
+        }
+
+        private void Authorize(string login, string password)
+        {
+            var userInfo = DBController.FindUserById(login);
+            string userHash;
+            using (var hash = System.Security.Cryptography.SHA512.Create())
+                userHash = BitConverter.ToString(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
+            if (userInfo.Any() && userInfo[3] == userHash)
+            {
+                currentUser = new User(userInfo);
+                MainMenuActivity();
+            }
+            else
+                MessageBox.Show("Неверно введены данные, попробуйте снова.",
+                "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

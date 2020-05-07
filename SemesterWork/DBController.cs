@@ -46,17 +46,22 @@ namespace SemesterWork
             Update(code, "Amount", data.Amount - amount);
         }
 
-        public static List<string> FindUser(string id)
+        public static List<string> FindUserById(string id)
         {
             return SQLFind("Users", "id", id);
         }
 
-        public static void AddUser(string id, string name, string accessLevel)
+        public static List<string> FindUserByName(string name)
+        {
+            return SQLFind("Users", "Name", name);
+        }
+
+        public static void AddUser(string id, string name, string accessLevel, string hash)
         {
             SQLInsert(
                 "Users",
-                @"id, Name, 'AccessLevel'",
-                $"'{id}', '{name}', '{accessLevel}'");
+                @"id, Name, AccessLevel, Hash",
+                $"'{id}', '{name}', '{accessLevel}', '{hash}'");
         }
 
         public static void UpdateUser(string id, string column, string value)

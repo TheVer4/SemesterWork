@@ -4,7 +4,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -15,6 +14,7 @@ namespace SemesterWork
         private DataGrid positions;
         private List<CheckLine> invoicePositions = new List<CheckLine>();
         private BarcodeReader barcodeReader;
+        private User currentUser;
         public void LoginActivity()
         {
             ClearScreen();
@@ -41,7 +41,7 @@ namespace SemesterWork
             Button close = new Button() { Content = "Выйти" };
             panel.Children.Add(enter);
             panel.Children.Add(close);
-            enter.Click += (sender, args) => MainMenuActivity();
+            enter.Click += (sender, args) => Authorize(login.Text, password.Text);
             close.Click += (sender, args) =>
             {
                 switch (MessageBox.Show(
@@ -81,7 +81,11 @@ namespace SemesterWork
             panel.Children.Add(logout);
             fastInvoice.Click += (sender, args) => FastInvoiceActivity();
             settings.Click += (sender, args) => { };
-            logout.Click += (sender, args) => LoginActivity();
+            logout.Click += (sender, args) =>
+            {
+                currentUser = null;
+                LoginActivity();
+            };
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 1);
             Grid.SetRow(panel, 1);
@@ -104,7 +108,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             TextBlock programName = new TextBlock() { Text = Variables.ProgramName, FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock cashier = new TextBlock() { Text = "Кассир: Мадам Брошкина ", TextAlignment = TextAlignment.Right, FontSize = 20 };
+            TextBlock cashier = new TextBlock() { Text = $"Кассир: {currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);

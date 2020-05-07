@@ -1,7 +1,4 @@
-﻿using System.IO.Ports;
-using System.Windows;
-
-namespace SemesterWork
+﻿namespace SemesterWork
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -10,9 +7,6 @@ namespace SemesterWork
     {
         public MainWindow()
         {
-            CheckLine a;
-            try { a = new CheckLine("123", 2); } 
-            catch { }
             InitializeComponent();
             InitializeEnvironment();
         }
