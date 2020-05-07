@@ -18,7 +18,8 @@ namespace SemesterWork
         private List<CheckLine> _invoicePositions = new List<CheckLine>();
         private BarcodeReader _barcodeReader;
         private TextBox _number;
-        private User currentUser;
+        private User _currentUser;
+        private TextBox _barcodeForm;
         public void LoginActivity()
         {
             ClearScreen();
@@ -91,7 +92,7 @@ namespace SemesterWork
             settings.Click += (sender, args) => { };
             logout.Click += (sender, args) =>
             {
-                currentUser = null;
+                _currentUser = null;
                 LoginActivity();
             };
             Grid.Children.Add(panel);
@@ -120,7 +121,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             TextBlock programName = new TextBlock() { Text = Variables.ProgramName, FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock cashier = new TextBlock() { Text = $"Кассир: {currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
+            TextBlock cashier = new TextBlock() { Text = $"Кассир: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -138,26 +139,37 @@ namespace SemesterWork
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            TextBox barcodeForm = new TextBox() { FontSize = 48 };
+            _barcodeForm = new TextBox() { FontSize = 48 };
+            _barcodeForm.PreviewTextInput += NumberValidationTextBox;
             Button addPosition = new Button() { Content = "Добавить", FontSize = 48 };
-            barcodeInput.Children.Add(barcodeForm);
+            addPosition.Click += AddPositionOnClick;
+            barcodeInput.Children.Add(_barcodeForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
             
-            TextBox number = new TextBox() { FontSize = 48 };
-            Grid.SetColumn(number, 1);
-            invoiceControls.Children.Add(number);
+            _number = new TextBox() { FontSize = 48 };
+            _number.PreviewTextInput += NumberValidationTextBox;
+            Grid.SetColumn(_number, 1);
+            invoiceControls.Children.Add(_number);
+            Binding[] binds = {
+                new Binding("Data.Name"),
+                new Binding("Data.Price"),
+                new Binding("Amount"),
+                new Binding("FullPrice")
+            };
+            foreach (var bind in binds)
+                bind.Mode = BindingMode.OneTime;
             _positions = new DataGrid()
             {
                 ItemsSource = _invoicePositions,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = "Позиция", Binding = new Binding("Data.Name"), MinWidth = 500 },
-                    new DataGridTextColumn() { Header = "Цена", Binding = new Binding("Data.Price") },
-                    new DataGridTextColumn() { Header = "Кол-во", Binding = new Binding("Amount") },
-                    new DataGridTextColumn() { Header = "Стоимость", Binding = new Binding("FullPrice") }
+                    new DataGridTextColumn() { Header = "Позиция", Binding = binds[0], MinWidth = 500 },
+                    new DataGridTextColumn() { Header = "Цена", Binding = binds[1] },
+                    new DataGridTextColumn() { Header = "Кол-во", Binding = binds[2] },
+                    new DataGridTextColumn() { Header = "Стоимость", Binding = binds[3] }
                 }
             };
             invoiceControls.Children.Add(_positions);
@@ -175,14 +187,17 @@ namespace SemesterWork
             for (int i = 8; i >= 0; i--)
             {
                 Button key = new Button() { Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
+                key.Click += (sender, args) => _number.Text += ((Button) sender).Content.ToString();
                 keyboard.Children.Add(key);
                 Grid.SetColumn(key, 2 - i % 3 );
                 Grid.SetRow(key, i / 3);
             }
             Button zero = new Button() { Content = "0", FontSize = 40, Height = 100 };
+            zero.Click += (sender, args) => { _number.Text += "0"; };
             keyboard.Children.Add(zero);
             Grid.SetRow(zero, 3);
             Button dot = new Button() { Content = ".", FontSize = 40, Height = 100 };
+            dot.Click += (sender, args) => { _number.Text += "."; };
             keyboard.Children.Add(dot);
             Grid.SetColumn(dot, 1);
             Grid.SetRow(dot, 3);
@@ -206,21 +221,23 @@ namespace SemesterWork
             Grid.SetRow(controls, 1);
 
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
-            _barcodeReader.AddReader(BarcodeReaded);
+            _barcodeReader.AddReader(BarcodeRead);
             DispatcherTimer updateSmth = new DispatcherTimer();
             updateSmth.Interval = TimeSpan.FromMilliseconds(500);
             updateSmth.Tick += (sender, args) =>
             {
-                if (_updatedSomeValue)
+                if (_readBarcode != null)
                 {
-                    _updatedSomeValue = false;
+                    AddPosition(_readBarcode);
                     _positions.Items.Refresh();
+                    _readBarcode = null;
+                    _number.Text = "";
                     total.Text = $"ИТОГО: {_invoicePositions.Select(x => x.FullPrice).Sum()}";
                 }
             };
             updateSmth.Start();          
         }
-        
+
         public void ClearScreen()
         {
             Grid.Children.Clear();
