@@ -17,10 +17,5 @@ namespace SemesterWork
         {
             _port.DataReceived += deleg;
         }
-
-        /*~BarcodeReader()
-        {
-            _port.Close();
-        }*/
     }
 }

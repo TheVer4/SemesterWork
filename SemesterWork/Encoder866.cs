@@ -2,7 +2,7 @@
 
 namespace SemesterWork
 {
-    public static class Encoder866 // TODO: переименовать
+    public static class Encoder866 //TODO переименовать
     {
         public static Encoding Encoding = Encoding.GetEncoding(866);
 

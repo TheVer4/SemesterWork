@@ -46,8 +46,6 @@ namespace SemesterWork
             foreach (var line in byteset)
                 data = PrintExtensions.AddBytes(data, line);
             return data;
-        }
-        
-    }
-    
+        }       
+    }    
 }

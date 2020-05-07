@@ -5,7 +5,6 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,7 +12,6 @@ namespace SemesterWork
 {
     public partial class MainWindow
     {
-        private bool _updatedSomeValue;
         private string _readBarcode;
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -36,22 +34,32 @@ namespace SemesterWork
 
         private void AddPosition(string code)
         {
-            int amount = 1;
-            if (_number.Text.Length != 0) amount = int.Parse(_number.Text);
-            try
+            var info = new List<string>();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) =>
             {
-                var pos = new CheckLine(code, amount);
-                var asd = _invoicePositions.Where(x => x.Data.EAN13 == code);
-                if (asd.Any())
-                    asd.FirstOrDefault().Amount += amount;
-                else 
-                    _invoicePositions.Add(pos);
-            }
-            catch
+                info = WareHouseDBController.Find(code);
+            };
+            worker.RunWorkerCompleted += (sender, args) =>
             {
-                MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
-                "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                int amount = 1;
+                if (_number.Text.Length != 0) 
+                    amount = int.Parse(_number.Text);
+                try
+                {
+                    var pos = new CheckLine(new ProductData(info), amount);
+                    var asd = _invoicePositions.Where(x => x.Data.EAN13 == code);
+                    if (asd.Any())
+                        asd.FirstOrDefault().Amount += amount;
+                     else
+                        _invoicePositions.Add(pos);
+                }
+                catch
+                {
+                    MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
+                    "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            };
         }
         
         

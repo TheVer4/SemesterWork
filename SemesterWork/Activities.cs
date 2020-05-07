@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -105,7 +104,7 @@ namespace SemesterWork
             ClearScreen();
             KeyDown += (sender, args) =>
             {
-                if (args.Key == Key.Escape)
+                if (args.Key == Key.Escape && _invoicePositions.Count == 0)
                     MainMenuActivity();
             };
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });

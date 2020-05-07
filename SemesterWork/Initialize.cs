@@ -7,7 +7,6 @@
         {
             printInvoice = new PrintInvoice();
             Variables.BarcodeScannerPort = "COM4";
-            //FastInvoiceActivity();
             LoginActivity();
         }
     }
