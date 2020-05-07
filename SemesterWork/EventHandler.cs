@@ -60,6 +60,7 @@ namespace SemesterWork
                     "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             };
+            worker.RunWorkerAsync();
         }
         
         
