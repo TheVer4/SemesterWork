@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Data.Entity.Core;
+using System.Linq;
 using System.Windows;
 
 namespace SemesterWork
@@ -28,8 +29,7 @@ namespace SemesterWork
         {        
             var info = DBController.Find(code);
             if (!info.Any())
-                MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
-                    "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw new ObjectNotFoundException();
             Data = new ProductData(info);
             Amount = amount;
         }

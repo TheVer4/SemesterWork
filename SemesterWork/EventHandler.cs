@@ -26,7 +26,15 @@ namespace SemesterWork
         {
             SerialPort e = (SerialPort) sender;
             var scanned = e.ReadTo("\r");
-            invoicePositions.Add(new CheckLine(scanned, 1));
+            try 
+            { 
+                invoicePositions.Add(new CheckLine(scanned, 1)); 
+            }
+            catch
+            {
+                MessageBox.Show($"Позиция с кодом {scanned} не найдена, попробуте повторить операцию",
+               "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             updatedSomeValue = true;
         }
     }

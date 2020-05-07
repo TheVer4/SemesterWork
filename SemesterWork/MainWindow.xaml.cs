@@ -9,7 +9,10 @@ namespace SemesterWork
     public partial class MainWindow
     {
         public MainWindow()
-        {            
+        {
+            CheckLine a;
+            try { a = new CheckLine("123", 2); } 
+            catch { }
             InitializeComponent();
             InitializeEnvironment();
         }
