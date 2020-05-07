@@ -1,8 +1,4 @@
-﻿using System.Data.Entity.Core;
-using System.Linq;
-using System.Windows;
-
-namespace SemesterWork
+﻿namespace SemesterWork
 {
     public class CheckLine
     {
@@ -25,12 +21,9 @@ namespace SemesterWork
             private set { }
         }
 
-        public CheckLine(string code, double amount)
-        {        
-            var info = DBController.Find(code);
-            if (!info.Any())
-                throw new ObjectNotFoundException();
-            Data = new ProductData(info);
+        public CheckLine(ProductData data, double amount)
+        {
+            Data = data;
             Amount = amount;
         }
 

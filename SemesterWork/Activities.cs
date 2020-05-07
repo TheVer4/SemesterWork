@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -39,6 +40,11 @@ namespace SemesterWork
             panel.Children.Add(new TextBlock() { Text = "Account" });
             panel.Children.Add(login);
             panel.Children.Add(new TextBlock() { Text = "Password" });
+            password.KeyDown += (sender, args) =>
+            {
+                if (args.Key == Key.Enter)
+                    Authorize(login.Text, password.Text);
+            };
             panel.Children.Add(password);
             Button enter = new Button() { Content = "Авторизация" };
             Button close = new Button() { Content = "Выйти" };
@@ -62,12 +68,11 @@ namespace SemesterWork
             };
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 2);
-            Grid.SetRow(panel, 1);
-            
+            Grid.SetRow(panel, 1);                   
         }
 
         public void MainMenuActivity()
-        {
+        {           
             ClearScreen();
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
@@ -92,12 +97,16 @@ namespace SemesterWork
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 1);
             Grid.SetRow(panel, 1);
-
         }
 
         public void FastInvoiceActivity()
         {
             ClearScreen();
+            KeyDown += (sender, args) =>
+            {
+                if (args.Key == Key.Escape)
+                    MainMenuActivity();
+            };
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
             Grid topBar = new Grid();
@@ -177,7 +186,7 @@ namespace SemesterWork
             keyboard.Children.Add(dot);
             Grid.SetColumn(dot, 1);
             Grid.SetRow(dot, 3);
-            Image crossImage = new Image() { Width = 50, Height = 50, Source = getBitmapSource(@"images/cross.png") };
+            Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
             Button clear = new Button() { Content = crossImage };
             clear.Click += ClearOnClick;
             keyboard.Children.Add(clear);
@@ -195,8 +204,7 @@ namespace SemesterWork
             invoiceControls.Children.Add(controls);
             Grid.SetColumn(controls, 1);
             Grid.SetRow(controls, 1);
-            
-            
+
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
             _barcodeReader.AddReader(BarcodeReaded);
             DispatcherTimer updateSmth = new DispatcherTimer();
@@ -210,8 +218,7 @@ namespace SemesterWork
                     total.Text = $"ИТОГО: {_invoicePositions.Select(x => x.FullPrice).Sum()}";
                 }
             };
-            updateSmth.Start();
-            
+            updateSmth.Start();          
         }
         
         public void ClearScreen()
@@ -221,7 +228,7 @@ namespace SemesterWork
             Grid.RowDefinitions.Clear();
         }
 
-        private BitmapSource getBitmapSource(string path)
+        private BitmapSource GetBitmapSource(string path)
         {
             Stream imageStreamSource = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);

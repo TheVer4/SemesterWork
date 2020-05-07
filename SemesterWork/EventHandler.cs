@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
@@ -12,7 +13,6 @@ namespace SemesterWork
 {
     public partial class MainWindow
     {
-
         private bool _updatedSomeValue;
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -30,7 +30,7 @@ namespace SemesterWork
         {
             SerialPort e = (SerialPort) sender;
             var scanned = e.ReadTo("\r");
-           AddPosition(scanned);
+            AddPosition(scanned);
         }
 
         private void AddPosition(string code)
@@ -39,7 +39,8 @@ namespace SemesterWork
             //if (_number.Text.Length != 0) amount = int.Parse(_number.Text);
             try 
             { 
-                _invoicePositions.Add(new CheckLine(code, amount)); 
+
+              //  _invoicePositions.Add(new CheckLine(code, amount)); 
             }
             catch
             {
@@ -57,18 +58,27 @@ namespace SemesterWork
 
         private void Authorize(string login, string password)
         {
-            var userInfo = DBController.FindUserById(login);
-            string userHash;
-            using (var hash = System.Security.Cryptography.SHA512.Create())
-                userHash = BitConverter.ToString(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
-            if (userInfo.Any() && userInfo[3] == userHash)
+            var userInfo = new List<string>();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) =>
             {
-                currentUser = new User(userInfo);
-                MainMenuActivity();
-            }
-            else
-                MessageBox.Show("Неверно введены данные, попробуйте снова.",
-                "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                userInfo = UserDBController.FindById(login);
+            };
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                string userHash;
+                using (var hash = System.Security.Cryptography.SHA512.Create())
+                    userHash = BitConverter.ToString(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
+                if (userInfo.Any() && userInfo[3] == userHash)
+                {
+                    currentUser = new User(userInfo);
+                    MainMenuActivity();
+                }
+                else
+                    MessageBox.Show("Неверно введены данные, попробуйте снова.",
+                    "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            };
+            worker.RunWorkerAsync();
         }
     }
 }
