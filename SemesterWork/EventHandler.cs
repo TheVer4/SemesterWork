@@ -25,8 +25,11 @@ namespace SemesterWork
         
         private void ClearOnClick(object sender, RoutedEventArgs e)
         {
-            if(_invoicePositions.Count == 0)
-                MainMenuActivity();
+            if (_invoicePositions.Count == 0)
+            {
+                if (_number.Text.Length != 0) _number.Text = "";
+                else MainMenuActivity();
+            }
             else if (_positions.SelectedIndex == -1)
             {
                 if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
@@ -38,6 +41,23 @@ namespace SemesterWork
                 if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                 _invoicePositions.RemoveAt(_positions.SelectedIndex);
+            }
+            FastInvoiceUpdate();
+        }
+        
+        private void AmountOnClick(object sender, RoutedEventArgs e)
+        {
+            if(_positions.SelectedIndex == -1) return;
+            if (_number.Text.Length == 0)
+                _invoicePositions[_positions.SelectedIndex].Amount++;
+            else {
+                double amount = double.Parse(_number.Text, CultureInfo.CurrentCulture);
+                if(amount <= 0) _invoicePositions.RemoveAt(_positions.SelectedIndex);
+                else if (_invoicePositions[_positions.SelectedIndex].Amount < amount)
+                    _invoicePositions[_positions.SelectedIndex].Amount = amount;
+                else if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                    _invoicePositions[_positions.SelectedIndex].Amount = amount;
             }
             FastInvoiceUpdate();
         }
