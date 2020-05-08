@@ -19,6 +19,7 @@ namespace SemesterWork
         private TextBox _number;
         private User _currentUser;
         private TextBox _barcodeForm;
+        private TextBlock _total = new TextBlock();
         public void LoginActivity()
         {
             ClearScreen();
@@ -141,7 +142,7 @@ namespace SemesterWork
             _barcodeForm = new TextBox() { FontSize = 48 };
             _barcodeForm.PreviewTextInput += NumberValidationTextBox;
             Button addPosition = new Button() { Content = "Добавить", FontSize = 48 };
-            addPosition.Click += AddPositionOnClick;
+            addPosition.Click += (sender, args) => AddPosition(_barcodeForm.Text);
             barcodeInput.Children.Add(_barcodeForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
@@ -210,11 +211,13 @@ namespace SemesterWork
             Button payment = new Button() { Content = "Оплата", FontSize = 40,  Height = 100 };
             Button amount = new Button() { Content = "Кол", FontSize = 40, Height = 100 };
             Button storn = new Button() { Content = "Сторно", FontSize = 40,  Height = 100 };
-            TextBlock total = new TextBlock() { Text = "ИТОГО: 0", FontSize = 40, Margin = new Thickness(15, 20, 0, 0) };
+            _total.Text = "ИТОГО: 0";
+            _total.FontSize = 40;
+            _total.Margin = new Thickness(15, 20, 0, 0);
             controls.Children.Add(payment);
             controls.Children.Add(amount);
             controls.Children.Add(storn);
-            controls.Children.Add(total);
+            controls.Children.Add(_total);
             invoiceControls.Children.Add(controls);
             Grid.SetColumn(controls, 1);
             Grid.SetRow(controls, 1);
@@ -226,13 +229,7 @@ namespace SemesterWork
             updateSmth.Tick += (sender, args) =>
             {
                 if (_readBarcode != null)
-                {
                     AddPosition(_readBarcode);
-                    _positions.Items.Refresh();
-                    _readBarcode = null;
-                    _number.Text = "";
-                    total.Text = $"ИТОГО: {_invoicePositions.Select(x => x.FullPrice).Sum()}";
-                }
             };
             updateSmth.Start();          
         }

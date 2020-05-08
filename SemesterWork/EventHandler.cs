@@ -45,31 +45,27 @@ namespace SemesterWork
                 int amount = 1;
                 if (_number.Text.Length != 0) 
                     amount = int.Parse(_number.Text);
-                try
+                if (info.Any())
                 {
                     var pos = new CheckLine(new ProductData(info), amount);
                     var asd = _invoicePositions.Where(x => x.Data.EAN13 == code);
                     if (asd.Any())
                         asd.FirstOrDefault().Amount += amount;
-                     else
+                    else
                         _invoicePositions.Add(pos);
                 }
-                catch
-                {
+                else
                     MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
                     "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                _positions.Items.Refresh();
+                _readBarcode = null;
+                _barcodeForm.Text = null;
+                _number.Text = null;
+                _total.Text = $"ИТОГО: { _invoicePositions.Select(x => x.FullPrice).Sum() }";
             };
             worker.RunWorkerAsync();
         }
-        
-        
-        private void AddPositionOnClick(object sender, RoutedEventArgs e)
-        {
-            string code = _barcodeForm.Text;
-            _readBarcode = code;
-        }
-        
+         
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
