@@ -19,7 +19,7 @@ namespace SemesterWork
         private TextBox _number;
         private User _currentUser;
         private TextBox _barcodeForm;
-        private TextBlock _total = new TextBlock();
+        private TextBlock _total;
         public void LoginActivity()
         {
             ClearScreen();
@@ -103,6 +103,7 @@ namespace SemesterWork
         public void FastInvoiceActivity()
         {
             ClearScreen();
+            _total = new TextBlock();
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
             Grid topBar = new Grid();

@@ -27,7 +27,7 @@ namespace SemesterWork
         {
             if(_invoicePositions.Count == 0)
                 MainMenuActivity();
-            if (_positions.SelectedIndex == -1)
+            else if (_positions.SelectedIndex == -1)
             {
                 if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
@@ -35,6 +35,8 @@ namespace SemesterWork
             } 
             else
             {
+                if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                 _invoicePositions.RemoveAt(_positions.SelectedIndex);
             }
             FastInvoiceUpdate();
