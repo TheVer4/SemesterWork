@@ -70,3 +70,5 @@ D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\EntityFramework.xml
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\EntityFramework.SqlServer.xml
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.xml
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\PasswordWindow.baml
+C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\PasswordWindow.g.cs

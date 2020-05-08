@@ -69,7 +69,7 @@ namespace SemesterWork
             };
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 2);
-            Grid.SetRow(panel, 1);                   
+            Grid.SetRow(panel, 1);
         }
 
         public void MainMenuActivity()

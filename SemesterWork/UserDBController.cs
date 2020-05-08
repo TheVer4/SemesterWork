@@ -14,6 +14,11 @@ namespace SemesterWork
             return DBController.SQLFind("Users", "id", id);
         }
 
+        public static List<string> FindByHash(string hash)
+        {
+            return DBController.SQLFind("Users", "Hash", hash);
+        }
+
         public static void Add(string id, string name, string accessLevel, string hash)
         {
             DBController.SQLInsert(
