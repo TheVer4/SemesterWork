@@ -41,7 +41,9 @@
         </e>
         <e p="SemesterWork.csproj" t="IncludeRecursive" />
         <e p="User.cs" t="Include" />
+        <e p="UserDBController.cs" t="Include" />
         <e p="Variables.cs" t="Include" />
+        <e p="WareHouseDBController.cs" t="Include" />
       </e>
       <e p="SemesterWork.sln" t="IncludeFlat" />
     </e>

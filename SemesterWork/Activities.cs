@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -36,8 +36,8 @@ namespace SemesterWork
             Grid.SetColumnSpan(logo, 3);
             Grid.SetColumn(logo, 1);
             StackPanel panel = new StackPanel();
-            TextBox login = new TextBox() {};
-            TextBox password = new TextBox() {};
+            TextBox login = new TextBox();
+            TextBox password = new TextBox();
             panel.Children.Add(new TextBlock() { Text = "Account" });
             panel.Children.Add(login);
             panel.Children.Add(new TextBlock() { Text = "Password" });
@@ -120,7 +120,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             TextBlock programName = new TextBlock() { Text = Variables.ProgramName, FontSize = 20 };
-            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(), TextAlignment = TextAlignment.Center, FontSize = 20 };
+            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
             TextBlock cashier = new TextBlock() { Text = $"Кассир: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
@@ -130,7 +130,7 @@ namespace SemesterWork
             Grid.SetColumn(cashier, 2);
             DispatcherTimer dateTimeTimer = new DispatcherTimer();
             dateTimeTimer.Interval = TimeSpan.FromMilliseconds(1000);
-            dateTimeTimer.Tick += (sender, args) => { dateTime.Text = DateTime.Now.ToString(); };
+            dateTimeTimer.Tick += (sender, args) => { dateTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture); };
             dateTimeTimer.Start();
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) });
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
@@ -172,6 +172,7 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = "Стоимость", Binding = binds[3] }
                 }
             };
+            //_positions.
             invoiceControls.Children.Add(_positions);
             Grid.SetRow(_positions, 1);
             
@@ -210,7 +211,12 @@ namespace SemesterWork
             controls.Children.Add(keyboard);
             Button payment = new Button() { Content = "Оплата", FontSize = 40,  Height = 100 };
             Button amount = new Button() { Content = "Кол", FontSize = 40, Height = 100 };
-            Button storn = new Button() { Content = "Сторно", FontSize = 40,  Height = 100 };
+            Button storn = new Button() { Content = "ТЕСТ ВСЕГО ЧТО МОЖНО", FontSize = 40,  Height = 100 };
+            storn.Click += (sender, args) =>
+                {
+                    MessageBox.Show(_positions.SelectedIndex.ToString(), "XYINDEX", MessageBoxButton.OK,
+                        MessageBoxImage.Asterisk);
+                };
             _total.Text = "ИТОГО: 0";
             _total.FontSize = 40;
             _total.Margin = new Thickness(15, 20, 0, 0);
@@ -230,6 +236,7 @@ namespace SemesterWork
             {
                 if (_readBarcode != null)
                     AddPosition(_readBarcode);
+                _readBarcode = null;
             };
             updateSmth.Start();          
         }

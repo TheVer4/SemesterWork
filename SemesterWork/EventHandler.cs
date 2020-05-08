@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace SemesterWork
@@ -22,7 +25,19 @@ namespace SemesterWork
         
         private void ClearOnClick(object sender, RoutedEventArgs e)
         {
-            
+            if(_invoicePositions.Count == 0)
+                MainMenuActivity();
+            if (_positions.SelectedIndex == -1)
+            {
+                if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                    _invoicePositions.Clear();
+            } 
+            else
+            {
+                _invoicePositions.RemoveAt(_positions.SelectedIndex);
+            }
+            _positions.Items.Refresh();
         }
 
         private void BarcodeRead(object sender, SerialDataReceivedEventArgs args)
@@ -42,17 +57,17 @@ namespace SemesterWork
             };
             worker.RunWorkerCompleted += (sender, args) =>
             {
-                int amount = 1;
+                double amount = 1;
                 if (_number.Text.Length != 0) 
-                    amount = int.Parse(_number.Text);
+                    amount = double.Parse(_number.Text, CultureInfo.InvariantCulture);
                 if (info.Any())
                 {
-                    var pos = new CheckLine(new ProductData(info), amount);
-                    var asd = _invoicePositions.Where(x => x.Data.EAN13 == code);
-                    if (asd.Any())
-                        asd.FirstOrDefault().Amount += amount;
+                    var item = new CheckLine(new ProductData(info), amount);
+                    var availablePosition = _invoicePositions.Where(x => x.Data.EAN13 == code);
+                    if (availablePosition.Any())
+                        availablePosition.FirstOrDefault().Amount += amount;
                     else
-                        _invoicePositions.Add(pos);
+                        _invoicePositions.Add(item);
                 }
                 else
                     MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
