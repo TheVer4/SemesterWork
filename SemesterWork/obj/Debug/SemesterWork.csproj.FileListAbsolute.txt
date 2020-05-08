@@ -49,11 +49,9 @@ C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\bin\Debug\EntityFramewor
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.xml
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.dll.config
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csprojAssemblyReference.cache
-C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\MainWindow.g.cs
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\App.g.cs
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.cache
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.lref
-C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\MainWindow.baml
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\SemesterWork.g.resources
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\SemesterWork.Properties.Resources.resources
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csproj.GenerateResource.cache
@@ -70,5 +68,5 @@ D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\EntityFramework.xml
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\EntityFramework.SqlServer.xml
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.xml
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.dll.config
-C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\PasswordWindow.baml
-C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\PasswordWindow.g.cs
+C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\MainWindow.g.cs
+C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\MainWindow.baml

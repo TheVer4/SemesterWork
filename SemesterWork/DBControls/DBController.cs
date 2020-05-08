@@ -50,7 +50,7 @@ namespace SemesterWork
                 $"WHERE {column}='{value}'");
         }
 
-        private static void SQLCommand(string SQLCommand)
+        public static void SQLCommand(string SQLCommand)
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (sender, args) =>

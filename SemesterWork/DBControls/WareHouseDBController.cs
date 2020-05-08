@@ -23,9 +23,26 @@ namespace SemesterWork
                 $"'{ean13}', '{name}', '{price}', '{amount}', '{units}', '{shortName}'");
         }
 
+        public static void Insert(ProductData data)
+        {
+            Insert(data.EAN13, data.Name, data.Price, data.Amount, data.Units, data.ShortName);
+        }
+
         public static void Update(string code, string column, object value)
         {
             DBController.SQLUpdate("WareHouse", column, value, "EAN13", code);
+        }
+
+        public static void Update(ProductData data)
+        {
+            DBController.SQLCommand(
+                $"UPDATE WareHouse SET " +
+                $"Name = '{data.Name}', " +
+                $"Price = '{data.Price}', " +
+                $"Amount = '{data.Amount}', " +
+                $"Units = '{data.Units}', " +
+                $"ShortName = '{data.ShortName}' " +               
+                $"WHERE EAN13 = '{data.EAN13}'");
         }
 
         public static void Remove(string code)

@@ -15,8 +15,6 @@ namespace SemesterWork
 {
     public partial class MainWindow
     {
-        private string _readBarcode;
-
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'";
@@ -42,7 +40,26 @@ namespace SemesterWork
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                 _invoicePositions.RemoveAt(_positions.SelectedIndex);
             }
-            FastInvoiceUpdate();
+            UpdateScreen();
+        }
+
+        private void ClearSavingOnClick(object sender, RoutedEventArgs e)
+        {
+            if (_savingPositions.Count == 0)
+                MainMenuActivity();
+            else if (_positions.SelectedIndex == -1)
+            {
+                if (MessageBox.Show("Вы уверены, что хотите удалить все позиции?", "Подтвердите удаление", MessageBoxButton.YesNo,
+                    MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    _savingPositions.Clear();
+            }
+            else
+            {
+                if (MessageBox.Show("Вы уверены, что хотите удалить эту позицию?", "Подтвердите удаление", MessageBoxButton.YesNo,
+                MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    _savingPositions.RemoveAt(_positions.SelectedIndex);
+            }
+            UpdateScreen();
         }
         
         private void AmountOnClick(object sender, RoutedEventArgs e)
@@ -59,7 +76,7 @@ namespace SemesterWork
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                     _invoicePositions[_positions.SelectedIndex].Amount = amount;
             }
-            FastInvoiceUpdate();
+            UpdateScreen();
         }
 
         private void BarcodeRead(object sender, SerialDataReceivedEventArgs args)
@@ -94,11 +111,70 @@ namespace SemesterWork
                 else
                     MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
                     "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                FastInvoiceUpdate();
+                UpdateScreen();
             };
             worker.RunWorkerAsync();
         }
-         
+
+        private void AddPositionForSaving(string code)
+        {
+            if (code.Length == 13)
+            { 
+                var info = new List<string>();
+                var worker = new BackgroundWorker();
+                var availablePosition = _savingPositions.Where(x => x.Data.EAN13 == code);
+                if (availablePosition.Any())
+                {
+                    MessageBox.Show($"Позиция с кодом {code} уже есть",
+                    "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    UpdateScreen();
+                    return;
+                }
+                worker.DoWork += (sender, args) =>
+                {
+                    info = WareHouseDBController.Find(code);
+                };
+                worker.RunWorkerCompleted += (sender, args) =>
+                {
+                    if (!info.Any())
+                    {
+                        double amount = 1;
+                        if (_number.Text.Length != 0)
+                            amount = double.Parse(_number.Text, CultureInfo.InvariantCulture);
+                        var item = new ProductData(code);
+                        _savingPositions.Add(new DBProductData(new ProductData(code), false));
+                    }
+                    else if (MessageBox.Show($"Товар с кодом {code} уже присутствует на складе. Хотите обновить значение?",
+                        "Подтвердите действие", MessageBoxButton.YesNo,
+                        MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        _savingPositions.Add(new DBProductData(new ProductData(info), true));
+                    UpdateScreen();
+                };
+                worker.RunWorkerAsync();
+            }
+            else
+                MessageBox.Show($"Неверный формат ввода EAN13.",
+                "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void SavePositions()
+        {
+            var worker = new BackgroundWorker();
+            foreach (var position in _savingPositions)             
+                if (position.IsInDB)
+                    worker.DoWork += (sender, args) =>
+                        WareHouseDBController.Update(position.Data);
+                else
+                    worker.DoWork += (sender, args) =>
+                        WareHouseDBController.Insert(position.Data);
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                MessageBox.Show($"Позиции успешно сохранены.",
+                "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+            };
+            worker.RunWorkerAsync();
+        }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
@@ -130,10 +206,11 @@ namespace SemesterWork
             worker.RunWorkerAsync();
         }
 
-        private void FastInvoiceUpdate()
+        private void UpdateScreen()
         {            
             _readBarcode = null;
-            _total.Text = $"ИТОГО: { _invoicePositions.Select(x => x.FullPrice).Sum() }";
+            if (_total != null)
+                _total.Text = $"ИТОГО: { _invoicePositions.Select(x => x.FullPrice).Sum() }";
             _number.Text = null;
             _barcodeForm.Text = null;
             _positions.Items.Refresh();

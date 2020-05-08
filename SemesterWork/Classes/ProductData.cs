@@ -4,12 +4,12 @@ namespace SemesterWork
 {
     public class ProductData
     {
-        public string EAN13 { get; private set; }
-        public string Name { get; private set; }
-        public double Price { get; private set; }
-        public double Amount { get; private set; }
-        public string Units { get; private set; }
-        public string ShortName { get; private set; }
+        public string EAN13 { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public double Amount { get; set; }
+        public string Units { get; set; }
+        public string ShortName { get; set; }
 
         public ProductData(List<string> data)
         {
@@ -19,6 +19,11 @@ namespace SemesterWork
             Amount = double.Parse(data[3]);
             Units = data[4];
             ShortName = data[5];
+        }
+
+        public ProductData(string code)
+        {
+            EAN13 = code;
         }
     }
 }

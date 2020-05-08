@@ -14,7 +14,7 @@ namespace SemesterWork
     public partial class MainWindow
     {
         public MainWindow()
-        {
+        {           
             InitializeComponent();
             InitializeEnvironment();
         }

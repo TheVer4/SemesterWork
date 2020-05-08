@@ -89,25 +89,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Activities.cs" />
-    <Compile Include="BarcodeReader.cs" />
-    <Compile Include="DBController.cs" />
-    <Compile Include="EventHandler.cs" />
-    <Compile Include="Initialize.cs" />
-    <Compile Include="PasswordWindow.xaml.cs">
-      <DependentUpon>PasswordWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PrintInvoice.cs" />
-    <Compile Include="ProductData.cs" />
+    <Compile Include="Classes\DBProductData.cs" />
+    <Compile Include="MainWindow\Activities.cs" />
+    <Compile Include="Classes\BarcodeReader.cs" />
+    <Compile Include="DBControls\DBController.cs" />
+    <Compile Include="MainWindow\EventHandler.cs" />
+    <Compile Include="MainWindow\Initialize.cs" />
+    <Compile Include="Classes\PrintInvoice.cs" />
+    <Compile Include="Classes\ProductData.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="User.cs" />
-    <Compile Include="UserDBController.cs" />
-    <Compile Include="Variables.cs" />
-    <Compile Include="WareHouseDBController.cs" />
+    <Compile Include="Classes\User.cs" />
+    <Compile Include="DBControls\UserDBController.cs" />
+    <Compile Include="Classes\Variables.cs" />
+    <Compile Include="DBControls\WareHouseDBController.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,19 +114,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CheckLine.cs" />
-    <Compile Include="Encoder866.cs" />
+    <Compile Include="Classes\CheckLine.cs" />
+    <Compile Include="Classes\Encoder866.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PasswordWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Printer.cs" />
+    <Compile Include="Classes\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
