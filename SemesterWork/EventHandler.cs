@@ -37,7 +37,7 @@ namespace SemesterWork
             {
                 _invoicePositions.RemoveAt(_positions.SelectedIndex);
             }
-            _positions.Items.Refresh();
+            FastInvoiceUpdate();
         }
 
         private void BarcodeRead(object sender, SerialDataReceivedEventArgs args)
@@ -72,11 +72,7 @@ namespace SemesterWork
                 else
                     MessageBox.Show($"Позиция с кодом {code} не найдена, попробуте повторить операцию",
                     "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                _positions.Items.Refresh();
-                _readBarcode = null;
-                _barcodeForm.Text = null;
-                _number.Text = null;
-                _total.Text = $"ИТОГО: { _invoicePositions.Select(x => x.FullPrice).Sum() }";
+                FastInvoiceUpdate();
             };
             worker.RunWorkerAsync();
         }
@@ -110,6 +106,15 @@ namespace SemesterWork
                     "Произошла ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             };
             worker.RunWorkerAsync();
+        }
+
+        private void FastInvoiceUpdate()
+        {            
+            _readBarcode = null;
+            _total.Text = $"ИТОГО: { _invoicePositions.Select(x => x.FullPrice).Sum() }";
+            _number.Text = null;
+            _barcodeForm.Text = null;
+            _positions.Items.Refresh();
         }
     }
 }

@@ -103,11 +103,6 @@ namespace SemesterWork
         public void FastInvoiceActivity()
         {
             ClearScreen();
-            KeyDown += (sender, args) =>
-            {
-                if (args.Key == Key.Escape && _invoicePositions.Count == 0)
-                    MainMenuActivity();
-            };
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
             Grid topBar = new Grid();
