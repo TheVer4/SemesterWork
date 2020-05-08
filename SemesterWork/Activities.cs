@@ -168,7 +168,8 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = "Стоимость", Binding = binds[3] }
                 }
             };
-            //_positions.
+            foreach (var column in _positions.Columns)
+                column.CanUserSort = false;
             invoiceControls.Children.Add(_positions);
             Grid.SetRow(_positions, 1);
             
@@ -205,9 +206,10 @@ namespace SemesterWork
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
             controls.Children.Add(keyboard);
-            Button payment = new Button() { Content = "Оплата", FontSize = 40,  Height = 100 };
-            Button amount = new Button() { Content = "Кол", FontSize = 40, Height = 100 };
-            Button storn = new Button() { Content = "ТЕСТ ВСЕГО ЧТО МОЖНО", FontSize = 40,  Height = 100 };
+            Button payment = new Button() { Content = "ОПЛАТА", FontSize = 40,  Height = 100 };
+            Button amount = new Button() { Content = "КОЛ", FontSize = 40, Height = 100 };
+            amount.Click += AmountOnClick;
+            Button storn = new Button() { Content = "ТЕСТ ЧЕГОНИТЬ", FontSize = 40,  Height = 100 };
             storn.Click += (sender, args) =>
                 {
                     MessageBox.Show(_positions.SelectedIndex.ToString(), "XYINDEX", MessageBoxButton.OK,
@@ -236,7 +238,7 @@ namespace SemesterWork
             };
             updateSmth.Start();          
         }
-
+        
         public void ClearScreen()
         {
             Grid.Children.Clear();
