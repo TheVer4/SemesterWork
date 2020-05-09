@@ -179,7 +179,7 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = Lang["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
                     new DataGridTextColumn() { Header = Lang["FastInvoiceActivity Count"], Binding = binds[2] },
                     new DataGridTextColumn() { Header = Lang["FastInvoiceActivity Units"], Binding = binds[3] },
-                    new DataGridTextColumn() { Header = Lang["FastInvoiceActivity FullPrice"], Binding = binds[3], MinWidth = 200 }
+                    new DataGridTextColumn() { Header = Lang["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
                 }
             };
             foreach (var column in _positions.Columns)
