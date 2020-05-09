@@ -44,9 +44,9 @@ namespace SemesterWork
             StackPanel panel = new StackPanel();
             TextBox login = new TextBox() { FontSize = 20 };
             TextBox password = new TextBox() { FontSize = 20 };
-            panel.Children.Add(new TextBlock() { Text = _lang["loginActivity Account"], FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = _lang["LoginActivity Account"], FontSize = 20 });
             panel.Children.Add(login);
-            panel.Children.Add(new TextBlock() { Text = _lang["loginActivity Password"], FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = _lang["LoginActivity Password"], FontSize = 20 });
             password.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
