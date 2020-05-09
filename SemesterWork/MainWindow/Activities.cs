@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,19 +40,19 @@ namespace SemesterWork
             Grid.SetColumnSpan(logo, 3);
             Grid.SetColumn(logo, 1);
             StackPanel panel = new StackPanel();
-            TextBox login = new TextBox();
-            TextBox password = new TextBox();
-            panel.Children.Add(new TextBlock() { Text = "Account" });
+            TextBox login = new TextBox() { FontSize = 20 };
+            TextBox password = new TextBox() { FontSize = 20 };
+            panel.Children.Add(new TextBlock() { Text = "Account", FontSize = 20 });
             panel.Children.Add(login);
-            panel.Children.Add(new TextBlock() { Text = "Password" });
+            panel.Children.Add(new TextBlock() { Text = "Password", FontSize = 20 });
             password.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
                     Authorize(login.Text, password.Text);
             };
             panel.Children.Add(password);
-            Button enter = new Button() { Content = "Авторизация" };
-            Button close = new Button() { Content = "Выйти" };
+            Button enter = new Button() { Content = "Авторизация", FontSize = 20 };
+            Button close = new Button() { Content = "Выйти", FontSize = 20 };
             panel.Children.Add(enter);
             panel.Children.Add(close);
             enter.Click += (sender, args) => Authorize(login.Text, password.Text);
@@ -85,11 +86,11 @@ namespace SemesterWork
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
             StackPanel panel = new StackPanel();
-            Button fastInvoice = new Button() { Content = "Быстрый чек", Height = 50 };
-            Button updateService = new Button() { Content = "Склад", Height = 50 };
+            Button fastInvoice = new Button() { Content = "Быстрый чек", Height = 50, FontSize = 20 };
+            Button updateService = new Button() { Content = "Склад", Height = 50, FontSize = 20 };
 
-            Button settings = new Button() { Content = "Настройки", Height = 50 };
-            Button logout = new Button() { Content = "Деавторизация", Height = 50 };
+            Button settings = new Button() { Content = "Настройки", Height = 50, FontSize = 20 };
+            Button logout = new Button() { Content = "Деавторизация", Height = 50, FontSize = 20 };
             panel.Children.Add(fastInvoice);
             if (_currentUser.AccessLevel != "Normal")
                 panel.Children.Add(updateService);
@@ -98,7 +99,7 @@ namespace SemesterWork
             panel.Children.Add(logout);
             fastInvoice.Click += (sender, args) => FastInvoiceActivity();
             updateService.Click += (sender, args) => WareHouseServiceActivity();
-            settings.Click += (sender, args) => { };
+            settings.Click += (sender, args) => SettingsActivity();
             logout.Click += (sender, args) =>
             {
                 _currentUser = null;
@@ -172,9 +173,9 @@ namespace SemesterWork
                 Columns =
                 {
                     new DataGridTextColumn() { Header = "Позиция", Binding = binds[0], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = "Цена", Binding = binds[1] },
+                    new DataGridTextColumn() { Header = "Цена", Binding = binds[1], MinWidth = 150 },
                     new DataGridTextColumn() { Header = "Кол-во", Binding = binds[2] },
-                    new DataGridTextColumn() { Header = "Стоимость", Binding = binds[3] }
+                    new DataGridTextColumn() { Header = "Стоимость", Binding = binds[3], MinWidth = 200 }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -289,7 +290,7 @@ namespace SemesterWork
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
-           
+            
             _number = new TextBox() { FontSize = 48 };
             _number.PreviewTextInput += NumberValidationTextBox;
             Grid.SetColumn(_number, 1);
@@ -312,8 +313,8 @@ namespace SemesterWork
                 {
                     new DataGridTextColumn() { Header = "EAN13", Binding = binds[0], MinWidth = 250 },
                     new DataGridTextColumn() { Header = "Полное название", Binding = binds[1], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = "Цена", Binding = binds[2] },
-                    new DataGridTextColumn() { Header = "Количество", Binding = binds[3] },
+                    new DataGridTextColumn() { Header = "Цена", Binding = binds[2], MinWidth = 150},
+                    new DataGridTextColumn() { Header = "Кол-во", Binding = binds[3] },
                     new DataGridTextColumn() { Header = "Единицы измерения", Binding = binds[4] },
                     new DataGridTextColumn() { Header = "Короткое название", Binding = binds[5] }
                 }
@@ -375,7 +376,65 @@ namespace SemesterWork
             };
             updateSmth.Start();          
         }
-        
+
+        public void SettingsActivity()
+        {
+            ClearScreen();
+            Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
+            Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
+            Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
+            Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
+            Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
+            Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
+            var panel = new StackPanel();
+
+            var languageSet = new StackPanel();
+            var languageTBlock = new TextBlock() { Text = "Язык", FontSize = 20 };
+            var russianItem = new TextBlock() { Text = "Русский", FontSize = 20 };
+            var englishItem = new TextBlock() { Text = "English", FontSize = 20 };
+            var languageSelector = new ComboBox() { FontSize = 20 };
+            languageSelector.ItemsSource = new List<TextBlock>() { russianItem, englishItem };
+            
+            languageSet.Children.Add(languageTBlock);
+            languageSet.Children.Add(languageSelector);
+
+            var scannerSet = new StackPanel();
+            var scannerTBlock = new TextBlock() { Text = "Порт сканнера", FontSize = 20 };
+            var scannerTBox = new TextBox() { Text = Variables.BarcodeScannerPort, FontSize = 20 };
+            scannerSet.Children.Add(scannerTBlock);
+            scannerSet.Children.Add(scannerTBox);
+
+            var printerSet = new StackPanel();
+            var printerTBlock = new TextBlock() { Text = "Сетевое имя принтера", FontSize = 20 };
+            var printerTBox = new TextBox() { Text = Variables.PrinterName, FontSize = 20 };
+            printerSet.Children.Add(printerTBlock);
+            printerSet.Children.Add(printerTBox);
+
+            var apply = new Button() { Content = "Применить", Height = 50, FontSize = 20 };
+            var cancel = new Button() { Content = "Отмена", Height = 50, FontSize = 20 };
+
+            panel.Children.Add(languageSet);
+            panel.Children.Add(printerSet);
+            panel.Children.Add(scannerSet);
+            panel.Children.Add(apply);
+            panel.Children.Add(cancel);
+
+            apply.Click += (sender, args) =>
+            {
+
+            };
+            cancel.Click += (sender, args) =>
+            {
+                if (MessageBox.Show("Вы уверены, что хотите выйти из настроек?", "Подтвердите действие", MessageBoxButton.YesNo,
+                MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    MainMenuActivity();
+            };
+
+            Grid.Children.Add(panel);
+            Grid.SetColumn(panel, 1);
+            Grid.SetRow(panel, 1);
+        }
+
         public void ClearScreen()
         {
             Grid.Children.Clear();

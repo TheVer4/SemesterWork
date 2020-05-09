@@ -14,7 +14,7 @@ namespace SemesterWork
             set { _printerName = value; }
         }
 
-        private static string _printerPath = "\\\\Windows\\POS";
+        private static string _printerPath = @"\\Windows\POS";
         public static string PrinterPath { get => _printerPath; }
 
         private static string _welcomeMotd = "!НЕ ЯВЛЯЕТСЯ ДОКУМЕНТОМ!";
