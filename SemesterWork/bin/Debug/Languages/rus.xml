@@ -22,9 +22,10 @@
         <string name="FastInvoiceActivity Position">Позиция</string>
         <string name="FastInvoiceActivity Price">Цена</string>
         <string name="FastInvoiceActivity Count">Кол-во</string>
+        <string name="FastInvoiceActivity Units">Ед.</string>
         <string name="FastInvoiceActivity FullPrice">Стоимость</string>
         <string name="FastInvoiceActivity AddPositionErrorMessageBoxTitle">Произошла ошибка</string>
-        <string name="FastInvoiceActivity AddPositionErrorMessageBox">Позиция с кодом {code} не найдена, попробуйте повторить операцию.</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBox">Позиция с кодом {0} не найдена, попробуйте повторить операцию.</string>
         <string name="WareHouseActivity AddPosition">Добавить</string>
         <string name="WareHouseActivity Manager">Менеджер</string>
         <string name="WareHouseActivity Save">Сохранить</string>
@@ -37,7 +38,7 @@
         <string name="WareHouseActivity EAN13FormatErrorTitle">Произошла ошибка</string>
         <string name="WareHouseActivity EAN13FormatError">Неверный формат ввода EAN13</string>
         <string name="WareHouseActivity ContainsQuestionTitle">Подтвердите действие</string>
-        <string name="WareHouseActivity ContainsQuestion">Товар с кодом {code} уже присутствует на складе. Хотите обновить значение?</string>
+        <string name="WareHouseActivity ContainsQuestion">Товар с кодом {0} уже присутствует на складе. Хотите обновить значение?</string>
         <string name="WareHouseActivity SingleDeleteConfirmTitle">Подтвердите действие</string>
         <string name="WareHouseActivity SingleDeleteConfirm">Вы уверены, что хотите удалить эту позицию?</string>
         <string name="WareHouseActivity DeleteConfirmTitle">Подтвердите действие</string>

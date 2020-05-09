@@ -44,25 +44,25 @@ namespace SemesterWork
             StackPanel panel = new StackPanel();
             TextBox login = new TextBox() { FontSize = 20 };
             TextBox password = new TextBox() { FontSize = 20 };
-            panel.Children.Add(new TextBlock() { Text = _lang["loginActivity Account"], FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = _lang["LoginActivity Account"], FontSize = 20 });
             panel.Children.Add(login);
-            panel.Children.Add(new TextBlock() { Text = _lang["loginActivity Password"], FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = _lang["LoginActivity Password"], FontSize = 20 });
             password.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
                     Authorize(login.Text, password.Text);
             };
             panel.Children.Add(password);
-            Button enter = new Button() { Content = "Авторизация", FontSize = 20 };
-            Button close = new Button() { Content = "Выйти", FontSize = 20 };
+            Button enter = new Button() { Content = _lang["LoginActivity Authorize"], FontSize = 20 };
+            Button close = new Button() { Content = _lang["LoginActivity Exit"], FontSize = 20 };
             panel.Children.Add(enter);
             panel.Children.Add(close);
             enter.Click += (sender, args) => Authorize(login.Text, password.Text);
             close.Click += (sender, args) =>
             {
                 switch (MessageBox.Show(
-                    "Вы действительно хотите выйти?",
-                    "Подтвердите действие",
+                    _lang["LoginActivity ExitMessageBox"],
+                    _lang["LoginActivity ExitMessageBoxTitle"],
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question))
                 {
@@ -88,11 +88,11 @@ namespace SemesterWork
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
             StackPanel panel = new StackPanel();
-            Button fastInvoice = new Button() { Content = "Быстрый чек", Height = 50, FontSize = 20 };
-            Button updateService = new Button() { Content = "Склад", Height = 50, FontSize = 20 };
+            Button fastInvoice = new Button() { Content = _lang["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
+            Button updateService = new Button() { Content = _lang["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
 
-            Button settings = new Button() { Content = "Настройки", Height = 50, FontSize = 20 };
-            Button logout = new Button() { Content = "Деавторизация", Height = 50, FontSize = 20 };
+            Button settings = new Button() { Content = _lang["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
+            Button logout = new Button() { Content = _lang["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
             panel.Children.Add(fastInvoice);
             if (_currentUser.AccessLevel != "Normal")
                 panel.Children.Add(updateService);
@@ -129,7 +129,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             TextBlock programName = new TextBlock() { Text = Variables.ProgramName, FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock cashier = new TextBlock() { Text = $"Кассир: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
+            TextBlock cashier = new TextBlock() { Text = $"{_lang["FastInvoiceActivity Cashier"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -149,7 +149,7 @@ namespace SemesterWork
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             _barcodeForm = new TextBox() { FontSize = 48 };
             _barcodeForm.PreviewTextInput += NumberValidationTextBox;
-            Button addPosition = new Button() { Content = "Добавить", FontSize = 48 };
+            Button addPosition = new Button() { Content = _lang["FastInvoiceActivity AddPosition"], FontSize = 48 };
             addPosition.Click += (sender, args) => AddPosition(_barcodeForm.Text);
             barcodeInput.Children.Add(_barcodeForm);
             Grid.SetColumn(addPosition, 1);
@@ -175,11 +175,11 @@ namespace SemesterWork
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = "Позиция", Binding = binds[0], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = "Цена", Binding = binds[1], MinWidth = 150 },
-                    new DataGridTextColumn() { Header = "Кол-во", Binding = binds[2] },
-                    new DataGridTextColumn() { Header = "Ед.", Binding = binds[3] },
-                    new DataGridTextColumn() { Header = "Стоимость", Binding = binds[3], MinWidth = 200 }
+                    new DataGridTextColumn() { Header = _lang["FastInvoiceActivity Position"], Binding = binds[0], MinWidth = 500 },
+                    new DataGridTextColumn() { Header = _lang["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
+                    new DataGridTextColumn() { Header = _lang["FastInvoiceActivity Count"], Binding = binds[2] },
+                    new DataGridTextColumn() { Header = _lang["FastInvoiceActivity Units"], Binding = binds[3] },
+                    new DataGridTextColumn() { Header = _lang["FastInvoiceActivity FullPrice"], Binding = binds[3], MinWidth = 200 }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -220,16 +220,16 @@ namespace SemesterWork
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
             controls.Children.Add(keyboard);
-            Button payment = new Button() { Content = "ОПЛАТА", FontSize = 40,  Height = 100 };
+            Button payment = new Button() { Content = _lang["FastInvoiceActivity Payment"], FontSize = 40,  Height = 100 };
             payment.Click += PaymentOnClick;
-            Button amount = new Button() { Content = "КОЛ", FontSize = 40, Height = 100 };
+            Button amount = new Button() { Content = _lang["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
             amount.Click += AmountOnClick;
             Button storn = new Button() { Content = "ТЕСТ ЧЕГОНИТЬ", FontSize = 40,  Height = 100 };
             storn.Click += (sender, args) =>
                 {
 
                 };
-            _total.Text = "ИТОГО: 0";
+            _total.Text = $"{_lang["FastInvoiceActivity Total"]}: 0";
             _total.FontSize = 40;
             _total.Margin = new Thickness(15, 20, 0, 0);
             controls.Children.Add(payment);
@@ -269,7 +269,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             TextBlock programName = new TextBlock() { Text = Variables.ProgramName, FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock cashier = new TextBlock() { Text = $"Менеджер: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
+            TextBlock cashier = new TextBlock() { Text = $"{_lang["WareHouseActivity Manager"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -289,7 +289,7 @@ namespace SemesterWork
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             _barcodeForm = new TextBox() { FontSize = 48 };
             _barcodeForm.PreviewTextInput += NumberValidationTextBox;
-            Button addPosition = new Button() { Content = "Добавить", FontSize = 48 };
+            Button addPosition = new Button() { Content = _lang["WareHouseActivity AddPosition"], FontSize = 48 };
             addPosition.Click += (sender, args) => AddPositionForSaving(_barcodeForm.Text);
             barcodeInput.Children.Add(_barcodeForm);
             Grid.SetColumn(addPosition, 1);
@@ -316,12 +316,12 @@ namespace SemesterWork
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = "EAN13", Binding = binds[0], MinWidth = 250 },
-                    new DataGridTextColumn() { Header = "Полное название", Binding = binds[1], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = "Цена", Binding = binds[2], MinWidth = 150},
-                    new DataGridTextColumn() { Header = "Кол-во", Binding = binds[3] },
-                    new DataGridTextColumn() { Header = "Единицы измерения", Binding = binds[4] },
-                    new DataGridTextColumn() { Header = "Короткое название", Binding = binds[5] }
+                    new DataGridTextColumn() { Header = _lang["WareHouseActivity EAN13"], Binding = binds[0], MinWidth = 250 },
+                    new DataGridTextColumn() { Header = _lang["WareHouseActivity FullName"], Binding = binds[1], MinWidth = 500 },
+                    new DataGridTextColumn() { Header = _lang["WareHouseActivity Price"], Binding = binds[2], MinWidth = 150},
+                    new DataGridTextColumn() { Header = _lang["WareHouseActivity Amount"], Binding = binds[3] },
+                    new DataGridTextColumn() { Header = _lang["WareHouseActivity Units"], Binding = binds[4] },
+                    new DataGridTextColumn() { Header = _lang["WareHouseActivity ShortName"], Binding = binds[5] }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -362,7 +362,7 @@ namespace SemesterWork
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
             controls.Children.Add(keyboard);
-            Button saveButton = new Button() { Content = "Сохранить", FontSize = 40,  Height = 100 };
+            Button saveButton = new Button() { Content = _lang["WareHouseActivity Save"], FontSize = 40,  Height = 100 };
             saveButton.Click += (sender, args) => SavePositions();
             controls.Children.Add(saveButton);
             invoiceControls.Children.Add(controls);
@@ -394,7 +394,7 @@ namespace SemesterWork
             var panel = new StackPanel();
 
             var languageSet = new StackPanel();
-            var languageTBlock = new TextBlock() { Text = "Язык", FontSize = 20 };
+            var languageTBlock = new TextBlock() { Text = _lang["SettingsActivity Language"], FontSize = 20 };
             var languageSelector = new ComboBox() { FontSize = 20 };
             languageSelector.ItemsSource = _lang.Languages.Select(language => new TextBlock() { Text = language, FontSize = 20 });
             
@@ -402,19 +402,19 @@ namespace SemesterWork
             languageSet.Children.Add(languageSelector);
 
             var scannerSet = new StackPanel();
-            var scannerTBlock = new TextBlock() { Text = "Порт сканнера", FontSize = 20 };
+            var scannerTBlock = new TextBlock() { Text = _lang["SettingsActivity ScannerPort"], FontSize = 20 };
             var scannerTBox = new TextBox() { Text = Variables.BarcodeScannerPort, FontSize = 20 };
             scannerSet.Children.Add(scannerTBlock);
             scannerSet.Children.Add(scannerTBox);
 
             var printerSet = new StackPanel();
-            var printerTBlock = new TextBlock() { Text = "Сетевое имя принтера", FontSize = 20 };
+            var printerTBlock = new TextBlock() { Text = _lang["SettingsActivity NetPrinterName"], FontSize = 20 };
             var printerTBox = new TextBox() { Text = Variables.PrinterName, FontSize = 20 };
             printerSet.Children.Add(printerTBlock);
             printerSet.Children.Add(printerTBox);
 
-            var apply = new Button() { Content = "Применить", Height = 50, FontSize = 20 };
-            var cancel = new Button() { Content = "Отмена", Height = 50, FontSize = 20 };
+            var apply = new Button() { Content = _lang["SettingsActivity Apply"], Height = 50, FontSize = 20 };
+            var cancel = new Button() { Content = _lang["SettingsActivity Cancel"], Height = 50, FontSize = 20 };
 
             panel.Children.Add(languageSet);
             panel.Children.Add(printerSet);
@@ -428,7 +428,7 @@ namespace SemesterWork
             };
             cancel.Click += (sender, args) =>
             {
-                if (MessageBox.Show("Вы уверены, что хотите выйти из настроек?", "Подтвердите действие", MessageBoxButton.YesNo,
+                if (MessageBox.Show(_lang["SettingsActivity CancelConfirm"], _lang["SettingsActivity CancelConfirmTitle"], MessageBoxButton.YesNo,
                 MessageBoxImage.Question) == MessageBoxResult.Yes)
                     MainMenuActivity();
             };
