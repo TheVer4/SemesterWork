@@ -52,5 +52,9 @@
         <string name="SettingsActivity Cancel">Отмена</string>
         <string name="SettingsActivity CancelConfirmTitle">Подтвердите действие</string>
         <string name="SettingsActivity CancelConfirm">Вы уверены, что хотите выйти из настроек?</string>
+        <string name="BarcodeReader NotFoundExceptionTitle">Внимание!</string>
+        <string name="BarcodeReader NotFountException">Не удалось открыть взаимодействие со сканером. Проверьте соединение и перезапустите режим из главного меню</string>
+        <string name="Printer NotFoundExceptionTitle">Внимание!</string>
+        <string name="Printer NotFountException">Не удалось открыть взаимодействие с принтером. Проверьте соединение и перезапустите режим из главного меню.</string>
     </strings>
 </document>

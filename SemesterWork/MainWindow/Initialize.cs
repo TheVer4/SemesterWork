@@ -2,13 +2,13 @@
 {
     public partial class MainWindow
     {
-        PrintInvoice printInvoice;
-        private LanguageEngine _lang;
+        private PrintInvoice _printInvoice;
+        public static LanguageEngine Lang;
         private void InitializeEnvironment()
         {
-            printInvoice = new PrintInvoice();
+            _printInvoice = new PrintInvoice();
             Variables.BarcodeScannerPort = "COM4";
-            _lang = new LanguageEngine();
+            Lang = new LanguageEngine();
             LoginActivity();
         }
     }

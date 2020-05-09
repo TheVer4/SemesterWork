@@ -17,8 +17,8 @@
             catch
             {
                 MessageBox.Show(
-                    "Не удалось открыть взаимодействие со сканером. Проверьте соединение и перезапустите режим из главного меню",
-                    "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MainWindow.Lang["BarcodeReader NotFoundException"],
+                    MainWindow.Lang["BarcodeReader NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

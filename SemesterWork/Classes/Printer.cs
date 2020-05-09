@@ -1,4 +1,5 @@
 ﻿using PrinterUtility;
+using System.Windows;
 
 namespace SemesterWork
 {
@@ -6,7 +7,13 @@ namespace SemesterWork
     {
         public void Send(byte[] data)
         {
-            PrintExtensions.Print(data, Variables.PrinterPath);
+            try { PrintExtensions.Print(data, Variables.PrinterPath); }
+            catch 
+            {
+                MessageBox.Show(
+                    MainWindow.Lang["Printer NotFoundExceptionTitle"],
+                    MainWindow.Lang["Printer NotFountException"], MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }
