@@ -90,6 +90,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\DBProductData.cs" />
+    <Compile Include="Classes\LanguageEngine.cs" />
     <Compile Include="MainWindow\Activities.cs" />
     <Compile Include="Classes\BarcodeReader.cs" />
     <Compile Include="DBControls\DBController.cs" />

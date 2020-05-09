@@ -17,6 +17,7 @@
           <e p="CheckLine.cs" t="Include" />
           <e p="DBProductData.cs" t="Include" />
           <e p="Encoder866.cs" t="Include" />
+          <e p="LanguageEngine.cs" t="Include" />
           <e p="Printer.cs" t="Include" />
           <e p="PrintInvoice.cs" t="Include" />
           <e p="ProductData.cs" t="Include" />

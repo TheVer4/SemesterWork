@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document>
+    <language>Русский</language>
+    <strings>
+        <string name="LoginActivity Account">Логин</string>
+        <string name="LoginActivity Password">Пароль</string>
+        <string name="LoginActivity Authorize">Авторизация</string>
+        <string name="LoginActivity Exit">Выйти</string>
+        <string name="LoginActivity ExitMessageBoxTitle">Подтвердите действие</string>
+        <string name="LoginActivity ExitMessageBox">Вы действительно хотите выйти?</string>
+        <string name="LoginActivity AuthorizationMessageBoxTitle">Произошла ошибка</string>
+        <string name="LoginActivity AuthorizationMessageBox">Неверно введены данные, попробуйте снова.</string>
+        <string name="MainMenuActivity FastInvoice">Быстрый чек</string>
+        <string name="MainMenuActivity WareHouse">Склад</string>
+        <string name="MainMenuActivity Settings">Настройки</string>
+        <string name="MainMenuActivity Logout">Деавторизация</string>
+        <string name="FastInvoiceActivity AddPosition">Добавить</string>
+        <string name="FastInvoiceActivity Cashier">Кассир</string>
+        <string name="FastInvoiceActivity Payment">ОПЛАТА</string>
+        <string name="FastInvoiceActivity Amount">КОЛ</string>
+        <string name="FastInvoiceActivity Total">ИТОГО</string>
+        <string name="FastInvoiceActivity Position">Позиция</string>
+        <string name="FastInvoiceActivity Price">Цена</string>
+        <string name="FastInvoiceActivity Count">Кол-во</string>
+        <string name="FastInvoiceActivity FullPrice">Стоимость</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBoxTitle">Произошла ошибка</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBox">Позиция с кодом {code} не найдена, попробуйте повторить операцию.</string>
+        <string name="WareHouseActivity AddPosition">Добавить</string>
+        <string name="WareHouseActivity Manager">Менеджер</string>
+        <string name="WareHouseActivity Save">Сохранить</string>
+        <string name="WareHouseActivity EAN13">EAN13</string>
+        <string name="WareHouseActivity FullName">Полное название</string>
+        <string name="WareHouseActivity Price">Цена</string>
+        <string name="WareHouseActivity Amount">Кол-во</string>
+        <string name="WareHouseActivity Units">Ед.</string>
+        <string name="WareHouseActivity ShortName">Короткое название</string>
+        <string name="WareHouseActivity EAN13FormatErrorTitle">Произошла ошибка</string>
+        <string name="WareHouseActivity EAN13FormatError">Неверный формат ввода EAN13</string>
+        <string name="WareHouseActivity ContainsQuestionTitle">Подтвердите действие</string>
+        <string name="WareHouseActivity ContainsQuestion">Товар с кодом {code} уже присутствует на складе. Хотите обновить значение?</string>
+        <string name="WareHouseActivity SingleDeleteConfirmTitle">Подтвердите действие</string>
+        <string name="WareHouseActivity SingleDeleteConfirm">Вы уверены, что хотите удалить эту позицию?</string>
+        <string name="WareHouseActivity DeleteConfirmTitle">Подтвердите действие</string>
+        <string name="WareHouseActivity DeleteConfirm">Вы уверены, что хотите удалить все позиции?</string>
+        <string name="WareHouseActivity SaveMessageBoxTitle">Сообщение</string>
+        <string name="WareHouseActivity SaveMessageBox">Позиции успешно сохранены!</string>
+        <string name="SettingsActivity Language">Язык</string>
+        <string name="SettingsActivity NetPrinterName">Сетевое имя принтера</string>
+        <string name="SettingsActivity ScannerPort">COM-Порт сканнера</string>
+        <string name="SettingsActivity Apply">Применить</string>
+        <string name="SettingsActivity Cancel">Отмена</string>
+        <string name="SettingsActivity CancelConfirmTitle">Подтвердите действие</string>
+        <string name="SettingsActivity CancelConfirm">Вы уверены, что хотите выйти из настроек?</string>
+    </strings>
+</document>

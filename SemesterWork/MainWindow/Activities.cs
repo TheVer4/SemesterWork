@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -43,9 +44,9 @@ namespace SemesterWork
             StackPanel panel = new StackPanel();
             TextBox login = new TextBox() { FontSize = 20 };
             TextBox password = new TextBox() { FontSize = 20 };
-            panel.Children.Add(new TextBlock() { Text = "Account", FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = _lang["loginActivity Account"], FontSize = 20 });
             panel.Children.Add(login);
-            panel.Children.Add(new TextBlock() { Text = "Password", FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = _lang["loginActivity Password"], FontSize = 20 });
             password.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
@@ -394,10 +395,8 @@ namespace SemesterWork
 
             var languageSet = new StackPanel();
             var languageTBlock = new TextBlock() { Text = "Язык", FontSize = 20 };
-            var russianItem = new TextBlock() { Text = "Русский", FontSize = 20 };
-            var englishItem = new TextBlock() { Text = "English", FontSize = 20 };
             var languageSelector = new ComboBox() { FontSize = 20 };
-            languageSelector.ItemsSource = new List<TextBlock>() { russianItem, englishItem };
+            languageSelector.ItemsSource = _lang.Languages.Select(language => new TextBlock() { Text = language, FontSize = 20 });
             
             languageSet.Children.Add(languageTBlock);
             languageSet.Children.Add(languageSelector);
