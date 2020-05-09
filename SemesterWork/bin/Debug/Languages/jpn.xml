@@ -53,8 +53,8 @@
         <string name="SettingsActivity CancelConfirmTitle">アクションを確認</string>
         <string name="SettingsActivity CancelConfirm">設定を終了してもよろしいですか？</string>
         <string name="BarcodeReader NotFoundExceptionTitle">ご注意！</string>
-        <string name="BarcodeReader NotFountException">スキャナーと対話することができませんでした。接続を確認し、メインメニューからモードを再起動してください。</string>
+        <string name="BarcodeReader NotFoundException">スキャナーと対話することができませんでした。接続を確認し、メインメニューからモードを再起動してください。</string>
         <string name="Printer NotFoundExceptionTitle">ご注意！</string>
-        <string name="Printer NotFountException">プリンターと対話することができませんでした。接続を確認し、メインメニューからモードを再起動してください。</string>
+        <string name="Printer NotFoundException">プリンターと対話することができませんでした。接続を確認し、メインメニューからモードを再起動してください。</string>
     </strings>
 </document>

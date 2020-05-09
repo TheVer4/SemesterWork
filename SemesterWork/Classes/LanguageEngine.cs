@@ -9,7 +9,7 @@ namespace SemesterWork
     {
         private static Dictionary<string, XmlDocument> _languages = new Dictionary<string, XmlDocument>();
         public List<string> Languages => _languages.Keys.ToList();
-        public static string Current { get; set; } = "日本語";
+        public static string Current { get; set; } = "Русский"; //Русский, English, 日本語
 
         public LanguageEngine()
         {

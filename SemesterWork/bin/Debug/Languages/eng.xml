@@ -55,6 +55,6 @@
         <string name="BarcodeReader NotFoundExceptionTitle">Attention!</string>
         <string name="BarcodeReader NotFoundException">Could not find the scanner. Check the connection and restart the mode from the main menu.</string>
         <string name="Printer NotFoundExceptionTitle">Attention!</string>
-        <string name="Printer NotFountException">Could not find the printer. Check the connection and restart the mode from the main menu.</string>
+        <string name="Printer NotFoundException">Could not find the printer. Check the connection and restart the mode from the main menu.</string>
     </strings>
 </document>
