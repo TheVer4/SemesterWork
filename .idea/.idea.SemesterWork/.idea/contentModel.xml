@@ -8,18 +8,32 @@
     <e p="D:\Projects\csharp\SemesterWork" t="IncludeFlat">
       <e p="packages" t="ExcludeRecursive" />
       <e p="SemesterWork" t="IncludeRecursive">
-        <e p="Activities.cs" t="Include" />
         <e p="App.config" t="Include" />
         <e p="App.xaml" t="Include" />
         <e p="App.xaml.cs" t="Include" />
-        <e p="BarcodeReader.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="CheckLine.cs" t="Include" />
+        <e p="Classes" t="Include">
+          <e p="BarcodeReader.cs" t="Include" />
+          <e p="CheckLine.cs" t="Include" />
+          <e p="DBProductData.cs" t="Include" />
+          <e p="Encoder866.cs" t="Include" />
+          <e p="Printer.cs" t="Include" />
+          <e p="PrintInvoice.cs" t="Include" />
+          <e p="ProductData.cs" t="Include" />
+          <e p="User.cs" t="Include" />
+          <e p="Variables.cs" t="Include" />
+        </e>
         <e p="DataBases" t="Include" />
-        <e p="DBController.cs" t="Include" />
-        <e p="Encoder866.cs" t="Include" />
-        <e p="EventHandler.cs" t="Include" />
-        <e p="Initialize.cs" t="Include" />
+        <e p="DBControls" t="Include">
+          <e p="DBController.cs" t="Include" />
+          <e p="UserDBController.cs" t="Include" />
+          <e p="WareHouseDBController.cs" t="Include" />
+        </e>
+        <e p="MainWindow" t="Include">
+          <e p="Activities.cs" t="Include" />
+          <e p="EventHandler.cs" t="Include" />
+          <e p="Initialize.cs" t="Include" />
+        </e>
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
@@ -29,9 +43,6 @@
           </e>
         </e>
         <e p="packages.config" t="Include" />
-        <e p="Printer.cs" t="Include" />
-        <e p="PrintInvoice.cs" t="Include" />
-        <e p="ProductData.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
           <e p="Resources.Designer.cs" t="Include" />
@@ -40,10 +51,6 @@
           <e p="Settings.settings" t="Include" />
         </e>
         <e p="SemesterWork.csproj" t="IncludeRecursive" />
-        <e p="User.cs" t="Include" />
-        <e p="UserDBController.cs" t="Include" />
-        <e p="Variables.cs" t="Include" />
-        <e p="WareHouseDBController.cs" t="Include" />
       </e>
       <e p="SemesterWork.sln" t="IncludeFlat" />
     </e>

@@ -15,19 +15,12 @@ namespace SemesterWork
 {
     public partial class MainWindow
     {
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'";
-            printInvoice.Print();
-        }
-        
+      
         private void ClearOnClick(object sender, RoutedEventArgs e)
         {
-            if (_invoicePositions.Count == 0)
-            {
-                if (_number.Text.Length != 0) _number.Text = "";
-                else MainMenuActivity();
-            }
+            if (_number.Text.Length != 0) _number.Text = "";
+            else if (_invoicePositions.Count == 0)
+                MainMenuActivity();
             else if (_positions.SelectedIndex == -1)
             {
                 if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
@@ -68,13 +61,14 @@ namespace SemesterWork
             if (_number.Text.Length == 0)
                 _invoicePositions[_positions.SelectedIndex].Amount++;
             else {
-                double amount = double.Parse(_number.Text, CultureInfo.CurrentCulture);
+                double amount = double.Parse(_number.Text, CultureInfo.InvariantCulture);
+                string units = _invoicePositions[_positions.SelectedIndex].Data.Units;
                 if(amount <= 0) _invoicePositions.RemoveAt(_positions.SelectedIndex);
                 else if (_invoicePositions[_positions.SelectedIndex].Amount < amount)
-                    _invoicePositions[_positions.SelectedIndex].Amount = amount;
+                    _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." ? Math.Round(amount, MidpointRounding.ToEven) : amount;
                 else if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
-                    _invoicePositions[_positions.SelectedIndex].Amount = amount;
+                    _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." ? Math.Round(amount, MidpointRounding.ToEven) : amount;
             }
             UpdateScreen();
         }
@@ -205,7 +199,12 @@ namespace SemesterWork
             };
             worker.RunWorkerAsync();
         }
-
+        
+        private void PaymentOnClick(object sender, RoutedEventArgs e)
+        {
+            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'"; 
+            printInvoice.Print(_invoicePositions);
+        }
         private void UpdateScreen()
         {            
             _readBarcode = null;

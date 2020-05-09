@@ -24,6 +24,7 @@ namespace SemesterWork
         private TextBox _barcodeForm;
         private TextBlock _total;
         private string _readBarcode;
+        private DispatcherTimer _updateSmth;
         public void LoginActivity()
         {
             ClearScreen();
@@ -162,6 +163,7 @@ namespace SemesterWork
                 new Binding("Data.Name"),
                 new Binding("Data.Price"),
                 new Binding("Amount"),
+                new Binding("Data.Units"),
                 new Binding("FullPrice")
             };
             foreach (var bind in binds)
@@ -175,6 +177,7 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = "Позиция", Binding = binds[0], MinWidth = 500 },
                     new DataGridTextColumn() { Header = "Цена", Binding = binds[1], MinWidth = 150 },
                     new DataGridTextColumn() { Header = "Кол-во", Binding = binds[2] },
+                    new DataGridTextColumn() { Header = "Ед.", Binding = binds[3] },
                     new DataGridTextColumn() { Header = "Стоимость", Binding = binds[3], MinWidth = 200 }
                 }
             };
@@ -217,6 +220,7 @@ namespace SemesterWork
             Grid.SetRow(clear, 3);
             controls.Children.Add(keyboard);
             Button payment = new Button() { Content = "ОПЛАТА", FontSize = 40,  Height = 100 };
+            payment.Click += PaymentOnClick;
             Button amount = new Button() { Content = "КОЛ", FontSize = 40, Height = 100 };
             amount.Click += AmountOnClick;
             Button storn = new Button() { Content = "ТЕСТ ЧЕГОНИТЬ", FontSize = 40,  Height = 100 };
@@ -237,17 +241,17 @@ namespace SemesterWork
 
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
             _barcodeReader.AddReader(BarcodeRead);
-            DispatcherTimer updateSmth = new DispatcherTimer();
-            updateSmth.Interval = TimeSpan.FromMilliseconds(500);
-            updateSmth.Tick += (sender, args) =>
+            _updateSmth = new DispatcherTimer();
+            _updateSmth.Interval = TimeSpan.FromMilliseconds(500);
+            _updateSmth.Tick += (sender, args) =>
             {
                 if (_readBarcode != null)
                     AddPosition(_readBarcode);
                 _readBarcode = null;
             };
-            updateSmth.Start();          
+            _updateSmth.Start();          
         }
-
+        
         public void WareHouseServiceActivity()
         {
             ClearScreen();
@@ -366,15 +370,15 @@ namespace SemesterWork
 
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
             _barcodeReader.AddReader(BarcodeRead);
-            DispatcherTimer updateSmth = new DispatcherTimer();
-            updateSmth.Interval = TimeSpan.FromMilliseconds(500);
-            updateSmth.Tick += (sender, args) =>
+            _updateSmth = new DispatcherTimer();
+            _updateSmth.Interval = TimeSpan.FromMilliseconds(500);
+            _updateSmth.Tick += (sender, args) =>
             {
                 if (_readBarcode != null)
                     AddPositionForSaving(_readBarcode);
                 _readBarcode = null;
             };
-            updateSmth.Start();          
+            _updateSmth.Start();          
         }
 
         public void SettingsActivity()
@@ -437,6 +441,8 @@ namespace SemesterWork
 
         public void ClearScreen()
         {
+            _barcodeReader?.Dispose();
+            _updateSmth?.Stop();
             Grid.Children.Clear();
             Grid.ColumnDefinitions.Clear();
             Grid.RowDefinitions.Clear();

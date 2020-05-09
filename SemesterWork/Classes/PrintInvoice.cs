@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 using PrinterUtility;
 using PrinterUtility.EscPosEpsonCommands;
 
@@ -14,7 +17,7 @@ namespace SemesterWork
             printer = new Printer();
         }
         
-        public bool Print()
+        public bool Print(List<CheckLine> list)
         {
             EscPosEpson epson = new EscPosEpson();
             printer.Send(FormatPaper(
@@ -33,13 +36,23 @@ namespace SemesterWork
                 epson.Lf(),
                 Encoder866.Recode("ПРИХОД"),
                 epson.Lf(),
-                Encoder866.Recode("ИТОГО: 420"),
+                FormatCheckLines(list),
+                epson.Lf(),
+                Encoder866.Recode($"ИТОГО: {list.Select(x => x.FullPrice).Sum()} руб."),
                 epson.Lf(),
                 epson.Lf()
                 ));
             return true;
         }
 
+        private byte[] FormatCheckLines(List<CheckLine> list)
+        {
+            byte[] result = new byte[] {};
+            foreach (var line in list)
+                result = PrintExtensions.AddBytes(result, Encoder866.Recode(line.ToString()));
+            return result;
+        }
+        
         private byte[] FormatPaper(params byte[][] byteset)
         {
             byte[] data = new byte[] {};
