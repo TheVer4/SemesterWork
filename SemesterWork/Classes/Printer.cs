@@ -8,7 +8,7 @@ namespace SemesterWork
         public void Send(byte[] data)
         {
             try { PrintExtensions.Print(data, Variables.PrinterPath); }
-            catch 
+            catch
             {
                 MessageBox.Show(
                     MainWindow.Lang["Printer NotFoundExceptionTitle"],

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
+using System.Runtime.Remoting.Channels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -396,6 +395,7 @@ namespace SemesterWork
             var languageSet = new StackPanel();
             var languageTBlock = new TextBlock() { Text = Lang["SettingsActivity Language"], FontSize = 20 };
             var languageSelector = new ComboBox() { FontSize = 20 };
+            languageSelector.SelectedIndex = Lang.Languages.IndexOf(Lang.Current);
             languageSelector.ItemsSource = Lang.Languages.Select(language => new TextBlock() { Text = language, FontSize = 20 });
             
             languageSet.Children.Add(languageTBlock);
@@ -406,12 +406,15 @@ namespace SemesterWork
             var scannerTBox = new TextBox() { Text = Variables.BarcodeScannerPort, FontSize = 20 };
             scannerSet.Children.Add(scannerTBlock);
             scannerSet.Children.Add(scannerTBox);
-
+            
             var printerSet = new StackPanel();
             var printerTBlock = new TextBlock() { Text = Lang["SettingsActivity NetPrinterName"], FontSize = 20 };
-            var printerTBox = new TextBox() { Text = Variables.PrinterName, FontSize = 20 };
+            var printerTBox = new TextBox() { Text = Variables.PrinterPath.Substring(Variables.PrinterPath.LastIndexOf('\\') + 1, 
+                Variables.PrinterPath.Length - Variables.PrinterPath.LastIndexOf('\\') - 1), FontSize = 20 };
+            var printerNetTBlock = new TextBlock() { Text = $"{Lang["SettingsActivity NetPrinterAddress"]}: {Variables.PrinterPath}"};
             printerSet.Children.Add(printerTBlock);
             printerSet.Children.Add(printerTBox);
+            printerSet.Children.Add(printerNetTBlock);
 
             var apply = new Button() { Content = Lang["SettingsActivity Apply"], Height = 50, FontSize = 20 };
             var cancel = new Button() { Content = Lang["SettingsActivity Cancel"], Height = 50, FontSize = 20 };
@@ -422,9 +425,33 @@ namespace SemesterWork
             panel.Children.Add(apply);
             panel.Children.Add(cancel);
 
+            string printerPath = Variables.PrinterPath;
+            printerTBox.TextChanged += (sender, args) =>
+            {
+                var data = sender as TextBox;
+                 printerPath = data.Text.Contains('\\') 
+                    ? data.Text 
+                    : @$"\\{Variables.MachineName}\{data.Text}";
+                printerNetTBlock.Text = $@"{Lang["SettingsActivity NetPrinterAddress"]}: {printerPath}";
+            };
+
+            string scanner = Variables.BarcodeScannerPort;
+            scannerTBox.TextChanged += (sender, args) =>
+            {
+                var data = sender as TextBox;
+                scanner = data.Text.StartsWith("COM") 
+                    ? data.Text 
+                    : "COM";
+                data.Text = scanner;
+                data.SelectionStart = data.Text.Length;
+            };
+
             apply.Click += (sender, args) =>
             {
-
+                Lang.Current = ((TextBlock) languageSelector.SelectedItem).Text;
+                Variables.PrinterPath = printerPath;
+                Variables.BarcodeScannerPort = scanner;
+                SettingsActivity();
             };
             cancel.Click += (sender, args) =>
             {

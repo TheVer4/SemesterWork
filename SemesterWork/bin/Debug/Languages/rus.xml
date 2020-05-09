@@ -47,9 +47,10 @@
         <string name="WareHouseActivity SaveMessageBox">Позиции успешно сохранены!</string>
         <string name="SettingsActivity Language">Язык</string>
         <string name="SettingsActivity NetPrinterName">Сетевое имя принтера</string>
+        <string name="SettingsActivity NetPrinterAddress">Полный адрес</string>
         <string name="SettingsActivity ScannerPort">COM-Порт сканнера</string>
         <string name="SettingsActivity Apply">Применить</string>
-        <string name="SettingsActivity Cancel">Отмена</string>
+        <string name="SettingsActivity Cancel">Выход</string>
         <string name="SettingsActivity CancelConfirmTitle">Подтвердите действие</string>
         <string name="SettingsActivity CancelConfirm">Вы уверены, что хотите выйти из настроек?</string>
         <string name="BarcodeReader NotFoundExceptionTitle">Внимание!</string>

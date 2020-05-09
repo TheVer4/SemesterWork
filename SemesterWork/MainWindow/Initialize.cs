@@ -7,7 +7,6 @@
         private void InitializeEnvironment()
         {
             _printInvoice = new PrintInvoice();
-            Variables.BarcodeScannerPort = "COM4";
             Lang = new LanguageEngine();
             LoginActivity();
         }
