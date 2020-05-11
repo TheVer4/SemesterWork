@@ -223,8 +223,8 @@ namespace SemesterWork
                     }
                 }
                 else
-                    MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DelitingNotInDB"],
-                    Lang["WareHouseActivity DeleteFromDB DelitingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingNotInDB"],
+                    Lang["WareHouseActivity DeleteFromDB DeletingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
             }
             UpdateScreen();
         }

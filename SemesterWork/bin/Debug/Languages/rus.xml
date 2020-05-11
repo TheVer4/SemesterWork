@@ -64,7 +64,7 @@
         <string name="WareHouseActivity DeleteFromDB DeletingPositions">Вы уверены, что хотите удалить со склада эти позиции?</string>
         <string name="WareHouseActivity DeleteFromDB DeletingPositionTitle">Подтвердите действие</string>
         <string name="WareHouseActivity DeleteFromDB DeletingPosition">Вы уверены, что хотите удалить со склада эту позицию?</string>
-        <string name="WareHouseActivity DeleteFromDB DelitingNotInDBTitle">Внимание!</string>
-        <string name="WareHouseActivity DeleteFromDB DelitingNotInDB">Эта позиция не присутствует на складе</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDBTitle">Внимание!</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDB">Эта позиция не присутствует на складе</string>
     </strings>
   </document>

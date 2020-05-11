@@ -102,7 +102,16 @@ namespace SemesterWork
         <string name='BarcodeReader NotFoundExceptionTitle'>Attention!</string>
         <string name='BarcodeReader NotFoundException'>Could not find the scanner. Check the connection and restart the mode from the main menu.</string>
         <string name='Printer NotFoundExceptionTitle'>Attention!</string>
-        <string name='Printer NotFountException'>Could not find the printer. Check the connection and restart the mode from the main menu.</string>
+        <string name='Printer NotFoundException'>Could not find the printer. Check the connection and restart the mode from the main menu.</string>
+        <string name='WareHouseActivity DeleteFromDBButton'>Delete from warehouse</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingErrorTitle'>Error</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingError'>Nothing to delete</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingPositionsTitle'>Confirm action</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingPositions'>Are you sure you want to remove these items from the warehouse?</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingPositionTitle'>Confirm action</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingPosition'>Are you sure you want to remove this item from the warehouse?</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingNotInDBTitle'>Attention!</string>
+        <string name='WareHouseActivity DeleteFromDB DeletingNotInDB'>This item is not in the warehouse.</string>
     </strings>
 </document>
 ";
