@@ -47,9 +47,10 @@
         <string name="WareHouseActivity SaveMessageBox">ポジションが保存されました！</string>
         <string name="SettingsActivity Language">言語</string>
         <string name="SettingsActivity NetPrinterName">プリンタネットワーク名</string>
+        <string name="SettingsActivity NetPrinterAddress">完全な住所</string>
         <string name="SettingsActivity ScannerPort">スキャナーのCOM-Port</string>
         <string name="SettingsActivity Apply">応募する</string>
-        <string name="SettingsActivity Cancel">キャンセル</string>
+        <string name="SettingsActivity Cancel">完了</string>
         <string name="SettingsActivity CancelConfirmTitle">アクションを確認</string>
         <string name="SettingsActivity CancelConfirm">設定を終了してもよろしいですか？</string>
         <string name="BarcodeReader NotFoundExceptionTitle">ご注意！</string>

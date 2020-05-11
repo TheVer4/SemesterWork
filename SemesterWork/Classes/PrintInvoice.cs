@@ -9,7 +9,6 @@ namespace SemesterWork
 {
     public class PrintInvoice
     {
-        private int InvoicesCount = 0;
         private Printer printer;
 
         public PrintInvoice()
@@ -29,8 +28,6 @@ namespace SemesterWork
                 Encoder866.Recode(Variables.InstitutionName),
                 epson.Lf(),
                 epson.Alignment.Left(),
-                epson.Lf(),
-                Encoder866.Recode($"Чек                            {InvoicesCount++}"), 
                 epson.Lf(),
                 Encoder866.Recode(DateTime.Now.ToString()),
                 epson.Lf(),

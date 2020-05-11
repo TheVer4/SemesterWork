@@ -209,7 +209,7 @@ namespace SemesterWork
         {            
             _readBarcode = null;
             if (_total != null)
-                _total.Text = Lang["FastInvoiceActivity Total"] + $": { _invoicePositions.Select(x => x.FullPrice).Sum() }";
+                _total.Text = $"{Lang["FastInvoiceActivity Total"]}: {_invoicePositions.Select(x => x.FullPrice).Sum()}";
             _number.Text = null;
             _barcodeForm.Text = null;
             _positions.Items.Refresh();

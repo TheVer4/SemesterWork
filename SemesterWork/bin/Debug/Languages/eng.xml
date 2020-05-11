@@ -46,10 +46,11 @@
         <string name="WareHouseActivity SaveMessageBoxTitle">Message</string>
         <string name="WareHouseActivity SaveMessageBox">Positions saved successfully!</string>
         <string name="SettingsActivity Language">Language</string>
-        <string name="SettingsActivity NetPrinterName">Printer network name</string>
+        <string name="SettingsActivity NetPrinterName">Network printer name</string>
+        <string name="SettingsActivity NetPrinterAddress">Full address</string>        
         <string name="SettingsActivity ScannerPort">Scanner COM-Port</string>
         <string name="SettingsActivity Apply">Apply</string>
-        <string name="SettingsActivity Cancel">Cancel</string>
+        <string name="SettingsActivity Cancel">Exit</string>
         <string name="SettingsActivity CancelConfirmTitle">Confirm action</string>
         <string name="SettingsActivity CancelConfirm">Are you sure you want to exit the settings?</string>
         <string name="BarcodeReader NotFoundExceptionTitle">Attention!</string>
