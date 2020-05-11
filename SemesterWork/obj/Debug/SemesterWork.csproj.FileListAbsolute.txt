@@ -72,3 +72,5 @@ C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\MainWindow.g.c
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\obj\Debug\MainWindow.baml
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.dll
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.xml
+C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.dll
+C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.xml
