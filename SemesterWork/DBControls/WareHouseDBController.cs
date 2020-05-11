@@ -2,7 +2,7 @@
 
 namespace SemesterWork
 {
-    class WareHouseDBController
+    static class WareHouseDBController
     {
         public static List<string> Find(string code)
         {

@@ -2,7 +2,7 @@
 
 namespace SemesterWork
 {
-    class UserDBController
+    static class UserDBController
     {
         public static List<string> FindByName(string name)
         {
@@ -23,7 +23,7 @@ namespace SemesterWork
         {
             DBController.SQLInsert(
                 "Users",
-                @"id, Name, AccessLevel, Hash",
+                "id, Name, AccessLevel, Hash",
                 $"'{id}', '{name}', '{accessLevel}', '{hash}'");
         }
 

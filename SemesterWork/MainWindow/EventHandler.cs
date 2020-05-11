@@ -290,6 +290,13 @@ namespace SemesterWork
         {
             Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'"; 
             _printInvoice.Print(_invoicePositions);
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) =>
+            {
+                //некая магия с json
+                //DocumentsDBController.Add(id, DateTime.Now, _currentUser.Name, json);
+            };
+            worker.RunWorkerAsync();
         }
 
         private void UpdateScreen()
