@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 
 namespace SemesterWork
 {
@@ -155,16 +156,10 @@ namespace SemesterWork
                 worker.RunWorkerCompleted += (sender, args) =>
                 {
                     if (!info.Any())
-                    {
-                        double amount = 1;
-                        if (_number.Text.Length != 0)
-                            amount = double.Parse(_number.Text, CultureInfo.InvariantCulture);
-                        var item = new ProductData(code);
                         _savingPositions.Add(new DBProductData(new ProductData(code), false));
-                    }
                     else if (MessageBox.Show(String.Format(Lang["WareHouseActivity ContainsQuestion"], code),
-                        Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.YesNo,
-                        MessageBoxImage.Question) == MessageBoxResult.Yes)
+                         Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.YesNo,
+                         MessageBoxImage.Question) == MessageBoxResult.Yes) 
                         _savingPositions.Add(new DBProductData(new ProductData(info), true));
                     UpdateScreen();
                 };
@@ -242,16 +237,16 @@ namespace SemesterWork
 
         private void UpdateFromCFG()
         {
-            var path = Variables.CFGPath;
+            var path = Variables.CFGPath; //TODO реализовать безопасную загрузку конфигов
             if (File.Exists(path))
                 using (var sr = new StreamReader(path))
                 {
                     var language = sr.ReadLine();
-                    LanguageEngine.Current = language.Substring(language.IndexOf('='));
+                    LanguageEngine.Current = language.Substring(language.IndexOf('=') + 1);
                     var printerPath = sr.ReadLine();
-                    Variables.PrinterPath = printerPath.Substring(printerPath.IndexOf('='));
+                    Variables.PrinterPath = printerPath.Substring(printerPath.IndexOf('=') + 1);
                     var barcodeScannerPort = sr.ReadLine();
-                    Variables.BarcodeScannerPort = barcodeScannerPort.Substring(barcodeScannerPort.IndexOf('='));
+                    Variables.BarcodeScannerPort = barcodeScannerPort.Substring(barcodeScannerPort.IndexOf('=') + 1);
                 }
         }
 
@@ -293,14 +288,14 @@ namespace SemesterWork
             var worker = new BackgroundWorker();
             worker.DoWork += (sender, args) =>
             {
-                //некая магия с json
-                //DocumentsDBController.Add(id, DateTime.Now, _currentUser.Name, json);
+                DocumentsDBController.Add((int) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds, _currentUser.Name, JsonConvert.SerializeObject(_invoicePositions));
                 foreach (var position in _invoicePositions)
                     WareHouseDBController.DecreaseAmountBy(position.Data.EAN13, position.Amount);
             };
             worker.RunWorkerCompleted += (sender, args) =>
             {
-
+                _invoicePositions.Clear();
+                UpdateScreen();
             };
             worker.RunWorkerAsync();
         }

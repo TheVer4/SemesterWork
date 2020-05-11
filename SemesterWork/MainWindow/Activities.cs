@@ -124,7 +124,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            TextBlock programName = new TextBlock() { Text = Variables.ProgramName, FontSize = 20 };
+            TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
             TextBlock cashier = new TextBlock() { Text = $"{Lang["FastInvoiceActivity Cashier"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
@@ -169,6 +169,7 @@ namespace SemesterWork
             _positions = new DataGrid()
             {
                 ItemsSource = _invoicePositions,
+                SelectionMode = DataGridSelectionMode.Single,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
@@ -179,8 +180,10 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = Lang["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
                 }
             };
-            foreach (var column in _positions.Columns)
+            foreach (var column in _positions.Columns) {
                 column.CanUserSort = false;
+                column.IsReadOnly = true;
+            }
             invoiceControls.Children.Add(_positions);
             Grid.SetRow(_positions, 1);
             
@@ -221,17 +224,11 @@ namespace SemesterWork
             payment.Click += PaymentOnClick;
             Button amount = new Button() { Content = Lang["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
             amount.Click += AmountOnClick;
-            Button storn = new Button() { Content = "ТЕСТ ЧЕГОНИТЬ", FontSize = 40,  Height = 100 };
-            storn.Click += (sender, args) =>
-                {
-
-                };
             _total.Text = $"{Lang["FastInvoiceActivity Total"]}: 0";
             _total.FontSize = 40;
             _total.Margin = new Thickness(15, 20, 0, 0);
             controls.Children.Add(payment);
             controls.Children.Add(amount);
-            controls.Children.Add(storn);
             controls.Children.Add(_total);
             invoiceControls.Children.Add(controls);
             Grid.SetColumn(controls, 1);
@@ -264,7 +261,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            TextBlock programName = new TextBlock() { Text = Variables.ProgramName, FontSize = 20 };
+            TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
             TextBlock cashier = new TextBlock() { Text = $"{Lang["WareHouseActivity Manager"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
@@ -277,10 +274,10 @@ namespace SemesterWork
             dateTimeTimer.Interval = TimeSpan.FromMilliseconds(1000);
             dateTimeTimer.Tick += (sender, args) => { dateTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture); };
             dateTimeTimer.Start();
-            invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) });
-            invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+            invoiceControls.ColumnDefinitions.Add(new ColumnDefinition());
+            invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1.25, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
+            invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(2, GridUnitType.Star) });
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
@@ -306,6 +303,7 @@ namespace SemesterWork
             _positions = new DataGrid()
             {
                 ItemsSource = _savingPositions,
+                SelectionMode = DataGridSelectionMode.Single,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
@@ -313,7 +311,7 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = Lang["WareHouseActivity FullName"], Binding = binds[1], MinWidth = 500 },
                     new DataGridTextColumn() { Header = Lang["WareHouseActivity Price"], Binding = binds[2], MinWidth = 150},
                     new DataGridTextColumn() { Header = Lang["WareHouseActivity Amount"], Binding = binds[3] },
-                    new DataGridTextColumn() { Header = Lang["WareHouseActivity Units"], Binding = binds[4] },
+                    new DataGridComboBoxColumn() { Header = Lang["WareHouseActivity Units"], TextBinding = binds[4], ItemsSource = new List<string>() {"шт.", "кг."}},
                     new DataGridTextColumn() { Header = Lang["WareHouseActivity ShortName"], Binding = binds[5] }
                 }
             };
@@ -322,26 +320,29 @@ namespace SemesterWork
             invoiceControls.Children.Add(_positions);
             Grid.SetRow(_positions, 1);
             
-            StackPanel controls = new StackPanel();
+            Grid controls = new Grid();
+            controls.ColumnDefinitions.Add(new ColumnDefinition());
+            controls.ColumnDefinitions.Add(new ColumnDefinition());
+            controls.ColumnDefinitions.Add(new ColumnDefinition());
 
             Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
             Button clear = new Button() { Content = crossImage, Height = 100 };
             clear.Click += (sender, args) => ClearSavingOnClick();
             controls.Children.Add(clear);
-            Grid.SetColumn(clear, 2);
-            Grid.SetRow(clear, 3);
+            Grid.SetColumn(clear, 0);
 
             var deleteButton = new Button() { Content = Lang["WareHouseActivity DeleteFromDBButton"], FontSize = 40, Height = 100 };
             deleteButton.Click += (sender, args) => DeleteFromDB();
             controls.Children.Add(deleteButton);
+            Grid.SetColumn(deleteButton, 1);
 
             Button saveButton = new Button() { Content = Lang["WareHouseActivity Save"], FontSize = 40,  Height = 100 };
             saveButton.Click += (sender, args) => SavePositions();
             controls.Children.Add(saveButton);
+            Grid.SetColumn(saveButton, 2);
 
             invoiceControls.Children.Add(controls);
-            Grid.SetColumn(controls, 1);
-            Grid.SetRow(controls, 1);
+            Grid.SetRow(controls, 2);
 
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
             _barcodeReader.AddReader(BarcodeRead);

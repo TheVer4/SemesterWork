@@ -27,6 +27,7 @@
         <e p="DataBases" t="Include" />
         <e p="DBControls" t="Include">
           <e p="DBController.cs" t="Include" />
+          <e p="DocumentsDBController.cs" t="Include" />
           <e p="UserDBController.cs" t="Include" />
           <e p="WareHouseDBController.cs" t="Include" />
         </e>

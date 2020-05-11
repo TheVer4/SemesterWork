@@ -1,4 +1,7 @@
-﻿namespace SemesterWork
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace SemesterWork
 {
     public partial class MainWindow
     {
@@ -8,7 +11,7 @@
         {
             _printInvoice = new PrintInvoice();
             Lang = new LanguageEngine();
-            UpdateFromCFG();
+            UpdateFromCFG(); 
             LoginActivity();
         }
     }

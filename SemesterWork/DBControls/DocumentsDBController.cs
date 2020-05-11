@@ -24,12 +24,12 @@ namespace SemesterWork
             return DBController.SQLFind("documents", "Name", name);
         }
 
-        public static void Add(int id, int dateTime, string name, string checkLine)
+        public static void Add(int dateTime, string name, string checkLine)
         {
             DBController.SQLInsert(
                 "documents",
-                "id, DateTime, Name, Data",
-                $"{id}, {dateTime}, {name}, {checkLine}");
+                "DateTime, CashierName, Data",
+                $"{dateTime}, '{name}', '{checkLine}'");
         }
     }
 }
