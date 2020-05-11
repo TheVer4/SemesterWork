@@ -2,23 +2,40 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace SemesterWork
 {
     public partial class MainWindow
     {
-      
+        public void ClearScreen()
+        {
+            _barcodeReader?.Dispose();
+            _updateSmth?.Stop();
+            Grid.Children.Clear();
+            Grid.ColumnDefinitions.Clear();
+            Grid.RowDefinitions.Clear();
+        }
+
+        private BitmapSource GetBitmapSource(string path)
+        {
+            Stream imageStreamSource = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            return decoder.Frames[0];
+        }
+
         private void ClearOnClick(object sender, RoutedEventArgs e)
         {
-            if (_number.Text.Length != 0) _number.Text = "";
+            if (_number.Text.Length != 0) 
+                _number.Text = "";
             else if (_invoicePositions.Count == 0)
                 MainMenuActivity();
             else if (_positions.SelectedIndex == -1)
@@ -31,12 +48,12 @@ namespace SemesterWork
             {
                 if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
-                _invoicePositions.RemoveAt(_positions.SelectedIndex);
+                    _invoicePositions.RemoveAt(_positions.SelectedIndex);
             }
             UpdateScreen();
         }
 
-        private void ClearSavingOnClick(object sender, RoutedEventArgs e)
+        private void ClearSavingOnClick()
         {
             if (_savingPositions.Count == 0)
                 MainMenuActivity();
@@ -49,7 +66,7 @@ namespace SemesterWork
             else
             {
                 if (MessageBox.Show(Lang["WareHouseActivity SingleDeleteConfirm"], Lang["WareHouseActivity SingleDeleteConfirmTitle"], MessageBoxButton.YesNo,
-                MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    MessageBoxImage.Question) == MessageBoxResult.Yes)
                     _savingPositions.RemoveAt(_positions.SelectedIndex);
             }
             UpdateScreen();
@@ -57,18 +74,25 @@ namespace SemesterWork
         
         private void AmountOnClick(object sender, RoutedEventArgs e)
         {
-            if(_positions.SelectedIndex == -1) return;
+            if (_positions.SelectedIndex == -1) 
+                return;
             if (_number.Text.Length == 0)
                 _invoicePositions[_positions.SelectedIndex].Amount++;
-            else {
+            else 
+            {
                 double amount = double.Parse(_number.Text, CultureInfo.InvariantCulture);
                 string units = _invoicePositions[_positions.SelectedIndex].Data.Units;
-                if(amount <= 0) _invoicePositions.RemoveAt(_positions.SelectedIndex);
+                if (amount <= 0) 
+                    _invoicePositions.RemoveAt(_positions.SelectedIndex);
                 else if (_invoicePositions[_positions.SelectedIndex].Amount < amount)
-                    _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." ? Math.Round(amount, MidpointRounding.ToEven) : amount;
+                    _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." 
+                        ? Math.Round(amount, MidpointRounding.ToEven) 
+                        : amount;
                 else if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
-                    _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." ? Math.Round(amount, MidpointRounding.ToEven) : amount;
+                    _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." 
+                        ? Math.Round(amount, MidpointRounding.ToEven) 
+                        : amount;
             }
             UpdateScreen();
         }
@@ -169,6 +193,65 @@ namespace SemesterWork
             worker.RunWorkerAsync();
         }
 
+        private void DeleteFromDB()
+        {
+            if (_savingPositions.Count == 0)
+                MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingError"],
+                Lang["WareHouseActivity DeleteFromDB DeletingErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+            else if (_positions.SelectedIndex == -1)
+            {
+                if (MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingPositions"],
+                    Lang["WareHouseActivity DeleteFromDB DeletingPositionsTitle"], MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    foreach (var position in _savingPositions)
+                        if (position.IsInDB)
+                            WareHouseDBController.Remove(position.Data.EAN13);
+                    _savingPositions.Clear();
+                }
+            }
+            else
+            {
+                if (_savingPositions[_positions.SelectedIndex].IsInDB)
+                {
+                    if (MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingPosition"],
+                        Lang["WareHouseActivity DeleteFromDB DeletingPositionTitle"], MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        WareHouseDBController.Remove(_savingPositions[_positions.SelectedIndex].Data.EAN13);
+                        _savingPositions.RemoveAt(_positions.SelectedIndex);
+                    }
+                }
+                else
+                    MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DelitingNotInDB"],
+                    Lang["WareHouseActivity DeleteFromDB DelitingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            UpdateScreen();
+        }
+
+        private void SaveSettings()
+        {
+            var path = Variables.CFGPath;
+            using (var sw = new StreamWriter(path, false))
+            {
+                sw.WriteLine(LanguageEngine.Current);
+                sw.WriteLine(Variables.PrinterPath);
+                sw.WriteLine(Variables.BarcodeScannerPort);   
+            }
+        }
+
+        private void UpdateFromCFG()
+        {
+            var path = Variables.CFGPath;
+            if (File.Exists(path))
+                using (var sr = new StreamReader(path))
+                {
+                    LanguageEngine.Current = sr.ReadLine();
+                    Variables.PrinterPath = sr.ReadLine();
+                    Variables.BarcodeScannerPort = sr.ReadLine();
+                }
+        }
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
@@ -205,12 +288,14 @@ namespace SemesterWork
             Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'"; 
             _printInvoice.Print(_invoicePositions);
         }
+
         private void UpdateScreen()
         {            
             _readBarcode = null;
             if (_total != null)
                 _total.Text = $"{Lang["FastInvoiceActivity Total"]}: {_invoicePositions.Select(x => x.FullPrice).Sum()}";
-            _number.Text = null;
+            if (_number != null)
+                _number.Text = null;
             _barcodeForm.Text = null;
             _positions.Items.Refresh();
         }

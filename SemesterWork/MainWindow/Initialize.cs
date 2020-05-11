@@ -8,6 +8,7 @@
         {
             _printInvoice = new PrintInvoice();
             Lang = new LanguageEngine();
+            UpdateFromCFG();
             LoginActivity();
         }
     }

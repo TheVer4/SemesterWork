@@ -57,5 +57,14 @@
         <string name="BarcodeReader NotFoundException">Не удалось открыть взаимодействие со сканером. Проверьте соединение и перезапустите режим из главного меню.</string>
         <string name="Printer NotFoundExceptionTitle">Внимание!</string>
         <string name="Printer NotFoundException">Не удалось открыть взаимодействие с принтером. Проверьте соединение и перезапустите режим из главного меню.</string>
+        <string name="WareHouseActivity DeleteFromDBButton">Удалить со склада</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingErrorTitle">Ошибка</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingError">Нечего удалять</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionsTitle">Подтвердите действие</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositions">Вы уверены, что хотите удалить со склада эти позиции?</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionTitle">Подтвердите действие</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPosition">Вы уверены, что хотите удалить со склада эту позицию?</string>
+        <string name="WareHouseActivity DeleteFromDB DelitingNotInDBTitle">Внимание!</string>
+        <string name="WareHouseActivity DeleteFromDB DelitingNotInDB">Эта позиция не присутствует на складе</string>
     </strings>
-</document>
+  </document>
