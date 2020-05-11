@@ -15,5 +15,6 @@ namespace SemesterWork
         public static string InstitutionName { get; set; }
         public static string InstitutionAddress { get; set; }
         public static string DBConnectionString { get => @"Data Source = ..\..\DataBases\DataBase.db; Version=3"; private set { } }
+        public static string CFGPath { get => @".\config.cfg"; private set { } }
     }
 }

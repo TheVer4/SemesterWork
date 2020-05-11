@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace SemesterWork
@@ -24,6 +22,7 @@ namespace SemesterWork
         private TextBlock _total;
         private string _readBarcode;
         private DispatcherTimer _updateSmth;
+
         public void LoginActivity()
         {
             ClearScreen();
@@ -294,10 +293,6 @@ namespace SemesterWork
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
             
-            _number = new TextBox() { FontSize = 48 };
-            _number.PreviewTextInput += NumberValidationTextBox;
-            Grid.SetColumn(_number, 1);
-            invoiceControls.Children.Add(_number);
             Binding[] binds = {
                 new Binding("Data.EAN13"),
                 new Binding("Data.Name"),
@@ -328,41 +323,22 @@ namespace SemesterWork
             Grid.SetRow(_positions, 1);
             
             StackPanel controls = new StackPanel();
-            Grid keyboard = new Grid() { ShowGridLines = false };
-            keyboard.ColumnDefinitions.Add(new ColumnDefinition());
-            keyboard.ColumnDefinitions.Add(new ColumnDefinition());
-            keyboard.ColumnDefinitions.Add(new ColumnDefinition());
-            keyboard.RowDefinitions.Add(new RowDefinition());
-            keyboard.RowDefinitions.Add(new RowDefinition());
-            keyboard.RowDefinitions.Add(new RowDefinition());
-            keyboard.RowDefinitions.Add(new RowDefinition());
-            for (int i = 8; i >= 0; i--)
-            {
-                Button key = new Button() { Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
-                key.Click += (sender, args) => _number.Text += ((Button) sender).Content.ToString();
-                keyboard.Children.Add(key);
-                Grid.SetColumn(key, 2 - i % 3 );
-                Grid.SetRow(key, i / 3);
-            }
-            Button zero = new Button() { Content = "0", FontSize = 40, Height = 100 };
-            zero.Click += (sender, args) => { _number.Text += "0"; };
-            keyboard.Children.Add(zero);
-            Grid.SetRow(zero, 3);
-            Button dot = new Button() { Content = ".", FontSize = 40, Height = 100 };
-            dot.Click += (sender, args) => { _number.Text += "."; };
-            keyboard.Children.Add(dot);
-            Grid.SetColumn(dot, 1);
-            Grid.SetRow(dot, 3);
+
             Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
-            Button clear = new Button() { Content = crossImage };
-            clear.Click += ClearSavingOnClick;
-            keyboard.Children.Add(clear);
+            Button clear = new Button() { Content = crossImage, Height = 100 };
+            clear.Click += (sender, args) => ClearSavingOnClick();
+            controls.Children.Add(clear);
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
-            controls.Children.Add(keyboard);
+
+            var deleteButton = new Button() { Content = Lang["WareHouseActivity DeleteFromDBButton"], FontSize = 40, Height = 100 };
+            deleteButton.Click += (sender, args) => DeleteFromDB();
+            controls.Children.Add(deleteButton);
+
             Button saveButton = new Button() { Content = Lang["WareHouseActivity Save"], FontSize = 40,  Height = 100 };
             saveButton.Click += (sender, args) => SavePositions();
             controls.Children.Add(saveButton);
+
             invoiceControls.Children.Add(controls);
             Grid.SetColumn(controls, 1);
             Grid.SetRow(controls, 1);
@@ -394,7 +370,7 @@ namespace SemesterWork
             var languageSet = new StackPanel();
             var languageTBlock = new TextBlock() { Text = Lang["SettingsActivity Language"], FontSize = 20 };
             var languageSelector = new ComboBox() { FontSize = 20 };
-            languageSelector.SelectedIndex = Lang.Languages.IndexOf(Lang.Current);
+            languageSelector.SelectedIndex = Lang.Languages.IndexOf(LanguageEngine.Current);
             languageSelector.ItemsSource = Lang.Languages.Select(language => new TextBlock() { Text = language, FontSize = 20 });
             
             languageSet.Children.Add(languageTBlock);
@@ -447,10 +423,11 @@ namespace SemesterWork
 
             apply.Click += (sender, args) =>
             {
-                Lang.Current = ((TextBlock) languageSelector.SelectedItem).Text;
+                LanguageEngine.Current = ((TextBlock) languageSelector.SelectedItem).Text;
                 Variables.PrinterPath = printerPath;
                 Variables.BarcodeScannerPort = scanner;
                 SettingsActivity();
+                SaveSettings();
             };
             cancel.Click += (sender, args) =>
             {
@@ -462,22 +439,6 @@ namespace SemesterWork
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 1);
             Grid.SetRow(panel, 1);
-        }
-
-        public void ClearScreen()
-        {
-            _barcodeReader?.Dispose();
-            _updateSmth?.Stop();
-            Grid.Children.Clear();
-            Grid.ColumnDefinitions.Clear();
-            Grid.RowDefinitions.Clear();
-        }
-
-        private BitmapSource GetBitmapSource(string path)
-        {
-            Stream imageStreamSource = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
-            return decoder.Frames[0];
         }
     }
 }

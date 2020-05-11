@@ -7,12 +7,15 @@ namespace SemesterWork
     {
         public void Send(byte[] data)
         {
-            try { PrintExtensions.Print(data, Variables.PrinterPath); }
+            try 
+            { 
+                PrintExtensions.Print(data, Variables.PrinterPath);
+            }
             catch
             {
                 MessageBox.Show(
-                    MainWindow.Lang["Printer NotFoundExceptionTitle"],
-                    MainWindow.Lang["Printer NotFoundException"], MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MainWindow.Lang["Printer NotFoundException"],
+                    MainWindow.Lang["Printer NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

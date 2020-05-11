@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\SemesterWork"
+    "\\SemesterWork",
+    "\\SemesterWork\\bin",
+    "\\SemesterWork\\bin\\Debug",
+    "\\SemesterWork\\bin\\Debug\\Languages",
+    "\\SemesterWork\\MainWindow"
   ],
-  "SelectedNode": "\\SemesterWork\\packages.config",
+  "SelectedNode": "\\SemesterWork\\MainWindow\\EventHandler.cs",
   "PreviewInSolutionExplorer": false
 }
