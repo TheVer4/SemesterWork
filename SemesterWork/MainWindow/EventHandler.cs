@@ -295,6 +295,12 @@ namespace SemesterWork
             {
                 //некая магия с json
                 //DocumentsDBController.Add(id, DateTime.Now, _currentUser.Name, json);
+                foreach (var position in _invoicePositions)
+                    WareHouseDBController.DecreaseAmountBy(position.Data.EAN13, position.Amount);
+            };
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+
             };
             worker.RunWorkerAsync();
         }
