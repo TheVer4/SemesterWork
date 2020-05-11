@@ -234,9 +234,9 @@ namespace SemesterWork
             var path = Variables.CFGPath;
             using (var sw = new StreamWriter(path, false))
             {
-                sw.WriteLine(LanguageEngine.Current);
-                sw.WriteLine(Variables.PrinterPath);
-                sw.WriteLine(Variables.BarcodeScannerPort);   
+                sw.WriteLine($"Language={LanguageEngine.Current}");
+                sw.WriteLine($"PrinterPath={Variables.PrinterPath}");
+                sw.WriteLine($"BarcodeScannerPort={Variables.BarcodeScannerPort}");   
             }
         }
 
@@ -246,9 +246,12 @@ namespace SemesterWork
             if (File.Exists(path))
                 using (var sr = new StreamReader(path))
                 {
-                    LanguageEngine.Current = sr.ReadLine();
-                    Variables.PrinterPath = sr.ReadLine();
-                    Variables.BarcodeScannerPort = sr.ReadLine();
+                    var language = sr.ReadLine();
+                    LanguageEngine.Current = language.Substring(language.IndexOf('='));
+                    var printerPath = sr.ReadLine();
+                    Variables.PrinterPath = printerPath.Substring(printerPath.IndexOf('='));
+                    var barcodeScannerPort = sr.ReadLine();
+                    Variables.BarcodeScannerPort = barcodeScannerPort.Substring(barcodeScannerPort.IndexOf('='));
                 }
         }
 
