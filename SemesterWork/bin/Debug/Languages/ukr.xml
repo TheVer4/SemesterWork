@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<document>
+    <language>Українська</language>
+    <strings>
+        <string name="LoginActivity Account">Логін</string>
+        <string name="LoginActivity Password">Пароль</string>
+        <string name="LoginActivity Authorize">Авторизація</string>
+        <string name="LoginActivity Exit">Вийти</string>
+        <string name="LoginActivity ExitMessageBoxTitle">Підтвердіть дію</string>
+        <string name="LoginActivity ExitMessageBox">Ви дійсно хочете вийти?</string>
+        <string name="LoginActivity AuthorizationMessageBoxTitle">Виникла помилка</string>
+        <string name="LoginActivity AuthorizationMessageBox">Невірно введені дані, спробуйте знову.</string>
+        <string name="MainMenuActivity FastInvoice">Швидкий чек</string>
+        <string name="MainMenuActivity WareHouse">Склад</string>
+        <string name="MainMenuActivity Settings">Налаштування</string>
+        <string name="MainMenuActivity Logout">Деавторізація</string>
+        <string name="FastInvoiceActivity AddPosition">Додати</string>
+        <string name="FastInvoiceActivity Cashier">Касир</string>
+        <string name="FastInvoiceActivity Payment">ОПЛАТА</string>
+        <string name="FastInvoiceActivity Amount">КІЛЬКІСТЬ</string>
+        <string name="FastInvoiceActivity Total">РАЗОМ</string>
+        <string name="FastInvoiceActivity Position">Позиція</string>
+        <string name="FastInvoiceActivity Price">Ціна</string>
+        <string name="FastInvoiceActivity Count">Кількість</string>
+        <string name="FastInvoiceActivity Units">Вим.</string>
+        <string name="FastInvoiceActivity FullPrice">Вартість</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBoxTitle">Виникла помилка</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBox">Позиція з кодом {0} не знайдена, спробуйте повторити операцію.</string>
+        <string name="WareHouseActivity AddPosition">Додати</string>
+        <string name="WareHouseActivity Manager">Менеджер</string>
+        <string name="WareHouseActivity Save">Зберегти</string>
+        <string name="WareHouseActivity EAN13">EAN13</string>
+        <string name="WareHouseActivity FullName">Повна назва</string>
+        <string name="WareHouseActivity Price">Ціна</string>
+        <string name="WareHouseActivity Amount">кількість</string>
+        <string name="WareHouseActivity Units">Вим.</string>
+        <string name="WareHouseActivity ShortName">Коротка назва</string>
+        <string name="WareHouseActivity EAN13FormatErrorTitle">Виникла помилка</string>
+        <string name="WareHouseActivity EAN13FormatError">Невірний формат вводу EAN13</string>
+        <string name="WareHouseActivity ContainsQuestionTitle">Підтвердіть дію</string>
+        <string name="WareHouseActivity ContainsQuestion">Товар з кодом {0} вже присутній на складі. Хочете оновити значення?</string>
+        <string name="WareHouseActivity SingleDeleteConfirmTitle">Підтвердіть дію</string>
+        <string name="WareHouseActivity SingleDeleteConfirm">Ви впевнені, що хочете видалити цю позицію?</string>
+        <string name="WareHouseActivity DeleteConfirmTitle">Підтвердіть дію</string>
+        <string name="WareHouseActivity DeleteConfirm">Ви впевнені, що хочете видалити всі позиції?</string>
+        <string name="WareHouseActivity SaveMessageBoxTitle">Повідомлення</string>
+        <string name="WareHouseActivity SaveMessageBox">Позиції успішно збережені!</string>
+        <string name="SettingsActivity Language">Мова</string>
+        <string name="SettingsActivity NetPrinterName">Мережеве ім'я принтера</string>
+        <string name="SettingsActivity NetPrinterAddress">Повна адреса</string>
+        <string name="SettingsActivity ScannerPort">COM-Порт сканнера</string>
+        <string name="SettingsActivity Apply">Застосувати</string>
+        <string name="SettingsActivity Cancel">Вихід</string>
+        <string name="SettingsActivity CancelConfirmTitle">Підтвердіть дію</string>
+        <string name="SettingsActivity CancelConfirm">Ви впевнені, що хочете вийти з налаштувань?</string>
+        <string name="BarcodeReader NotFoundExceptionTitle">Увага!</string>
+        <string name="BarcodeReader NotFoundException">Не вдалося відкрити взаємодія зі сканером. Перевірте з'єднання і запустіть режим з головного меню.</string>
+        <string name="Printer NotFoundExceptionTitle">Увага!</string>
+        <string name="Printer NotFoundException">Не вдалося відкрити взаємодія з принтером. Перевірте з'єднання і запустіть режим з головного меню.</string>
+        <string name="WareHouseActivity DeleteFromDBButton">Видалити зі складу</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingErrorTitle">Помилка</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingError">Нічого видаляти</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionsTitle">Підтвердіть дію</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositions">Ви впевнені, що хочете видалити зі складу ці позиції?</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionTitle">Підтвердіть дію</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPosition">Ви впевнені, що хочете видалити зі складу цю позицію?</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDBTitle">Увага!</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDB">Ця позиція не присутній на складі</string>
+    </strings>
+  </document>

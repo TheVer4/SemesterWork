@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document>
+    <language>Esperanto</language>
+    <strings>   
+        <string name="LoginActivity Account">Uzantnomo</string>
+        <string name="LoginActivity Password">Pasvorto</string>
+        <string name="LoginActivity Authorize">Ensalutu</string>
+        <string name="LoginActivity Exit">Eliru</string>
+        <string name="LoginActivity ExitMessageBoxTitle">Konfirmu agon</string>
+        <string name="LoginActivity ExitMessageBox">Ĉu vi vere volas eliri?</string>
+        <string name="LoginActivity AuthorizationMessageBoxTitle">Eraro okazis</string>
+        <string name="LoginActivity AuthorizationMessageBox">La enigitaj datumoj estas malĝustaj, provu denove.</string>
+        <string name="MainMenuActivity FastInvoice">Rapida interpunkcio</string>
+        <string name="MainMenuActivity WareHouse">Magazeno</string>
+        <string name="MainMenuActivity Settings">Agordoj</string>
+        <string name="MainMenuActivity Logout">Malhonorigo</string>
+        <string name="FastInvoiceActivity AddPosition">Aldoni</string>
+        <string name="FastInvoiceActivity Cashier">Kasisto</string>
+        <string name="FastInvoiceActivity Payment">PAGO</string>
+        <string name="FastInvoiceActivity Amount">KANTO</string>
+        <string name="FastInvoiceActivity Total">TOTALO</string>
+        <string name="FastInvoiceActivity Position">Pozicio</string>
+        <string name="FastInvoiceActivity Price">Prezo</string>
+        <string name="FastInvoiceActivity Count">Kvanto</string>
+        <string name="FastInvoiceActivity Units">Un.</string>
+        <string name="FastInvoiceActivity FullPrice">Kosto</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBoxTitle">Eraro okazis</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBox">Pozicio pri kodo {0} ne trovita, provu denove la operacion.</string>
+        <string name="WareHouseActivity AddPosition">Aldoni</string>
+        <string name="WareHouseActivity Manager">Direktisto</string>
+        <string name="WareHouseActivity Save">Konservi</string>
+        <string name="WareHouseActivity EAN13">EAN13</string>
+        <string name="WareHouseActivity FullName">Plena nomo</string>
+        <string name="WareHouseActivity Price">Prezo</string>
+        <string name="WareHouseActivity Amount">Kvanto</string>
+        <string name="WareHouseActivity Units">Un.</string>
+        <string name="WareHouseActivity ShortName">Mallonga nomo</string>
+        <string name="WareHouseActivity EAN13FormatErrorTitle">Eraro okazis</string>
+        <string name="WareHouseActivity EAN13FormatError">Nevalida ena formato EAN13</string>
+        <string name="WareHouseActivity ContainsQuestionTitle">Konfirmu agon</string>
+        <string name="WareHouseActivity ContainsQuestion">Produkto kun kodo {0} jam en stoko. Volas ĝisdatigi valoron?</string>
+        <string name="WareHouseActivity SingleDeleteConfirmTitle">Konfirmu agon</string>
+        <string name="WareHouseActivity SingleDeleteConfirm">Ĉu vi certas, ke vi volas forigi ĉi tiun pozicion?</string>
+        <string name="WareHouseActivity DeleteConfirmTitle">Konfirmu agon</string>
+        <string name="WareHouseActivity DeleteConfirm">Ĉu vi certas, ke vi volas forigi ĉiujn poziciojn?</string>
+        <string name="WareHouseActivity SaveMessageBoxTitle">Mesaĝo</string>
+        <string name="WareHouseActivity SaveMessageBox">Pozicioj konservitaj sukcese!</string>
+        <string name="SettingsActivity Language">Lingvo</string>
+        <string name="SettingsActivity NetPrinterName">Printer reto nomo</string>
+        <string name="SettingsActivity NetPrinterAddress">Plena adreso</string>
+        <string name="SettingsActivity ScannerPort">Skanila COM-haveno</string>
+        <string name="SettingsActivity Apply">Por apliki</string>
+        <string name="SettingsActivity Cancel">Eliro</string>
+        <string name="SettingsActivity CancelConfirmTitle">Konfirmu agon</string>
+        <string name="SettingsActivity CancelConfirm">Ĉu vi certas, ke vi volas forlasi agordojn?</string>
+        <string name="BarcodeReader NotFoundExceptionTitle">Singardemo!</string>
+        <string name="BarcodeReader NotFoundException">Ne povis malfermi interagadon kun skanilo. Kontrolu la rilaton kaj rekomencu la reĝimon el la ĉefa menuo.</string>
+        <string name="Printer NotFoundExceptionTitle">Singardemo!</string>
+        <string name="Printer NotFoundException">Ne povis malfermi presan interagadon. Kontrolu la rilaton kaj rekomencu la reĝimon el la ĉefa menuo.</string>
+        <string name="WareHouseActivity DeleteFromDBButton">Forigi el stoko</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingErrorTitle">Eraro</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingError">Nenio por forigi</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionsTitle">Konfirmu agon</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositions">Ĉu vi certas, ke vi volas forigi ĉi tiujn erojn el la magazeno?</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionTitle">Konfirmu agon</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPosition">Ĉu vi certas, ke vi volas forigi ĉi tiun eron el stoko?</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDBTitle">Singardemo!</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDB">Ĉi tiu ero ne estas en stoko</string>
+    </strings>
+  </document>
