@@ -86,12 +86,12 @@ namespace SemesterWork
                     _invoicePositions.RemoveAt(_positions.SelectedIndex);
                 else if (_invoicePositions[_positions.SelectedIndex].Amount < amount)
                     _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." 
-                        ? Math.Round(amount, MidpointRounding.ToEven) 
+                        ? Math.Round(amount, mode: MidpointRounding.AwayFromZero) 
                         : amount;
                 else if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                     _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." 
-                        ? Math.Round(amount, MidpointRounding.ToEven) 
+                        ? Math.Round(amount, mode: MidpointRounding.AwayFromZero) 
                         : amount;
             }
             UpdateScreen();
