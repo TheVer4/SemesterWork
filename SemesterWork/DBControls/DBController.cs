@@ -29,7 +29,7 @@ namespace SemesterWork
             var command = new SQLiteCommand(
                 $"SELECT * FROM {table} " +
                 $"WHERE {column} BETWEEN {first} AND {second}",
-            connection);
+                connection);
             var reader = command.ExecuteReader();
             while (reader.Read())
                 for (var i = 0; i < reader.FieldCount; i++)

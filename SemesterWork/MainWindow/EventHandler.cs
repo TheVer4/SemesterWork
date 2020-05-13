@@ -42,13 +42,13 @@ namespace SemesterWork
             else if (_positions.SelectedIndex == -1)
             {
                 if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                        MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                     _invoicePositions.Clear();
             } 
             else
             {
                 if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                        MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                     _invoicePositions.RemoveAt(_positions.SelectedIndex);
             }
             UpdateScreen();
@@ -61,13 +61,13 @@ namespace SemesterWork
             else if (_positions.SelectedIndex == -1)
             {
                 if (MessageBox.Show(Lang["WareHouseActivity DeleteConfirm"], Lang["WareHouseActivity DeleteConfirmTitle"], MessageBoxButton.YesNo,
-                    MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        MessageBoxImage.Question) == MessageBoxResult.Yes)
                     _savingPositions.Clear();
             }
             else
             {
                 if (MessageBox.Show(Lang["WareHouseActivity SingleDeleteConfirm"], Lang["WareHouseActivity SingleDeleteConfirmTitle"], MessageBoxButton.YesNo,
-                    MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        MessageBoxImage.Question) == MessageBoxResult.Yes)
                     _savingPositions.RemoveAt(_positions.SelectedIndex);
             }
             UpdateScreen();
@@ -90,7 +90,7 @@ namespace SemesterWork
                         ? Math.Round(amount, mode: MidpointRounding.AwayFromZero) 
                         : amount;
                 else if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
+                        MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                     _invoicePositions[_positions.SelectedIndex].Amount = units == "шт." 
                         ? Math.Round(amount, mode: MidpointRounding.AwayFromZero) 
                         : amount;
@@ -115,11 +115,11 @@ namespace SemesterWork
             };
             worker.RunWorkerCompleted += (sender, args) =>
             {
-                double amount = 1;
-                if (_number.Text.Length != 0) 
-                    amount = double.Parse(_number.Text, CultureInfo.InvariantCulture);
                 if (info.Any())
                 {
+                    var amount = _number.Text.Length != 0
+                        ? double.Parse(_number.Text, CultureInfo.InvariantCulture)
+                        : 1;
                     var item = new CheckLine(new ProductData(info), amount);
                     var availablePosition = _invoicePositions.Where(x => x.Data.EAN13 == code);
                     if (availablePosition.Any())
@@ -129,7 +129,7 @@ namespace SemesterWork
                 }
                 else
                     MessageBox.Show(String.Format(Lang["FastInvoiceActivity AddPositionErrorMessageBox"], code),
-                    Lang["FastInvoiceActivity AddPositionErrorMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                        Lang["FastInvoiceActivity AddPositionErrorMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                 UpdateScreen();
             };
             worker.RunWorkerAsync();
@@ -145,7 +145,7 @@ namespace SemesterWork
                 if (availablePosition.Any())
                 {
                     MessageBox.Show(String.Format(Lang["WareHouseActivity ContainsQuestion"], code),
-                    Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                        Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                     UpdateScreen();
                     return;
                 }
@@ -158,8 +158,8 @@ namespace SemesterWork
                     if (!info.Any())
                         _savingPositions.Add(new DBProductData(new ProductData(code), false));
                     else if (MessageBox.Show(String.Format(Lang["WareHouseActivity ContainsQuestion"], code),
-                         Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.YesNo,
-                         MessageBoxImage.Question) == MessageBoxResult.Yes) 
+                            Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.YesNo,
+                            MessageBoxImage.Question) == MessageBoxResult.Yes) 
                         _savingPositions.Add(new DBProductData(new ProductData(info), true));
                     UpdateScreen();
                 };
@@ -167,24 +167,26 @@ namespace SemesterWork
             }
             else
                 MessageBox.Show(Lang["WareHouseActivity EAN13FormatError"],
-                Lang["WareHouseActivity EAN13FormatErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                    Lang["WareHouseActivity EAN13FormatErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void SavePositions()
         {
             var worker = new BackgroundWorker();
-            worker.DoWork += (sender, args) =>
-            {
-                foreach (var position in _savingPositions)
-                    if (position.IsInDB)
+            foreach (var position in _savingPositions)
+                if (position.IsInDB)
+                    worker.DoWork += (sender, args) =>
                         WareHouseDBController.Update(position.Data);
-                    else
+                else
+                {
+                    worker.DoWork += (sender, args) =>
                         WareHouseDBController.Insert(position.Data);
-            };
+                    position.IsInDB = true;
+                }
             worker.RunWorkerCompleted += (sender, args) =>
             {
                 MessageBox.Show(Lang["WareHouseActivity SaveMessageBox"],
-                Lang["WareHouseActivity SaveMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
+                    Lang["WareHouseActivity SaveMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
             };
             worker.RunWorkerAsync();
         }
@@ -194,19 +196,17 @@ namespace SemesterWork
             var worker = new BackgroundWorker();
             if (_savingPositions.Count == 0)
                 MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingError"],
-                Lang["WareHouseActivity DeleteFromDB DeletingErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                    Lang["WareHouseActivity DeleteFromDB DeletingErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             else if (_positions.SelectedIndex == -1)
             {
                 if (MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingPositions"],
-                    Lang["WareHouseActivity DeleteFromDB DeletingPositionsTitle"], MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        Lang["WareHouseActivity DeleteFromDB DeletingPositionsTitle"], MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    worker.DoWork += (sender, args) =>
-                    {
-                        foreach (var position in _savingPositions)
-                            if (position.IsInDB)
+                    foreach (var position in _savingPositions)
+                        if (position.IsInDB)
+                            worker.DoWork += (sender, args) => 
                                 WareHouseDBController.Remove(position.Data.EAN13);
-                    };
                     worker.RunWorkerCompleted += (sender, args) =>
                     {
                         _savingPositions.Clear();
@@ -219,11 +219,12 @@ namespace SemesterWork
                 if (_savingPositions[_positions.SelectedIndex].IsInDB)
                 {
                     if (MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingPosition"],
-                        Lang["WareHouseActivity DeleteFromDB DeletingPositionTitle"], MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                            Lang["WareHouseActivity DeleteFromDB DeletingPositionTitle"], MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
+                        var code = _savingPositions[_positions.SelectedIndex].Data.EAN13;
                         worker.DoWork += (sender, args) =>
-                            WareHouseDBController.Remove(_savingPositions[_positions.SelectedIndex].Data.EAN13);
+                            WareHouseDBController.Remove(code);
                         worker.RunWorkerCompleted += (sender, args) =>
                         {
                             _savingPositions.RemoveAt(_positions.SelectedIndex);
@@ -233,7 +234,7 @@ namespace SemesterWork
                 }
                 else
                     MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingNotInDB"],
-                    Lang["WareHouseActivity DeleteFromDB DeletingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
+                        Lang["WareHouseActivity DeleteFromDB DeletingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
             }
             worker.RunWorkerAsync();
         }
@@ -241,27 +242,34 @@ namespace SemesterWork
         private void SaveSettings()
         {
             var path = Variables.CFGPath;
-            using (var sw = new StreamWriter(path, false))
-            {
-                sw.WriteLine($"Language={LanguageEngine.Current}");
-                sw.WriteLine($"PrinterPath={Variables.PrinterPath}");
-                sw.WriteLine($"BarcodeScannerPort={Variables.BarcodeScannerPort}");   
-            }
+            using var sw = new StreamWriter(path, false);
+            sw.WriteLine($"Language={LanguageEngine.Current}");
+            sw.WriteLine($"PrinterPath={Variables.PrinterPath}");
+            sw.WriteLine($"BarcodeScannerPort={Variables.BarcodeScannerPort}");   
         }
 
         private void UpdateFromCFG()
         {
-            var path = Variables.CFGPath; //TODO реализовать безопасную загрузку конфигов
+            var path = Variables.CFGPath;
             if (File.Exists(path))
-                using (var sr = new StreamReader(path))
-                {
-                    var language = sr.ReadLine();
-                    LanguageEngine.Current = language.Substring(language.IndexOf('=') + 1);
-                    var printerPath = sr.ReadLine();
-                    Variables.PrinterPath = printerPath.Substring(printerPath.IndexOf('=') + 1);
-                    var barcodeScannerPort = sr.ReadLine();
-                    Variables.BarcodeScannerPort = barcodeScannerPort.Substring(barcodeScannerPort.IndexOf('=') + 1);
-                }
+            {
+                using var sr = new StreamReader(path);
+
+                var languageLine = sr.ReadLine();
+                var language = languageLine.Substring(languageLine.IndexOf('=') + 1);
+                if (LanguageEngine.Languages.Contains(language))
+                    LanguageEngine.Current = language;
+                else
+                    _isSettingsOK = false;
+
+                var printerPath = sr.ReadLine();
+                Variables.PrinterPath = printerPath.Substring(printerPath.IndexOf('=') + 1);
+
+                var barcodeScannerPort = sr.ReadLine();
+                Variables.BarcodeScannerPort = barcodeScannerPort.Substring(barcodeScannerPort.IndexOf('=') + 1);
+            }
+            else
+                _isSettingsOK = false;
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -290,22 +298,26 @@ namespace SemesterWork
                 }
                 else
                     MessageBox.Show(Lang["LoginActivity AuthorizationMessageBox"],
-                    Lang["LoginActivity AuthorizationMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                        Lang["LoginActivity AuthorizationMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             };
             worker.RunWorkerAsync();
         }
         
         private void PaymentOnClick(object sender, RoutedEventArgs e)
         {
-            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'"; 
+            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'";
+            var currentUserName = _currentUser.Name;
+            var jsonStr = JsonConvert.SerializeObject(_invoicePositions);
             _printInvoice.Print(_invoicePositions);
             var worker = new BackgroundWorker();
             worker.DoWork += (sender, args) =>
-            {
-                DocumentsDBController.Add((int) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds, _currentUser.Name, JsonConvert.SerializeObject(_invoicePositions));
-                foreach (var position in _invoicePositions)
+                DocumentsDBController.Add(
+                    (int) DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
+                    currentUserName, 
+                    jsonStr);
+            foreach (var position in _invoicePositions)
+                worker.DoWork += (sender, args) =>
                     WareHouseDBController.DecreaseAmountBy(position.Data.EAN13, position.Amount);
-            };
             worker.RunWorkerCompleted += (sender, args) =>
             {
                 _invoicePositions.Clear();

@@ -8,8 +8,8 @@ namespace SemesterWork
     public class LanguageEngine
     {
         private static Dictionary<string, XmlDocument> _languages = new Dictionary<string, XmlDocument>();
-        public List<string> Languages => _languages.Keys.ToList();
-        public static string Current { get; set; }
+        public static List<string> Languages => _languages.Keys.ToList();
+        public static string Current { get; set; } = "English";
 
         public LanguageEngine()
         {
@@ -21,7 +21,7 @@ namespace SemesterWork
                 XmlDocument document = new XmlDocument();
                 document.Load(file);
                 XmlElement root = document.DocumentElement;
-                if(root?.HasChildNodes != true)  continue;
+                if(root?.HasChildNodes != true) continue;
                 string langName = root?["language"]?.InnerText;
                 if(langName == null || langName == "English") continue;
                 _languages[langName] = document;

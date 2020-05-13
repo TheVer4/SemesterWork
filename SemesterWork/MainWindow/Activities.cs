@@ -22,6 +22,7 @@ namespace SemesterWork
         private TextBlock _total;
         private string _readBarcode;
         private DispatcherTimer _updateSmth;
+        private bool _isSettingsOK = true;
 
         public void LoginActivity()
         {
@@ -113,6 +114,10 @@ namespace SemesterWork
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 1);
             Grid.SetRow(panel, 1);
+            
+            if (!_isSettingsOK)
+                MessageBox.Show("An error occurred while loading the settings. Default settings were set.",  // не локализовано, потому что может появиться
+                    "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);                            // только с дефолтной (English) локализацией
         }
 
         public void FastInvoiceActivity()
@@ -396,8 +401,8 @@ namespace SemesterWork
             var languageSet = new StackPanel();
             var languageTBlock = new TextBlock() { Text = Lang["SettingsActivity Language"], FontSize = 20 };
             var languageSelector = new ComboBox() { FontSize = 20 };
-            languageSelector.SelectedIndex = Lang.Languages.IndexOf(LanguageEngine.Current);
-            languageSelector.ItemsSource = Lang.Languages.Select(language => new TextBlock() { Text = language, FontSize = 20 });
+            languageSelector.SelectedIndex = LanguageEngine.Languages.IndexOf(LanguageEngine.Current);
+            languageSelector.ItemsSource = LanguageEngine.Languages.Select(language => new TextBlock() { Text = language, FontSize = 20 });
             
             languageSet.Children.Add(languageTBlock);
             languageSet.Children.Add(languageSelector);
@@ -452,6 +457,7 @@ namespace SemesterWork
                 LanguageEngine.Current = ((TextBlock) languageSelector.SelectedItem).Text;
                 Variables.PrinterPath = printerPath;
                 Variables.BarcodeScannerPort = scanner;
+                _isSettingsOK = true;
                 SettingsActivity();
                 SaveSettings();
             };
