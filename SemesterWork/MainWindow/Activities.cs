@@ -26,6 +26,7 @@ namespace SemesterWork
         public void LoginActivity()
         {
             ClearScreen();
+
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
@@ -34,13 +35,16 @@ namespace SemesterWork
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
+
             TextBlock logo = new TextBlock() { Text = Variables.ProgramName, FontSize = 72, TextAlignment = TextAlignment.Center };
             Grid.Children.Add(logo);
             Grid.SetColumnSpan(logo, 3);
             Grid.SetColumn(logo, 1);
+
             StackPanel panel = new StackPanel();
             TextBox login = new TextBox() { FontSize = 20 };
             TextBox password = new TextBox() { FontSize = 20 };
+
             panel.Children.Add(new TextBlock() { Text = Lang["LoginActivity Account"], FontSize = 20 });
             panel.Children.Add(login);
             panel.Children.Add(new TextBlock() { Text = Lang["LoginActivity Password"], FontSize = 20 });
@@ -78,18 +82,20 @@ namespace SemesterWork
         public void MainMenuActivity()
         {           
             ClearScreen();
+
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
+
             StackPanel panel = new StackPanel();
             Button fastInvoice = new Button() { Content = Lang["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
             Button updateService = new Button() { Content = Lang["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
-
             Button settings = new Button() { Content = Lang["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
             Button logout = new Button() { Content = Lang["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
+
             panel.Children.Add(fastInvoice);
             if (_currentUser.AccessLevel != "Normal")
                 panel.Children.Add(updateService);
@@ -112,6 +118,7 @@ namespace SemesterWork
         public void FastInvoiceActivity()
         {
             ClearScreen();
+
             _total = new TextBlock();
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
@@ -124,6 +131,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
+
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
             TextBlock cashier = new TextBlock() { Text = $"{Lang["FastInvoiceActivity Cashier"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
@@ -133,19 +141,23 @@ namespace SemesterWork
             Grid.SetColumn(dateTime, 1);
             topBar.Children.Add(cashier);
             Grid.SetColumn(cashier, 2);
+
             DispatcherTimer dateTimeTimer = new DispatcherTimer();
             dateTimeTimer.Interval = TimeSpan.FromMilliseconds(1000);
             dateTimeTimer.Tick += (sender, args) => { dateTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture); };
             dateTimeTimer.Start();
+
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) });
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
+
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             _barcodeForm = new TextBox() { FontSize = 48 };
             _barcodeForm.PreviewTextInput += NumberValidationTextBox;
+
             Button addPosition = new Button() { Content = Lang["FastInvoiceActivity AddPosition"], FontSize = 48 };
             addPosition.Click += (sender, args) => AddPosition(_barcodeForm.Text);
             barcodeInput.Children.Add(_barcodeForm);
@@ -157,7 +169,8 @@ namespace SemesterWork
             _number.PreviewTextInput += NumberValidationTextBox;
             Grid.SetColumn(_number, 1);
             invoiceControls.Children.Add(_number);
-            Binding[] binds = {
+            Binding[] binds = 
+            {
                 new Binding("Data.Name"),
                 new Binding("Data.Price"),
                 new Binding("Amount"),
@@ -166,6 +179,7 @@ namespace SemesterWork
             };
             foreach (var bind in binds)
                 bind.Mode = BindingMode.OneTime;
+
             _positions = new DataGrid()
             {
                 ItemsSource = _invoicePositions,
@@ -213,17 +227,20 @@ namespace SemesterWork
             keyboard.Children.Add(dot);
             Grid.SetColumn(dot, 1);
             Grid.SetRow(dot, 3);
+
             Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
             Button clear = new Button() { Content = crossImage };
             clear.Click += ClearOnClick;
             keyboard.Children.Add(clear);
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
+
             controls.Children.Add(keyboard);
             Button payment = new Button() { Content = Lang["FastInvoiceActivity Payment"], FontSize = 40,  Height = 100 };
             payment.Click += PaymentOnClick;
             Button amount = new Button() { Content = Lang["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
             amount.Click += AmountOnClick;
+
             _total.Text = $"{Lang["FastInvoiceActivity Total"]}: 0";
             _total.FontSize = 40;
             _total.Margin = new Thickness(15, 20, 0, 0);
@@ -250,8 +267,10 @@ namespace SemesterWork
         public void WareHouseServiceActivity()
         {
             ClearScreen();
+
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
+
             Grid topBar = new Grid();
             Grid.Children.Add(topBar);
             Grid.SetRow(topBar, 0);
@@ -261,6 +280,7 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
+
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
             TextBlock cashier = new TextBlock() { Text = $"{Lang["WareHouseActivity Manager"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
@@ -270,19 +290,23 @@ namespace SemesterWork
             Grid.SetColumn(dateTime, 1);
             topBar.Children.Add(cashier);
             Grid.SetColumn(cashier, 2);
+
             DispatcherTimer dateTimeTimer = new DispatcherTimer();
             dateTimeTimer.Interval = TimeSpan.FromMilliseconds(1000);
             dateTimeTimer.Tick += (sender, args) => { dateTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture); };
             dateTimeTimer.Start();
+
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition());
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1.25, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(2, GridUnitType.Star) });
+
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             _barcodeForm = new TextBox() { FontSize = 48 };
             _barcodeForm.PreviewTextInput += NumberValidationTextBox;
+
             Button addPosition = new Button() { Content = Lang["WareHouseActivity AddPosition"], FontSize = 48 };
             addPosition.Click += (sender, args) => AddPositionForSaving(_barcodeForm.Text);
             barcodeInput.Children.Add(_barcodeForm);
@@ -360,14 +384,15 @@ namespace SemesterWork
         public void SettingsActivity()
         {
             ClearScreen();
+
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
-            var panel = new StackPanel();
 
+            var panel = new StackPanel();
             var languageSet = new StackPanel();
             var languageTBlock = new TextBlock() { Text = Lang["SettingsActivity Language"], FontSize = 20 };
             var languageSelector = new ComboBox() { FontSize = 20 };

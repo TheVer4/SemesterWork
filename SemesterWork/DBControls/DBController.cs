@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.SQLite;
 
 namespace SemesterWork
@@ -9,36 +8,32 @@ namespace SemesterWork
         public static List<string> SQLFind(string table, string column, object value)
         {
             var result = new List<string>();
-            using (var connection = new SQLiteConnection(Variables.DBConnectionString))
-            {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    $"SELECT * FROM {table} " +
-                    $"WHERE {column}='{value}'",
-                    connection);
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                    for (var i = 0; i < reader.FieldCount; i++)
-                        result.Add(reader.GetString(i));
-            }
+            using var connection = new SQLiteConnection(Variables.DBConnectionString);
+            connection.Open();
+            var command = new SQLiteCommand(
+                $"SELECT * FROM {table} " +
+                $"WHERE {column}='{value}'",
+                connection);
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+                for (var i = 0; i < reader.FieldCount; i++)
+                    result.Add(reader.GetString(i));
             return result;
         }
 
         public static List<string> SQLFindBetween(string table, string column, object first, object second)
         {
             var result = new List<string>();
-            using (var connection = new SQLiteConnection(Variables.DBConnectionString))
-            {
-                connection.Open();
-                var command = new SQLiteCommand(
-                    $"SELECT * FROM {table} " +
-                    $"WHERE {column} BETWEEN {first} AND {second}",
-                connection);
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                    for (var i = 0; i < reader.FieldCount; i++)
-                        result.Add(reader.GetString(i));
-            }
+            using var connection = new SQLiteConnection(Variables.DBConnectionString);
+            connection.Open();
+            var command = new SQLiteCommand(
+                $"SELECT * FROM {table} " +
+                $"WHERE {column} BETWEEN {first} AND {second}",
+            connection);
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+                for (var i = 0; i < reader.FieldCount; i++)
+                    result.Add(reader.GetString(i));
             return result;
         }
 
@@ -70,17 +65,10 @@ namespace SemesterWork
 
         public static void SQLCommand(string SQLCommand)
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (sender, args) =>
-            {
-                using (var connection = new SQLiteConnection(Variables.DBConnectionString))
-                {
-                    connection.Open();
-                    var command = new SQLiteCommand(SQLCommand, connection);
-                    var number = command.ExecuteNonQuery();
-                }
-            };
-            worker.RunWorkerAsync();
+            using var connection = new SQLiteConnection(Variables.DBConnectionString);
+            connection.Open();
+            var command = new SQLiteCommand(SQLCommand, connection);
+            var number = command.ExecuteNonQuery();
         }
     }
 }

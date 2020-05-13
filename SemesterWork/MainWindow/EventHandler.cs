@@ -173,13 +173,14 @@ namespace SemesterWork
         private void SavePositions()
         {
             var worker = new BackgroundWorker();
-            foreach (var position in _savingPositions)             
-                if (position.IsInDB)
-                    worker.DoWork += (sender, args) =>
+            worker.DoWork += (sender, args) =>
+            {
+                foreach (var position in _savingPositions)
+                    if (position.IsInDB)
                         WareHouseDBController.Update(position.Data);
-                else
-                    worker.DoWork += (sender, args) =>
+                    else
                         WareHouseDBController.Insert(position.Data);
+            };
             worker.RunWorkerCompleted += (sender, args) =>
             {
                 MessageBox.Show(Lang["WareHouseActivity SaveMessageBox"],
@@ -190,6 +191,7 @@ namespace SemesterWork
 
         private void DeleteFromDB()
         {
+            var worker = new BackgroundWorker();
             if (_savingPositions.Count == 0)
                 MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingError"],
                 Lang["WareHouseActivity DeleteFromDB DeletingErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
@@ -199,10 +201,17 @@ namespace SemesterWork
                     Lang["WareHouseActivity DeleteFromDB DeletingPositionsTitle"], MessageBoxButton.YesNo,
                     MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    foreach (var position in _savingPositions)
-                        if (position.IsInDB)
-                            WareHouseDBController.Remove(position.Data.EAN13);
-                    _savingPositions.Clear();
+                    worker.DoWork += (sender, args) =>
+                    {
+                        foreach (var position in _savingPositions)
+                            if (position.IsInDB)
+                                WareHouseDBController.Remove(position.Data.EAN13);
+                    };
+                    worker.RunWorkerCompleted += (sender, args) =>
+                    {
+                        _savingPositions.Clear();
+                        UpdateScreen();
+                    };
                 }
             }
             else
@@ -213,15 +222,20 @@ namespace SemesterWork
                         Lang["WareHouseActivity DeleteFromDB DeletingPositionTitle"], MessageBoxButton.YesNo,
                         MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        WareHouseDBController.Remove(_savingPositions[_positions.SelectedIndex].Data.EAN13);
-                        _savingPositions.RemoveAt(_positions.SelectedIndex);
+                        worker.DoWork += (sender, args) =>
+                            WareHouseDBController.Remove(_savingPositions[_positions.SelectedIndex].Data.EAN13);
+                        worker.RunWorkerCompleted += (sender, args) =>
+                        {
+                            _savingPositions.RemoveAt(_positions.SelectedIndex);
+                            UpdateScreen();
+                        };
                     }
                 }
                 else
                     MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingNotInDB"],
                     Lang["WareHouseActivity DeleteFromDB DeletingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            UpdateScreen();
+            worker.RunWorkerAsync();
         }
 
         private void SaveSettings()

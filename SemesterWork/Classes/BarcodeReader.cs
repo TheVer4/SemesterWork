@@ -27,9 +27,9 @@
             _port.DataReceived += deleg;
         }
         
-        public void Dispose() {
+        public void Dispose() 
+        {
             _port.Close();
-        }
-        
+        }       
     }
 }
