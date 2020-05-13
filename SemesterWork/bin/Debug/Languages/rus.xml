@@ -45,6 +45,8 @@
         <string name="WareHouseActivity DeleteConfirm">Вы уверены, что хотите удалить все позиции?</string>
         <string name="WareHouseActivity SaveMessageBoxTitle">Сообщение</string>
         <string name="WareHouseActivity SaveMessageBox">Позиции успешно сохранены!</string>
+        <string name="WareHouseActivity PositionContainsQuestionTitle">Произошла ошибка</string>
+        <string name="WareHouseActivity PositionContainsQuestion">Позиция с кодом {0} уже есть в таблице.</string>
         <string name="SettingsActivity Language">Язык</string>
         <string name="SettingsActivity NetPrinterName">Сетевое имя принтера</string>
         <string name="SettingsActivity NetPrinterAddress">Полный адрес</string>

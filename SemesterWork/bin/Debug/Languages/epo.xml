@@ -45,6 +45,8 @@
         <string name="WareHouseActivity DeleteConfirm">Ĉu vi vere volas forigi ĉiujn poziciojn?</string>
         <string name="WareHouseActivity SaveMessageBoxTitle">Mesaĝo</string>
         <string name="WareHouseActivity SaveMessageBox">Pozicioj savitaj sukcese!</string>
+        <string name="WareHouseActivity PositionContainsQuestionTitle">Eraro okazis</string>
+        <string name="WareHouseActivity PositionContainsQuestion">Ni jam havas kodo linion {0}.</string>
         <string name="SettingsActivity Language">Lingvo</string>
         <string name="SettingsActivity NetPrinterName">Presilo reto nomo</string>
         <string name="SettingsActivity NetPrinterAddress">Presilo plena adreso</string>

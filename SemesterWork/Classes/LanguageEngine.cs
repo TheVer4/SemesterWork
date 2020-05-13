@@ -43,7 +43,7 @@ namespace SemesterWork
 
         #region defaultLanguage
 
-        private readonly string DEFAULT_LANGUAGE = 
+        private readonly string DEFAULT_LANGUAGE =
             @"<?xml version='1.0' encoding='utf-8'?>
 <document>
     <language>English</language>
@@ -91,9 +91,11 @@ namespace SemesterWork
         <string name='WareHouseActivity DeleteConfirm'>Are you sure you want to delete all positions?</string>
         <string name='WareHouseActivity SaveMessageBoxTitle'>Message</string>
         <string name='WareHouseActivity SaveMessageBox'>Positions saved successfully!</string>
+        <string name='WareHouseActivity PositionContainsQuestionTitle'>Error</string>
+        <string name='WareHouseActivity PositionContainsQuestion'>Already have a line item with code {0}.</string>
         <string name='SettingsActivity Language'>Language</string>
         <string name='SettingsActivity NetPrinterName'>Network printer name</string>
-        <string name='SettingsActivity NetPrinterAddress'>Full address</string>        
+        <string name='SettingsActivity NetPrinterAddress'>Full address</string>
         <string name='SettingsActivity ScannerPort'>Scanner COM-Port</string>
         <string name='SettingsActivity Apply'>Apply</string>
         <string name='SettingsActivity Cancel'>Exit</string>

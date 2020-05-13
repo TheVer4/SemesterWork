@@ -144,8 +144,8 @@ namespace SemesterWork
                 var availablePosition = _savingPositions.Where(x => x.Data.EAN13 == code);
                 if (availablePosition.Any())
                 {
-                    MessageBox.Show(String.Format(Lang["WareHouseActivity ContainsQuestion"], code),
-                        Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(String.Format(Lang["WareHouseActivity PositionContainsQuestion"], code),
+                        Lang["WareHouseActivity PositionContainsQuestionTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                     UpdateScreen();
                     return;
                 }

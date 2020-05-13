@@ -45,6 +45,8 @@
         <string name="WareHouseActivity DeleteConfirm">すべてのポジションを削除してもよろしいですか？</string>
         <string name="WareHouseActivity SaveMessageBoxTitle">メッセージ</string>
         <string name="WareHouseActivity SaveMessageBox">ポジションが保存されました！</string>
+        <string name="WareHouseActivity PositionContainsQuestionTitle"></string>
+        <string name="WareHouseActivity PositionContainsQuestion"></string>
         <string name="SettingsActivity Language">言語</string>
         <string name="SettingsActivity NetPrinterName">プリンタネットワーク名</string>
         <string name="SettingsActivity NetPrinterAddress">完全な住所</string>

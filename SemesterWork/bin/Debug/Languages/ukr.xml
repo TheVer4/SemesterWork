@@ -45,6 +45,8 @@
         <string name="WareHouseActivity DeleteConfirm">Ви впевнені, що хочете видалити всі позиції?</string>
         <string name="WareHouseActivity SaveMessageBoxTitle">Повідомлення</string>
         <string name="WareHouseActivity SaveMessageBox">Позиції успішно збережені!</string>
+        <string name="WareHouseActivity PositionContainsQuestionTitle"></string>
+        <string name="WareHouseActivity PositionContainsQuestion"></string>
         <string name="SettingsActivity Language">Мова</string>
         <string name="SettingsActivity NetPrinterName">Мережеве ім'я принтера</string>
         <string name="SettingsActivity NetPrinterAddress">Повна адреса</string>

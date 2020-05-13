@@ -117,7 +117,7 @@ namespace SemesterWork
             
             if (!_isSettingsOK)
                 MessageBox.Show("An error occurred while loading the settings. Default settings were set.",  // не локализовано, потому что может появиться
-                    "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);                            // только с дефолтной (English) локализацией
+                    "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);                                // только с дефолтной (English) локализацией
         }
 
         public void FastInvoiceActivity()
@@ -162,6 +162,11 @@ namespace SemesterWork
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             _barcodeForm = new TextBox() { FontSize = 48 };
             _barcodeForm.PreviewTextInput += NumberValidationTextBox;
+            _barcodeForm.KeyDown += (sender, args) =>
+            {
+                if (args.Key == Key.Enter)
+                    AddPosition(_barcodeForm.Text);
+            };
 
             Button addPosition = new Button() { Content = Lang["FastInvoiceActivity AddPosition"], FontSize = 48 };
             addPosition.Click += (sender, args) => AddPosition(_barcodeForm.Text);
@@ -311,6 +316,11 @@ namespace SemesterWork
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             _barcodeForm = new TextBox() { FontSize = 48 };
             _barcodeForm.PreviewTextInput += NumberValidationTextBox;
+            _barcodeForm.KeyDown += (sender, args) =>
+            {
+                if (args.Key == Key.Enter)
+                    AddPositionForSaving(_barcodeForm.Text);
+            };
 
             Button addPosition = new Button() { Content = Lang["WareHouseActivity AddPosition"], FontSize = 48 };
             addPosition.Click += (sender, args) => AddPositionForSaving(_barcodeForm.Text);
