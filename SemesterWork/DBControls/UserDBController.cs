@@ -32,6 +32,15 @@ namespace SemesterWork
             DBController.SQLUpdate("Users", column, value, "id", id);
         }
 
+        public static void Update(User data)
+        {
+            DBController.SQLCommand(
+                $"UPDATE Users SET " +
+                $"Name = '{data.Name}', " +
+                $"AccessLevel = '{data.AccessLevel}' " +
+                $"WHERE id = '{data.Id}'");
+        }
+
         public static void Remove(string id)
         {
             DBController.SQLRemove("Users", "id", id);

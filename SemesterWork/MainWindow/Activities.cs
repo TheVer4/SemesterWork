@@ -13,12 +13,11 @@ namespace SemesterWork
     public partial class MainWindow
     {
         private DataGrid _positions;
-        private List<CheckLine> _invoicePositions = new List<CheckLine>();
-        private List<DBProductData> _savingPositions = new List<DBProductData>();
+        private List<object> _itemsPositions = new List<object>();
         private BarcodeReader _barcodeReader;
         private TextBox _number;
         private User _currentUser;
-        private TextBox _barcodeForm;
+        private TextBox _textForm;
         private TextBlock _total;
         private string _readBarcode;
         private DispatcherTimer _updateSmth;
@@ -81,7 +80,7 @@ namespace SemesterWork
         }
 
         public void MainMenuActivity()
-        {           
+        {
             ClearScreen();
 
             Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
@@ -93,18 +92,28 @@ namespace SemesterWork
 
             StackPanel panel = new StackPanel();
             Button fastInvoice = new Button() { Content = Lang["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
-            Button updateService = new Button() { Content = Lang["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
+            Button warehouse = new Button() { Content = Lang["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
+            Button statistics = new Button() { Content = "Статистика", Height = 50, FontSize = 20 }; //loc
+            Button userControlService = new Button() { Content = "Менеджер аккаунтов", Height = 50, FontSize = 20 }; // loc
             Button settings = new Button() { Content = Lang["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
             Button logout = new Button() { Content = Lang["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
 
             panel.Children.Add(fastInvoice);
             if (_currentUser.AccessLevel != "Normal")
-                panel.Children.Add(updateService);
+            {
+                panel.Children.Add(warehouse);
+                panel.Children.Add(statistics);
+            }
             if (_currentUser.AccessLevel == "Admin")
+            {
+                panel.Children.Add(userControlService);
                 panel.Children.Add(settings);
+            }
             panel.Children.Add(logout);
             fastInvoice.Click += (sender, args) => FastInvoiceActivity();
-            updateService.Click += (sender, args) => WareHouseServiceActivity();
+            warehouse.Click += (sender, args) => WareHouseServiceActivity();
+            statistics.Click += (sender, args) => StatisticsActivity();
+            userControlService.Click += (sender, args) => UserControlServiceActivity();
             settings.Click += (sender, args) => SettingsActivity();
             logout.Click += (sender, args) =>
             {
@@ -114,7 +123,7 @@ namespace SemesterWork
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 1);
             Grid.SetRow(panel, 1);
-            
+
             if (!_isSettingsOK)
                 MessageBox.Show("An error occurred while loading the settings. Default settings were set.",  // не локализовано, потому что может появиться
                     "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);                                // только с дефолтной (English) локализацией
@@ -160,26 +169,26 @@ namespace SemesterWork
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            _barcodeForm = new TextBox() { FontSize = 48 };
-            _barcodeForm.PreviewTextInput += NumberValidationTextBox;
-            _barcodeForm.KeyDown += (sender, args) =>
+            _textForm = new TextBox() { FontSize = 48 };
+            _textForm.PreviewTextInput += NumberValidationTextBox;
+            _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    AddPosition(_barcodeForm.Text);
+                    AddPosition(_textForm.Text);
             };
 
             Button addPosition = new Button() { Content = Lang["FastInvoiceActivity AddPosition"], FontSize = 48 };
-            addPosition.Click += (sender, args) => AddPosition(_barcodeForm.Text);
-            barcodeInput.Children.Add(_barcodeForm);
+            addPosition.Click += (sender, args) => AddPosition(_textForm.Text);
+            barcodeInput.Children.Add(_textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
-            
+
             _number = new TextBox() { FontSize = 48 };
             _number.PreviewTextInput += NumberValidationTextBox;
             Grid.SetColumn(_number, 1);
             invoiceControls.Children.Add(_number);
-            Binding[] binds = 
+            Binding[] binds =
             {
                 new Binding("Data.Name"),
                 new Binding("Data.Price"),
@@ -192,7 +201,7 @@ namespace SemesterWork
 
             _positions = new DataGrid()
             {
-                ItemsSource = _invoicePositions,
+                ItemsSource = _itemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
@@ -210,7 +219,7 @@ namespace SemesterWork
             }
             invoiceControls.Children.Add(_positions);
             Grid.SetRow(_positions, 1);
-            
+
             StackPanel controls = new StackPanel();
             Grid keyboard = new Grid() { ShowGridLines = false };
             keyboard.ColumnDefinitions.Add(new ColumnDefinition());
@@ -223,9 +232,9 @@ namespace SemesterWork
             for (int i = 8; i >= 0; i--)
             {
                 Button key = new Button() { Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
-                key.Click += (sender, args) => _number.Text += ((Button) sender).Content.ToString();
+                key.Click += (sender, args) => _number.Text += ((Button)sender).Content.ToString();
                 keyboard.Children.Add(key);
-                Grid.SetColumn(key, 2 - i % 3 );
+                Grid.SetColumn(key, 2 - i % 3);
                 Grid.SetRow(key, i / 3);
             }
             Button zero = new Button() { Content = "0", FontSize = 40, Height = 100 };
@@ -240,13 +249,13 @@ namespace SemesterWork
 
             Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
             Button clear = new Button() { Content = crossImage };
-            clear.Click += ClearOnClick;
+            clear.Click += (sender, args) => ClearOnClick();
             keyboard.Children.Add(clear);
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
 
             controls.Children.Add(keyboard);
-            Button payment = new Button() { Content = Lang["FastInvoiceActivity Payment"], FontSize = 40,  Height = 100 };
+            Button payment = new Button() { Content = Lang["FastInvoiceActivity Payment"], FontSize = 40, Height = 100 };
             payment.Click += PaymentOnClick;
             Button amount = new Button() { Content = Lang["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
             amount.Click += AmountOnClick;
@@ -271,9 +280,9 @@ namespace SemesterWork
                     AddPosition(_readBarcode);
                 _readBarcode = null;
             };
-            _updateSmth.Start();          
+            _updateSmth.Start();
         }
-        
+
         public void WareHouseServiceActivity()
         {
             ClearScreen();
@@ -293,13 +302,13 @@ namespace SemesterWork
 
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock cashier = new TextBlock() { Text = $"{Lang["WareHouseActivity Manager"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
+            TextBlock manager = new TextBlock() { Text = $"{Lang["WareHouseActivity Manager"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
             Grid.SetColumn(dateTime, 1);
-            topBar.Children.Add(cashier);
-            Grid.SetColumn(cashier, 2);
+            topBar.Children.Add(manager);
+            Grid.SetColumn(manager, 2);
 
             DispatcherTimer dateTimeTimer = new DispatcherTimer();
             dateTimeTimer.Interval = TimeSpan.FromMilliseconds(1000);
@@ -314,21 +323,21 @@ namespace SemesterWork
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            _barcodeForm = new TextBox() { FontSize = 48 };
-            _barcodeForm.PreviewTextInput += NumberValidationTextBox;
-            _barcodeForm.KeyDown += (sender, args) =>
+            _textForm = new TextBox() { FontSize = 48 };
+            _textForm.PreviewTextInput += NumberValidationTextBox;
+            _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    AddPositionForSaving(_barcodeForm.Text);
+                    AddPositionForSaving(_textForm.Text);
             };
 
             Button addPosition = new Button() { Content = Lang["WareHouseActivity AddPosition"], FontSize = 48 };
-            addPosition.Click += (sender, args) => AddPositionForSaving(_barcodeForm.Text);
-            barcodeInput.Children.Add(_barcodeForm);
+            addPosition.Click += (sender, args) => AddPositionForSaving(_textForm.Text);
+            barcodeInput.Children.Add(_textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
-            
+
             Binding[] binds = {
                 new Binding("Data.EAN13"),
                 new Binding("Data.Name"),
@@ -341,9 +350,9 @@ namespace SemesterWork
                 bind.Mode = BindingMode.Default;
             _positions = new DataGrid()
             {
-                ItemsSource = _savingPositions,
+                ItemsSource = _itemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
-                FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
+                FontSize = 20, AutoGenerateColumns = false, Name = "ManagerTable",
                 Columns =
                 {
                     new DataGridTextColumn() { Header = Lang["WareHouseActivity EAN13"], Binding = binds[0], MinWidth = 250 },
@@ -358,7 +367,7 @@ namespace SemesterWork
                 column.CanUserSort = false;
             invoiceControls.Children.Add(_positions);
             Grid.SetRow(_positions, 1);
-            
+
             Grid controls = new Grid();
             controls.ColumnDefinitions.Add(new ColumnDefinition());
             controls.ColumnDefinitions.Add(new ColumnDefinition());
@@ -366,7 +375,7 @@ namespace SemesterWork
 
             Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
             Button clear = new Button() { Content = crossImage, Height = 100 };
-            clear.Click += (sender, args) => ClearSavingOnClick();
+            clear.Click += (sender, args) => ClearOnClick();
             controls.Children.Add(clear);
             Grid.SetColumn(clear, 0);
 
@@ -375,8 +384,8 @@ namespace SemesterWork
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
 
-            Button saveButton = new Button() { Content = Lang["WareHouseActivity Save"], FontSize = 40,  Height = 100 };
-            saveButton.Click += (sender, args) => SavePositions();
+            Button saveButton = new Button() { Content = Lang["WareHouseActivity Save"], FontSize = 40, Height = 100 };
+            saveButton.Click += (sender, args) => SavePositionsForWarehouse();
             controls.Children.Add(saveButton);
             Grid.SetColumn(saveButton, 2);
 
@@ -393,7 +402,121 @@ namespace SemesterWork
                     AddPositionForSaving(_readBarcode);
                 _readBarcode = null;
             };
-            _updateSmth.Start();          
+            _updateSmth.Start();
+        }
+
+        public void StatisticsActivity()
+        {
+
+        }
+
+        public void UserControlServiceActivity()
+        {
+            ClearScreen();
+
+            Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+            Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
+
+            Grid topBar = new Grid();
+            Grid.Children.Add(topBar);
+            Grid.SetRow(topBar, 0);
+            Grid userControls = new Grid();
+            Grid.Children.Add(userControls);
+            Grid.SetRow(userControls, 1);
+            topBar.ColumnDefinitions.Add(new ColumnDefinition());
+            topBar.ColumnDefinitions.Add(new ColumnDefinition());
+            topBar.ColumnDefinitions.Add(new ColumnDefinition());
+
+            TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
+            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
+            TextBlock admin = new TextBlock() { Text = $"Администратор: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //loc
+            topBar.Children.Add(programName);
+            Grid.SetColumn(programName, 0);
+            topBar.Children.Add(dateTime);
+            Grid.SetColumn(dateTime, 1);
+            topBar.Children.Add(admin);
+            Grid.SetColumn(admin, 2);
+
+            DispatcherTimer dateTimeTimer = new DispatcherTimer();
+            dateTimeTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            dateTimeTimer.Tick += (sender, args) => { dateTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture); };
+            dateTimeTimer.Start();
+
+            userControls.ColumnDefinitions.Add(new ColumnDefinition());
+            userControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1.25, GridUnitType.Star) });
+            userControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
+            userControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(2, GridUnitType.Star) });
+
+            Grid userInput = new Grid();
+            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
+            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
+            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
+            _textForm = new TextBox() { FontSize = 48 };
+            _textForm.KeyDown += (sender, args) =>
+            {
+                if (args.Key == Key.Enter)
+                    AddUserPosition(_textForm.Text);
+            };
+
+            var findUser = new Button() { Content = "Найти", FontSize = 48 }; //loc
+            Button addNewUser = new Button() { Content = "Добавить", FontSize = 48 }; //loc
+            findUser.Click += (sender, args) => AddUserPosition(_textForm.Text);
+            addNewUser.Click += (sender, args) => AddNewUser();
+            userInput.Children.Add(_textForm);
+            Grid.SetColumn(userInput, 0);
+            userInput.Children.Add(findUser);
+            Grid.SetColumn(findUser, 1);
+            userInput.Children.Add(addNewUser);
+            Grid.SetColumn(addNewUser, 2);
+            userControls.Children.Add(userInput);
+
+            Binding[] binds = {
+                new Binding("Id") { Mode = BindingMode.OneTime },
+                new Binding("Name") { Mode = BindingMode.Default },
+                new Binding("AccessLevel") { Mode = BindingMode.Default }
+            };
+            _positions = new DataGrid()
+            {
+                ItemsSource = _itemsPositions,
+                SelectionMode = DataGridSelectionMode.Single,
+                FontSize = 20,
+                AutoGenerateColumns = false,
+                Name = "AdminTable",
+                Columns =
+                {
+                    new DataGridTextColumn() { Header = "id", Binding = binds[0], MinWidth = 200 }, //loc
+                    new DataGridTextColumn() { Header = "Имя", Binding = binds[1], MinWidth = 750 }, //loc
+                    new DataGridComboBoxColumn() { Header = "Уровень доступа" , TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } }, //loc
+                }
+            };
+            foreach (var column in _positions.Columns)
+                column.CanUserSort = false;
+            userControls.Children.Add(_positions);
+            Grid.SetRow(_positions, 1);
+
+            Grid controls = new Grid();
+            controls.ColumnDefinitions.Add(new ColumnDefinition());
+            controls.ColumnDefinitions.Add(new ColumnDefinition());
+            controls.ColumnDefinitions.Add(new ColumnDefinition());
+
+            Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
+            Button clear = new Button() { Content = crossImage, Height = 100 };
+            clear.Click += (sender, args) => ClearOnClick();
+            controls.Children.Add(clear);
+            Grid.SetColumn(clear, 0);
+
+            var deleteButton = new Button() { Content = "Удалить пользователя", FontSize = 40, Height = 100 }; //loc
+            deleteButton.Click += (sender, args) => DeleteUserFromDB();
+            controls.Children.Add(deleteButton);
+            Grid.SetColumn(deleteButton, 1);
+
+            Button saveButton = new Button() { Content = "Сохранить", FontSize = 40, Height = 100 }; //loc
+            saveButton.Click += (sender, args) => SaveUsersPositions();
+            controls.Children.Add(saveButton);
+            Grid.SetColumn(saveButton, 2);
+
+            userControls.Children.Add(controls);
+            Grid.SetRow(controls, 2);
         }
 
         public void SettingsActivity()
