@@ -20,8 +20,8 @@ namespace SemesterWork
         private TextBox _number;
         private TextBox _textForm;
         private TextBlock _total;      
-        private DispatcherTimer _updateSmth;
-        private BarcodeReader _barcodeReader;
+        private DispatcherTimer _updateSmth; //TODO remove timer from view
+        private BarcodeReader _barcodeReader; //TODO remove bcscanner from view
 
         public void LoginActivity()
         {
@@ -93,8 +93,8 @@ namespace SemesterWork
             StackPanel panel = new StackPanel();
             Button fastInvoice = new Button() { Content = EventHandler.Lang["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
             Button warehouse = new Button() { Content = EventHandler.Lang["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
-            Button statistics = new Button() { Content = "Статистика", Height = 50, FontSize = 20 }; //loc
-            Button userControlService = new Button() { Content = "Менеджер аккаунтов", Height = 50, FontSize = 20 }; // loc
+            Button statistics = new Button() { Content = "Статистика", Height = 50, FontSize = 20 }; //TODO localize
+            Button userControlService = new Button() { Content = "Менеджер аккаунтов", Height = 50, FontSize = 20 }; //TODO localize
             Button settings = new Button() { Content = EventHandler.Lang["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
             Button logout = new Button() { Content = EventHandler.Lang["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
 
@@ -484,7 +484,7 @@ namespace SemesterWork
 
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock admin = new TextBlock() { Text = $"Администратор: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //loc
+            TextBlock admin = new TextBlock() { Text = $"Администратор: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //TODO localize
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -513,8 +513,8 @@ namespace SemesterWork
                     AddUserPosition();
             };
 
-            var findUser = new Button() { Content = "Найти", FontSize = 48 }; //loc
-            Button addNewUser = new Button() { Content = "Добавить", FontSize = 48 }; //loc
+            var findUser = new Button() { Content = "Найти", FontSize = 48 }; //TODO localize
+            Button addNewUser = new Button() { Content = "Добавить", FontSize = 48 }; //TODO localize
             findUser.Click += (sender, args) => AddUserPosition();
             findUser.Click += (sender, args) => UpdateScreen();
             addNewUser.Click += (sender, args) => EventHandler.AddNewUser();
@@ -540,9 +540,9 @@ namespace SemesterWork
                 Name = "AdminTable",
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = "id", Binding = binds[0], MinWidth = 200 }, //loc
-                    new DataGridTextColumn() { Header = "Имя", Binding = binds[1], MinWidth = 750 }, //loc
-                    new DataGridComboBoxColumn() { Header = "Уровень доступа" , TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } }, //loc
+                    new DataGridTextColumn() { Header = "id", Binding = binds[0], MinWidth = 200 }, //TODO localize
+                    new DataGridTextColumn() { Header = "Имя", Binding = binds[1], MinWidth = 750 }, //TODO localize
+                    new DataGridComboBoxColumn() { Header = "Уровень доступа" , TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } }, //TODO localize
                 }
             };
             foreach (var column in _positions.Columns)
@@ -573,7 +573,7 @@ namespace SemesterWork
             controls.Children.Add(clear);
             Grid.SetColumn(clear, 0);
 
-            var deleteButton = new Button() { Content = "Удалить пользователя", FontSize = 40, Height = 100 }; //loc
+            var deleteButton = new Button() { Content = "Удалить пользователя", FontSize = 40, Height = 100 }; //TODO localize
             deleteButton.Click += (sender, args) =>
             {
                 var selectedIndex = _positions.SelectedIndex;
@@ -585,7 +585,7 @@ namespace SemesterWork
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
 
-            Button saveButton = new Button() { Content = "Сохранить", FontSize = 40, Height = 100 }; //loc
+            Button saveButton = new Button() { Content = "Сохранить", FontSize = 40, Height = 100 }; //TODO localize
             saveButton.Click += (sender, args) => EventHandler.SaveUsersPositions();
             controls.Children.Add(saveButton);
             Grid.SetColumn(saveButton, 2);
@@ -736,7 +736,7 @@ namespace SemesterWork
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-
+        //TODO clear this shit:
         private void AddPosition()
         {
             var textFormText = _textForm.Text;

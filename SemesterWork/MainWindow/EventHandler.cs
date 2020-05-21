@@ -110,8 +110,8 @@ namespace SemesterWork
         {
             var availablePosition = ItemsPositions.Where(x => (x as User).Name == infoStr || (x as User).Id == infoStr);
             if (availablePosition.Any())
-                MessageBox.Show("Пользоавтель с такими данными уже есть в таблице", //loc
-                    "Внимание", MessageBoxButton.OK, MessageBoxImage.Error); //loc
+                MessageBox.Show("Пользоавтель с такими данными уже есть в таблице", //TODO localize
+                    "Внимание", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
             else
             {
                 var info = UserDBController.FindById(infoStr);
@@ -121,8 +121,8 @@ namespace SemesterWork
                 if (info.Any())
                     ItemsPositions.Add(new User(info));
                 else
-                    MessageBox.Show("Пользователь с такими данными не найден", //loc
-                        "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //loc
+                    MessageBox.Show("Пользователь с такими данными не найден", //TODO localize
+                        "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
             }
         }
 
@@ -198,15 +198,15 @@ namespace SemesterWork
         public static void DeleteUserFromDB(int selectedIndex)
         {
             if (ItemsPositions.Count == 0)
-                MessageBox.Show("Нечего удалять", //loc
-                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //loc
+                MessageBox.Show("Нечего удалять", //TODO localize
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
             else if (ItemsPositions.Select(x => (x as User).Id).Contains(CurrentUser.Id))
-                MessageBox.Show("Вы не можете удалить себя.", //loc
-                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //loc
+                MessageBox.Show("Вы не можете удалить себя.", //TODO localize
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
             else if (selectedIndex == -1)
             {
-                if (MessageBox.Show("Вы уверены, что хотите удалить все эти позиции?", //loc
-                        "Подтвердите действие", MessageBoxButton.YesNo, //loc
+                if (MessageBox.Show("Вы уверены, что хотите удалить все эти позиции?", //TODO localize
+                        "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
                         MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     foreach (User user in ItemsPositions)
@@ -216,8 +216,8 @@ namespace SemesterWork
             }
             else
             {
-                if (MessageBox.Show("Вы уверены, что хотите удалить эту позицию?", //loc 
-                        "Подтвердите действие", MessageBoxButton.YesNo, //loc
+                if (MessageBox.Show("Вы уверены, что хотите удалить эту позицию?", //TODO localize 
+                        "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
                          MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     var id = (ItemsPositions[selectedIndex] as User).Id;
