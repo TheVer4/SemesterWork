@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace SemesterWork
@@ -13,15 +17,11 @@ namespace SemesterWork
     public partial class MainWindow
     {
         private DataGrid _positions;
-        private List<object> _itemsPositions = new List<object>();
-        private BarcodeReader _barcodeReader;
         private TextBox _number;
-        private User _currentUser;
         private TextBox _textForm;
-        private TextBlock _total;
-        private string _readBarcode;
+        private TextBlock _total;      
         private DispatcherTimer _updateSmth;
-        private bool _isSettingsOK = true;
+        private BarcodeReader _barcodeReader;
 
         public void LoginActivity()
         {
@@ -45,25 +45,25 @@ namespace SemesterWork
             TextBox login = new TextBox() { FontSize = 20 };
             TextBox password = new TextBox() { FontSize = 20 };
 
-            panel.Children.Add(new TextBlock() { Text = Lang["LoginActivity Account"], FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = EventHandler.Lang["LoginActivity Account"], FontSize = 20 });
             panel.Children.Add(login);
-            panel.Children.Add(new TextBlock() { Text = Lang["LoginActivity Password"], FontSize = 20 });
+            panel.Children.Add(new TextBlock() { Text = EventHandler.Lang["LoginActivity Password"], FontSize = 20 });
             password.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
                     Authorize(login.Text, password.Text);
             };
             panel.Children.Add(password);
-            Button enter = new Button() { Content = Lang["LoginActivity Authorize"], FontSize = 20 };
-            Button close = new Button() { Content = Lang["LoginActivity Exit"], FontSize = 20 };
+            Button enter = new Button() { Content = EventHandler.Lang["LoginActivity Authorize"], FontSize = 20 };
+            Button close = new Button() { Content = EventHandler.Lang["LoginActivity Exit"], FontSize = 20 };
             panel.Children.Add(enter);
             panel.Children.Add(close);
             enter.Click += (sender, args) => Authorize(login.Text, password.Text);
             close.Click += (sender, args) =>
             {
                 switch (MessageBox.Show(
-                    Lang["LoginActivity ExitMessageBox"],
-                    Lang["LoginActivity ExitMessageBoxTitle"],
+                    EventHandler.Lang["LoginActivity ExitMessageBox"],
+                    EventHandler.Lang["LoginActivity ExitMessageBoxTitle"],
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question))
                 {
@@ -91,20 +91,20 @@ namespace SemesterWork
             Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
 
             StackPanel panel = new StackPanel();
-            Button fastInvoice = new Button() { Content = Lang["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
-            Button warehouse = new Button() { Content = Lang["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
+            Button fastInvoice = new Button() { Content = EventHandler.Lang["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
+            Button warehouse = new Button() { Content = EventHandler.Lang["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
             Button statistics = new Button() { Content = "Статистика", Height = 50, FontSize = 20 }; //loc
             Button userControlService = new Button() { Content = "Менеджер аккаунтов", Height = 50, FontSize = 20 }; // loc
-            Button settings = new Button() { Content = Lang["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
-            Button logout = new Button() { Content = Lang["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
+            Button settings = new Button() { Content = EventHandler.Lang["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
+            Button logout = new Button() { Content = EventHandler.Lang["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
 
             panel.Children.Add(fastInvoice);
-            if (_currentUser.AccessLevel != "Normal")
+            if (EventHandler.CurrentUser.AccessLevel != "Normal")
             {
                 panel.Children.Add(warehouse);
                 panel.Children.Add(statistics);
             }
-            if (_currentUser.AccessLevel == "Admin")
+            if (EventHandler.CurrentUser.AccessLevel == "Admin")
             {
                 panel.Children.Add(userControlService);
                 panel.Children.Add(settings);
@@ -117,14 +117,14 @@ namespace SemesterWork
             settings.Click += (sender, args) => SettingsActivity();
             logout.Click += (sender, args) =>
             {
-                _currentUser = null;
+                EventHandler.Logout();
                 LoginActivity();
             };
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 1);
             Grid.SetRow(panel, 1);
 
-            if (!_isSettingsOK)
+            if (!EventHandler.IsSettingsOK)
                 MessageBox.Show("An error occurred while loading the settings. Default settings were set.",  // не локализовано, потому что может появиться
                     "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);                                // только с дефолтной (English) локализацией
         }
@@ -148,7 +148,7 @@ namespace SemesterWork
 
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock cashier = new TextBlock() { Text = $"{Lang["FastInvoiceActivity Cashier"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
+            TextBlock cashier = new TextBlock() { Text = $"{EventHandler.Lang["FastInvoiceActivity Cashier"]}: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -171,20 +171,23 @@ namespace SemesterWork
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             _textForm = new TextBox() { FontSize = 48 };
             _textForm.PreviewTextInput += NumberValidationTextBox;
+            _number = new TextBox() { FontSize = 48 };
+
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    AddPosition(_textForm.Text);
+                    AddPosition();
             };
 
-            Button addPosition = new Button() { Content = Lang["FastInvoiceActivity AddPosition"], FontSize = 48 };
-            addPosition.Click += (sender, args) => AddPosition(_textForm.Text);
+            Button addPosition = new Button() { Content = EventHandler.Lang["FastInvoiceActivity AddPosition"], FontSize = 48 };
+            addPosition.Click += (sender, args) => AddPosition();
+
             barcodeInput.Children.Add(_textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
 
-            _number = new TextBox() { FontSize = 48 };
+
             _number.PreviewTextInput += NumberValidationTextBox;
             Grid.SetColumn(_number, 1);
             invoiceControls.Children.Add(_number);
@@ -201,16 +204,16 @@ namespace SemesterWork
 
             _positions = new DataGrid()
             {
-                ItemsSource = _itemsPositions,
+                ItemsSource = EventHandler.ItemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
                 FontSize = 20, AutoGenerateColumns = false, Name = "CashierTable",
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = Lang["FastInvoiceActivity Position"], Binding = binds[0], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = Lang["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
-                    new DataGridTextColumn() { Header = Lang["FastInvoiceActivity Count"], Binding = binds[2] },
-                    new DataGridTextColumn() { Header = Lang["FastInvoiceActivity Units"], Binding = binds[3] },
-                    new DataGridTextColumn() { Header = Lang["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
+                    new DataGridTextColumn() { Header = EventHandler.Lang["FastInvoiceActivity Position"], Binding = binds[0], MinWidth = 500 },
+                    new DataGridTextColumn() { Header = EventHandler.Lang["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
+                    new DataGridTextColumn() { Header = EventHandler.Lang["FastInvoiceActivity Count"], Binding = binds[2] },
+                    new DataGridTextColumn() { Header = EventHandler.Lang["FastInvoiceActivity Units"], Binding = binds[3] },
+                    new DataGridTextColumn() { Header = EventHandler.Lang["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
                 }
             };
             foreach (var column in _positions.Columns) {
@@ -247,20 +250,45 @@ namespace SemesterWork
             Grid.SetColumn(dot, 1);
             Grid.SetRow(dot, 3);
 
-            Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
-            Button clear = new Button() { Content = crossImage };
+            Image crossImage = new Image() { Width = 50, Height = 50 };
+            BitmapSource source = null;
+            Button clear = new Button();
+            var imageSourceWorker = new BackgroundWorker();
+            imageSourceWorker.DoWork += (sender, args) =>
+            {
+                source = GetBitmapSource(@"images/cross.png");
+            };
+            imageSourceWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                crossImage.Source = source;
+                clear.Content = crossImage;
+            };
+            imageSourceWorker.RunWorkerAsync();
             clear.Click += (sender, args) => ClearOnClick();
             keyboard.Children.Add(clear);
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
 
             controls.Children.Add(keyboard);
-            Button payment = new Button() { Content = Lang["FastInvoiceActivity Payment"], FontSize = 40, Height = 100 };
-            payment.Click += PaymentOnClick;
-            Button amount = new Button() { Content = Lang["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
-            amount.Click += AmountOnClick;
-
-            _total.Text = $"{Lang["FastInvoiceActivity Total"]}: 0";
+            Button payment = new Button() { Content = EventHandler.Lang["FastInvoiceActivity Payment"], FontSize = 40, Height = 100 };
+            payment.Click += (sender, args) =>
+            {
+                var worker = new BackgroundWorker();
+                worker.DoWork += (sender, args) => EventHandler.PaymentOnClick();
+                worker.RunWorkerAsync();
+            };
+            payment.Click += (sender, args) => UpdateScreen();
+            Button amount = new Button() { Content = EventHandler.Lang["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
+            amount.Click += (sender, args) =>
+            {
+                var numberText = _number.Text;
+                var selectedIndex = _positions.SelectedIndex;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (sender, args) => EventHandler.AmountOnClick(numberText, selectedIndex);
+                worker.RunWorkerCompleted += (sender, args) => UpdateScreen();
+                worker.RunWorkerAsync();
+            };
+            _total.Text = $"{EventHandler.Lang["FastInvoiceActivity Total"]}: 0";
             _total.FontSize = 40;
             _total.Margin = new Thickness(15, 20, 0, 0);
             controls.Children.Add(payment);
@@ -271,14 +299,14 @@ namespace SemesterWork
             Grid.SetRow(controls, 1);
 
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
-            _barcodeReader.AddReader(BarcodeRead);
+            _barcodeReader.AddReader(EventHandler.BarcodeRead);
             _updateSmth = new DispatcherTimer();
             _updateSmth.Interval = TimeSpan.FromMilliseconds(500);
             _updateSmth.Tick += (sender, args) =>
             {
-                if (_readBarcode != null)
-                    AddPosition(_readBarcode);
-                _readBarcode = null;
+                if (EventHandler.ReadBarcode != null)
+                    AddPositionFromBCReader();
+                EventHandler.ReadBarcode = null;
             };
             _updateSmth.Start();
         }
@@ -302,7 +330,7 @@ namespace SemesterWork
 
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock manager = new TextBlock() { Text = $"{Lang["WareHouseActivity Manager"]}: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
+            TextBlock manager = new TextBlock() { Text = $"{EventHandler.Lang["WareHouseActivity Manager"]}: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -328,11 +356,11 @@ namespace SemesterWork
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    AddPositionForSaving(_textForm.Text);
+                    AddPositionForSaving();
             };
 
-            Button addPosition = new Button() { Content = Lang["WareHouseActivity AddPosition"], FontSize = 48 };
-            addPosition.Click += (sender, args) => AddPositionForSaving(_textForm.Text);
+            Button addPosition = new Button() { Content = EventHandler.Lang["WareHouseActivity AddPosition"], FontSize = 48 };
+            addPosition.Click += (sender, args) => AddPositionForSaving();
             barcodeInput.Children.Add(_textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
@@ -350,17 +378,17 @@ namespace SemesterWork
                 bind.Mode = BindingMode.Default;
             _positions = new DataGrid()
             {
-                ItemsSource = _itemsPositions,
+                ItemsSource = EventHandler.ItemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
                 FontSize = 20, AutoGenerateColumns = false, Name = "ManagerTable",
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = Lang["WareHouseActivity EAN13"], Binding = binds[0], MinWidth = 250 },
-                    new DataGridTextColumn() { Header = Lang["WareHouseActivity FullName"], Binding = binds[1], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = Lang["WareHouseActivity Price"], Binding = binds[2], MinWidth = 150},
-                    new DataGridTextColumn() { Header = Lang["WareHouseActivity Amount"], Binding = binds[3] },
-                    new DataGridComboBoxColumn() { Header = Lang["WareHouseActivity Units"], TextBinding = binds[4], ItemsSource = new List<string>() {"шт.", "кг."}},
-                    new DataGridTextColumn() { Header = Lang["WareHouseActivity ShortName"], Binding = binds[5] }
+                    new DataGridTextColumn() { Header = EventHandler.Lang["WareHouseActivity EAN13"], Binding = binds[0], MinWidth = 250 },
+                    new DataGridTextColumn() { Header = EventHandler.Lang["WareHouseActivity FullName"], Binding = binds[1], MinWidth = 500 },
+                    new DataGridTextColumn() { Header = EventHandler.Lang["WareHouseActivity Price"], Binding = binds[2], MinWidth = 150},
+                    new DataGridTextColumn() { Header = EventHandler.Lang["WareHouseActivity Amount"], Binding = binds[3] },
+                    new DataGridComboBoxColumn() { Header = EventHandler.Lang["WareHouseActivity Units"], TextBinding = binds[4], ItemsSource = new List<string>() {"шт.", "кг."}},
+                    new DataGridTextColumn() { Header = EventHandler.Lang["WareHouseActivity ShortName"], Binding = binds[5] }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -373,19 +401,46 @@ namespace SemesterWork
             controls.ColumnDefinitions.Add(new ColumnDefinition());
             controls.ColumnDefinitions.Add(new ColumnDefinition());
 
-            Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
-            Button clear = new Button() { Content = crossImage, Height = 100 };
+            Image crossImage = new Image() { Width = 50, Height = 50 };
+            var worker = new BackgroundWorker();
+            BitmapSource source = null;
+            Button clear = new Button() { Height = 100 };
+            worker.DoWork += (sender, args) =>
+            {
+                source = GetBitmapSource(@"images/cross.png");
+            };
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                crossImage.Source = source;
+                clear.Content = crossImage;
+            };
+            worker.RunWorkerAsync();
             clear.Click += (sender, args) => ClearOnClick();
             controls.Children.Add(clear);
             Grid.SetColumn(clear, 0);
 
-            var deleteButton = new Button() { Content = Lang["WareHouseActivity DeleteFromDBButton"], FontSize = 40, Height = 100 };
-            deleteButton.Click += (sender, args) => DeleteFromDB();
+            var deleteButton = new Button() { Content = EventHandler.Lang["WareHouseActivity DeleteFromDBButton"], FontSize = 40, Height = 100 };
+            deleteButton.Click += (sender, args) =>
+            {
+                var selectedIndex = _positions.SelectedIndex;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (sender, args) => EventHandler.DeleteFromDB(selectedIndex);
+                worker.RunWorkerCompleted += (sender, args) => UpdateScreen();
+                worker.RunWorkerAsync();
+            };
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
 
-            Button saveButton = new Button() { Content = Lang["WareHouseActivity Save"], FontSize = 40, Height = 100 };
-            saveButton.Click += (sender, args) => SavePositionsForWarehouse();
+            Button saveButton = new Button() { Content = EventHandler.Lang["WareHouseActivity Save"], FontSize = 40, Height = 100 };
+            saveButton.Click += (sender, args) =>
+            {
+                var worker = new BackgroundWorker();
+                worker.DoWork += (sender, args) => EventHandler.SavePositionsForWarehouse();
+                worker.RunWorkerCompleted += (sender, args) =>
+                    MessageBox.Show(EventHandler.Lang["WareHouseActivity SaveMessageBox"],
+                        EventHandler.Lang["WareHouseActivity SaveMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
+                worker.RunWorkerAsync();
+            };
             controls.Children.Add(saveButton);
             Grid.SetColumn(saveButton, 2);
 
@@ -393,14 +448,14 @@ namespace SemesterWork
             Grid.SetRow(controls, 2);
 
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
-            _barcodeReader.AddReader(BarcodeRead);
+            _barcodeReader.AddReader(EventHandler.BarcodeRead);
             _updateSmth = new DispatcherTimer();
             _updateSmth.Interval = TimeSpan.FromMilliseconds(500);
             _updateSmth.Tick += (sender, args) =>
             {
-                if (_readBarcode != null)
-                    AddPositionForSaving(_readBarcode);
-                _readBarcode = null;
+                if (EventHandler.ReadBarcode != null)
+                    AddPositionForSaving();
+                EventHandler.ReadBarcode = null;
             };
             _updateSmth.Start();
         }
@@ -429,7 +484,7 @@ namespace SemesterWork
 
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock admin = new TextBlock() { Text = $"Администратор: {_currentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //loc
+            TextBlock admin = new TextBlock() { Text = $"Администратор: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //loc
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -455,13 +510,14 @@ namespace SemesterWork
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    AddUserPosition(_textForm.Text);
+                    AddUserPosition();
             };
 
             var findUser = new Button() { Content = "Найти", FontSize = 48 }; //loc
             Button addNewUser = new Button() { Content = "Добавить", FontSize = 48 }; //loc
-            findUser.Click += (sender, args) => AddUserPosition(_textForm.Text);
-            addNewUser.Click += (sender, args) => AddNewUser();
+            findUser.Click += (sender, args) => AddUserPosition();
+            findUser.Click += (sender, args) => UpdateScreen();
+            addNewUser.Click += (sender, args) => EventHandler.AddNewUser();
             userInput.Children.Add(_textForm);
             Grid.SetColumn(userInput, 0);
             userInput.Children.Add(findUser);
@@ -477,7 +533,7 @@ namespace SemesterWork
             };
             _positions = new DataGrid()
             {
-                ItemsSource = _itemsPositions,
+                ItemsSource = EventHandler.ItemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
                 FontSize = 20,
                 AutoGenerateColumns = false,
@@ -499,19 +555,38 @@ namespace SemesterWork
             controls.ColumnDefinitions.Add(new ColumnDefinition());
             controls.ColumnDefinitions.Add(new ColumnDefinition());
 
-            Image crossImage = new Image() { Width = 50, Height = 50, Source = GetBitmapSource(@"images/cross.png") };
-            Button clear = new Button() { Content = crossImage, Height = 100 };
+            Image crossImage = new Image() { Width = 50, Height = 50 };
+            var worker = new BackgroundWorker();
+            BitmapSource source = null;
+            Button clear = new Button() { Height = 100 };
+            worker.DoWork += (sender, args) =>
+            {
+                source = GetBitmapSource(@"images/cross.png");
+            };
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                crossImage.Source = source;
+                clear.Content = crossImage;
+            };
+            worker.RunWorkerAsync();
             clear.Click += (sender, args) => ClearOnClick();
             controls.Children.Add(clear);
             Grid.SetColumn(clear, 0);
 
             var deleteButton = new Button() { Content = "Удалить пользователя", FontSize = 40, Height = 100 }; //loc
-            deleteButton.Click += (sender, args) => DeleteUserFromDB();
+            deleteButton.Click += (sender, args) =>
+            {
+                var selectedIndex = _positions.SelectedIndex;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (sender, args) => EventHandler.DeleteUserFromDB(selectedIndex);
+                worker.RunWorkerCompleted += (sender, args) => UpdateScreen();
+                worker.RunWorkerAsync();
+            };
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
 
             Button saveButton = new Button() { Content = "Сохранить", FontSize = 40, Height = 100 }; //loc
-            saveButton.Click += (sender, args) => SaveUsersPositions();
+            saveButton.Click += (sender, args) => EventHandler.SaveUsersPositions();
             controls.Children.Add(saveButton);
             Grid.SetColumn(saveButton, 2);
 
@@ -532,7 +607,7 @@ namespace SemesterWork
 
             var panel = new StackPanel();
             var languageSet = new StackPanel();
-            var languageTBlock = new TextBlock() { Text = Lang["SettingsActivity Language"], FontSize = 20 };
+            var languageTBlock = new TextBlock() { Text = EventHandler.Lang["SettingsActivity Language"], FontSize = 20 };
             var languageSelector = new ComboBox() { FontSize = 20 };
             languageSelector.SelectedIndex = LanguageEngine.Languages.IndexOf(LanguageEngine.Current);
             languageSelector.ItemsSource = LanguageEngine.Languages.Select(language => new TextBlock() { Text = language, FontSize = 20 });
@@ -541,22 +616,22 @@ namespace SemesterWork
             languageSet.Children.Add(languageSelector);
 
             var scannerSet = new StackPanel();
-            var scannerTBlock = new TextBlock() { Text = Lang["SettingsActivity ScannerPort"], FontSize = 20 };
+            var scannerTBlock = new TextBlock() { Text = EventHandler.Lang["SettingsActivity ScannerPort"], FontSize = 20 };
             var scannerTBox = new TextBox() { Text = Variables.BarcodeScannerPort, FontSize = 20 };
             scannerSet.Children.Add(scannerTBlock);
             scannerSet.Children.Add(scannerTBox);
             
             var printerSet = new StackPanel();
-            var printerTBlock = new TextBlock() { Text = Lang["SettingsActivity NetPrinterName"], FontSize = 20 };
+            var printerTBlock = new TextBlock() { Text = EventHandler.Lang["SettingsActivity NetPrinterName"], FontSize = 20 };
             var printerTBox = new TextBox() { Text = Variables.PrinterPath.Substring(Variables.PrinterPath.LastIndexOf('\\') + 1, 
                 Variables.PrinterPath.Length - Variables.PrinterPath.LastIndexOf('\\') - 1), FontSize = 20 };
-            var printerNetTBlock = new TextBlock() { Text = $"{Lang["SettingsActivity NetPrinterAddress"]}: {Variables.PrinterPath}"};
+            var printerNetTBlock = new TextBlock() { Text = $"{EventHandler.Lang["SettingsActivity NetPrinterAddress"]}: {Variables.PrinterPath}"};
             printerSet.Children.Add(printerTBlock);
             printerSet.Children.Add(printerTBox);
             printerSet.Children.Add(printerNetTBlock);
 
-            var apply = new Button() { Content = Lang["SettingsActivity Apply"], Height = 50, FontSize = 20 };
-            var cancel = new Button() { Content = Lang["SettingsActivity Cancel"], Height = 50, FontSize = 20 };
+            var apply = new Button() { Content = EventHandler.Lang["SettingsActivity Apply"], Height = 50, FontSize = 20 };
+            var cancel = new Button() { Content = EventHandler.Lang["SettingsActivity Cancel"], Height = 50, FontSize = 20 };
 
             panel.Children.Add(languageSet);
             panel.Children.Add(printerSet);
@@ -571,7 +646,7 @@ namespace SemesterWork
                  printerPath = data.Text.Contains('\\') 
                     ? data.Text 
                     : @$"\\{Variables.MachineName}\{data.Text}";
-                printerNetTBlock.Text = $@"{Lang["SettingsActivity NetPrinterAddress"]}: {printerPath}";
+                printerNetTBlock.Text = $@"{EventHandler.Lang["SettingsActivity NetPrinterAddress"]}: {printerPath}";
             };
 
             string scanner = Variables.BarcodeScannerPort;
@@ -590,13 +665,13 @@ namespace SemesterWork
                 LanguageEngine.Current = ((TextBlock) languageSelector.SelectedItem).Text;
                 Variables.PrinterPath = printerPath;
                 Variables.BarcodeScannerPort = scanner;
-                _isSettingsOK = true;
+                EventHandler.IsSettingsOK = true;
                 SettingsActivity();
-                SaveSettings();
+                EventHandler.SaveSettings();
             };
             cancel.Click += (sender, args) =>
             {
-                if (MessageBox.Show(Lang["SettingsActivity CancelConfirm"], Lang["SettingsActivity CancelConfirmTitle"], MessageBoxButton.YesNo,
+                if (MessageBox.Show(EventHandler.Lang["SettingsActivity CancelConfirm"], EventHandler.Lang["SettingsActivity CancelConfirmTitle"], MessageBoxButton.YesNo,
                 MessageBoxImage.Question) == MessageBoxResult.Yes)
                     MainMenuActivity();
             };
@@ -604,6 +679,113 @@ namespace SemesterWork
             Grid.Children.Add(panel);
             Grid.SetColumn(panel, 1);
             Grid.SetRow(panel, 1);
+        }
+
+        public void ClearScreen()
+        {
+            _total = null;
+            _barcodeReader?.Dispose();
+            _updateSmth?.Stop();
+            Grid.Children.Clear();
+            Grid.ColumnDefinitions.Clear();
+            Grid.RowDefinitions.Clear();
+        }
+
+        private BitmapSource GetBitmapSource(string path)
+        {
+            Stream imageStreamSource = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            return decoder.Frames[0];
+        }
+
+        private void ClearOnClick()
+        {
+            if (_number != null && _number.Text.Length != 0)
+                _number.Text = "";
+            if (EventHandler.ItemsPositions.Count == 0)
+                MainMenuActivity();
+            else if (_positions.SelectedIndex == -1)
+            {
+                if (MessageBox.Show(EventHandler.Lang["WareHouseActivity DeleteConfirm"], EventHandler.Lang["WareHouseActivity DeleteConfirmTitle"], MessageBoxButton.YesNo,
+                        MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    EventHandler.ItemsPositions.Clear();
+            }
+            else
+            {
+                if (MessageBox.Show(EventHandler.Lang["WareHouseActivity SingleDeleteConfirm"], EventHandler.Lang["WareHouseActivity SingleDeleteConfirmTitle"], MessageBoxButton.YesNo,
+                        MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    EventHandler.ItemsPositions.RemoveAt(_positions.SelectedIndex);
+            }
+            UpdateScreen();
+        }
+
+        private void UpdateScreen()
+        {
+            EventHandler.ReadBarcode = null;
+            if (_total != null)
+                _total.Text = $"{EventHandler.Lang["FastInvoiceActivity Total"]}: {EventHandler.ItemsPositions.Select(x => (x as CheckLine).FullPrice).Sum()}";
+            if (_number != null)
+                _number.Text = null;
+            if (_textForm != null)
+                _textForm.Text = null;
+            _positions.Items.Refresh();
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void AddPosition()
+        {
+            var textFormText = _textForm.Text;
+            var numberText = _number.Text;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) => EventHandler.AddPosition(textFormText, numberText);
+            worker.RunWorkerCompleted += (sender, args) => UpdateScreen();
+            worker.RunWorkerAsync();
+        }
+
+        private void AddPositionFromBCReader()
+        {
+            var textFormText = _textForm.Text;
+            var numberText = _number.Text;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) => EventHandler.AddPosition(numberText);
+            worker.RunWorkerCompleted += (sender, args) => UpdateScreen();
+            worker.RunWorkerAsync();
+        }
+
+        private void AddPositionForSaving()
+        {
+            var textFormText = _textForm.Text;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) => EventHandler.AddPositionForSaving(textFormText);
+            worker.RunWorkerCompleted += (sender, args) => UpdateScreen();
+            worker.RunWorkerAsync();
+        }
+
+        private void AddUserPosition()
+        {
+            var textFormText = _textForm.Text;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) => EventHandler.AddUserPosition(textFormText);
+            worker.RunWorkerCompleted += (sender, args) => UpdateScreen();
+            worker.RunWorkerAsync();
+        }
+
+        private void Authorize(string login, string password)
+        {
+            var worker = new BackgroundWorker();
+            var isAuthorized = false;
+            worker.DoWork += (sender, args) => isAuthorized = EventHandler.Authorize(login, password);
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (isAuthorized)
+                    MainMenuActivity();
+            };
+            worker.RunWorkerAsync();
         }
     }
 }

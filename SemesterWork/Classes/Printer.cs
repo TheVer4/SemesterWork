@@ -14,8 +14,8 @@ namespace SemesterWork
             catch
             {
                 MessageBox.Show(
-                    MainWindow.Lang["Printer NotFoundException"],
-                    MainWindow.Lang["Printer NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
+                    EventHandler.Lang["Printer NotFoundException"],
+                    EventHandler.Lang["Printer NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

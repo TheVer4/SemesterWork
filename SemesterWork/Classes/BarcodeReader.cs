@@ -1,5 +1,5 @@
 ﻿﻿using System.IO.Ports;
- using System.Windows;
+using System.Windows;
 
  namespace SemesterWork
 {
@@ -17,8 +17,8 @@
             catch
             {
                 MessageBox.Show(
-                    MainWindow.Lang["BarcodeReader NotFoundException"],
-                    MainWindow.Lang["BarcodeReader NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
+                    EventHandler.Lang["BarcodeReader NotFoundException"],
+                    EventHandler.Lang["BarcodeReader NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
