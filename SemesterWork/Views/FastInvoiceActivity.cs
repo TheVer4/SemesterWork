@@ -9,11 +9,11 @@ using System.Windows.Media.Imaging;
 
 namespace SemesterWork
 {
-    public class FastInvoiceActivity : Activity
+    public class FastInvoiceActivity : ActivityWithDynamics
     {
         public FastInvoiceActivity(MainWindow window) : base(window)
         {
-            Window._total = new TextBlock();
+            total = new TextBlock();
             Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
             Grid topBar = new Grid();
@@ -46,28 +46,28 @@ namespace SemesterWork
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            Window._textForm = new TextBox() { FontSize = 48 };
-            Window._textForm.PreviewTextInput += Window.NumberValidationTextBox;
-            Window._number = new TextBox() { FontSize = 48 };
+            textForm = new TextBox() { FontSize = 48 };
+            textForm.PreviewTextInput += Window.NumberValidationTextBox;
+            number = new TextBox() { FontSize = 48 };
 
-            Window._textForm.KeyDown += (sender, args) =>
+            textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    Window.AddPosition(EventHandler.AddPosition, Window._textForm.Text, Window._number.Text);
+                    AddPosition(EventHandler.AddPosition);
             };
 
             Button addPosition = new Button() { Content = LanguageEngine.Language["FastInvoiceActivity AddPosition"], FontSize = 48 };
-            addPosition.Click += (sender, args) => Window.AddPosition(EventHandler.AddPosition, Window._textForm.Text, Window._number.Text);
+            addPosition.Click += (sender, args) => AddPosition(EventHandler.AddPosition);
 
-            barcodeInput.Children.Add(Window._textForm);
+            barcodeInput.Children.Add(textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
 
 
-            Window._number.PreviewTextInput += Window.NumberValidationTextBox;
-            Grid.SetColumn(Window._number, 1);
-            invoiceControls.Children.Add(Window._number);
+            number.PreviewTextInput += Window.NumberValidationTextBox;
+            Grid.SetColumn(number, 1);
+            invoiceControls.Children.Add(number);
             Binding[] binds =
             {
                 new Binding("Data.Name"),
@@ -79,7 +79,7 @@ namespace SemesterWork
             foreach (var bind in binds)
                 bind.Mode = BindingMode.OneTime;
 
-            Window._positions = new DataGrid()
+            positions = new DataGrid()
             {
                 ItemsSource = EventHandler.ItemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
@@ -94,12 +94,12 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
                 }
             };
-            foreach (var column in Window._positions.Columns) {
+            foreach (var column in positions.Columns) {
                 column.CanUserSort = false;
                 column.IsReadOnly = true;
             }
-            invoiceControls.Children.Add(Window._positions);
-            Grid.SetRow(Window._positions, 1);
+            invoiceControls.Children.Add(positions);
+            Grid.SetRow(positions, 1);
 
             StackPanel controls = new StackPanel();
             Grid keyboard = new Grid() { ShowGridLines = false };
@@ -113,17 +113,17 @@ namespace SemesterWork
             for (int i = 8; i >= 0; i--)
             {
                 Button key = new Button() { Content = (9 - i).ToString(), FontSize = 40, Height = 100 };
-                key.Click += (sender, args) => Window._number.Text += ((Button)sender).Content.ToString();
+                key.Click += (sender, args) => number.Text += ((Button)sender).Content.ToString();
                 keyboard.Children.Add(key);
                 Grid.SetColumn(key, 2 - i % 3);
                 Grid.SetRow(key, i / 3);
             }
             Button zero = new Button() { Content = "0", FontSize = 40, Height = 100 };
-            zero.Click += (sender, args) => { Window._number.Text += "0"; };
+            zero.Click += (sender, args) => { number.Text += "0"; };
             keyboard.Children.Add(zero);
             Grid.SetRow(zero, 3);
             Button dot = new Button() { Content = ".", FontSize = 40, Height = 100 };
-            dot.Click += (sender, args) => { Window._number.Text += "."; };
+            dot.Click += (sender, args) => { number.Text += "."; };
             keyboard.Children.Add(dot);
             Grid.SetColumn(dot, 1);
             Grid.SetRow(dot, 3);
@@ -142,35 +142,44 @@ namespace SemesterWork
                 clear.Content = crossImage;
             };
             imageSourceWorker.RunWorkerAsync();
-            clear.Click += (sender, args) => Window.ClearOnClick();
+            clear.Click += (sender, args) => ClearOnClick();
             keyboard.Children.Add(clear);
             Grid.SetColumn(clear, 2);
             Grid.SetRow(clear, 3);
 
             controls.Children.Add(keyboard);
             Button payment = new Button() { Content = LanguageEngine.Language["FastInvoiceActivity Payment"], FontSize = 40, Height = 100 };
-            payment.Click += (sender, args) => Window.PaymentOnClick();
+            payment.Click += (sender, args) => PaymentOnClick();
             Button amount = new Button() { Content = LanguageEngine.Language["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
             amount.Click += (sender, args) =>
             {
-                var numberText = Window._number.Text;
-                var selectedIndex = Window._positions.SelectedIndex;
+                var numberText = number.Text;
+                var selectedIndex = positions.SelectedIndex;
                 var worker = new BackgroundWorker();
                 worker.DoWork += (sender, args) => EventHandler.AmountOnClick(numberText, selectedIndex);
-                worker.RunWorkerCompleted += (sender, args) => Window.UpdateScreen();
+                worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
                 worker.RunWorkerAsync();
             };
-            Window._total.Text = $"{LanguageEngine.Language["FastInvoiceActivity Total"]}: 0";
-            Window._total.FontSize = 40;
-            Window._total.Margin = new Thickness(15, 20, 0, 0);
+            total.Text = $"{LanguageEngine.Language["FastInvoiceActivity Total"]}: 0";
+            total.FontSize = 40;
+            total.Margin = new Thickness(15, 20, 0, 0);
             controls.Children.Add(payment);
             controls.Children.Add(amount);
-            controls.Children.Add(Window._total);
+            controls.Children.Add(total);
             invoiceControls.Children.Add(controls);
             Grid.SetColumn(controls, 1);
             Grid.SetRow(controls, 1);
 
-            EventHandler.StartScannerReceiver(Window.AddPosition, EventHandler.AddPosition,  Window._number.Text);
+            EventHandler.StartScannerReceiver(AddPosition, EventHandler.AddPosition);
+        }
+        
+        private void PaymentOnClick()
+        {
+            //TODO сюда напиши уже что-нибудь
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, args) => EventHandler.ProceedPayment();
+            worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
+            worker.RunWorkerAsync();
         }
     }
 }

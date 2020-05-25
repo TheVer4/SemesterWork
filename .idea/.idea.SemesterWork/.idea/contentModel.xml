@@ -54,6 +54,7 @@
         <e p="Views" t="Include">
           <e p="Activities.cs" t="Include" />
           <e p="Activity.cs" t="Include" />
+          <e p="ActivityWithDynamics.cs" t="Include" />
           <e p="FastInvoiceActivity.cs" t="Include" />
           <e p="LoginActivity.cs" t="Include" />
           <e p="MainMenuActivity.cs" t="Include" />

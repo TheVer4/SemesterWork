@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document>
+    <language>Қазақ</language>
+    <strings>
+        <string name="LoginActivity Account">Пайдаланушы аты</string>
+        <string name="LoginActivity Password">Пароль</string>
+        <string name="LoginActivity Authorize">Кіру</string>
+        <string name="LoginActivity Exit">Шығу</string>
+        <string name="LoginActivity ExitMessageBoxTitle">Әрекетті растаңыз</string>
+        <string name="LoginActivity ExitMessageBox">Сіз шынымен кеткіңіз келеді ме?</string>
+        <string name="LoginActivity AuthorizationMessageBoxTitle">Қате орын алды</string>
+        <string name="LoginActivity AuthorizationMessageBox">Енгізілген деректер дұрыс емес, әрекетті қайталаңыз.</string>
+        <string name="MainMenuActivity FastInvoice">Жылдам есеп</string>
+        <string name="MainMenuActivity WareHouse">Қойма</string>
+        <string name="MainMenuActivity Settings">Параметрлер</string>
+        <string name="MainMenuActivity Logout">Рұқсат ету</string>
+        <string name="FastInvoiceActivity AddPosition">Қосу</string>
+        <string name="FastInvoiceActivity Cashier">Кассир</string>
+        <string name="FastInvoiceActivity Payment">ТӨЛЕМ</string>
+        <string name="FastInvoiceActivity Amount">САПА</string>
+        <string name="FastInvoiceActivity Total">БАРЛЫҚ</string>
+        <string name="FastInvoiceActivity Position">Лауазымы</string>
+        <string name="FastInvoiceActivity Price">Бағасы</string>
+        <string name="FastInvoiceActivity Count">Саны</string>
+        <string name="FastInvoiceActivity Units">Өлш.</string>
+        <string name="FastInvoiceActivity FullPrice">Құны</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBoxTitle">Қате орын алды</string>
+        <string name="FastInvoiceActivity AddPositionErrorMessageBox">{0} тауар коды табылмады, әрекетті қайталаңыз.</string>
+        <string name="WareHouseActivity AddPosition">Қосу</string>
+        <string name="WareHouseActivity Manager">Менеджер</string>
+        <string name="WareHouseActivity Save">Сақтау</string>
+        <string name="WareHouseActivity EAN13">EAN13</string>
+        <string name="WareHouseActivity FullName">Толық атауы</string>
+        <string name="WareHouseActivity Price">Бағасы</string>
+        <string name="WareHouseActivity Amount">Саны</string>
+        <string name="WareHouseActivity Units">Өлш.</string>
+        <string name="WareHouseActivity ShortName">Қысқа атау</string>
+        <string name="WareHouseActivity EAN13FormatErrorTitle">Қате орын алды</string>
+        <string name="WareHouseActivity EAN13FormatError">EAN13 жарамсыз енгізу форматы</string>
+        <string name="WareHouseActivity ContainsQuestionTitle">Әрекетті растаңыз</string>
+        <string name="WareHouseActivity ContainsQuestion">{0} коды бар өнім қоймада бар. Мәнді жаңартқыңыз келе ме?</string>
+        <string name="WareHouseActivity SingleDeleteConfirmTitle">Әрекетті растаңыз</string>
+        <string name="WareHouseActivity SingleDeleteConfirm">Бұл позицияны жойғыңыз келе ме?</string>
+        <string name="WareHouseActivity DeleteConfirmTitle">Әрекетті растаңыз</string>
+        <string name="WareHouseActivity DeleteConfirm">Барлық позицияларды жойғыңыз келе ме?</string>
+        <string name="WareHouseActivity SaveMessageBoxTitle">Хабар</string>
+        <string name="WareHouseActivity SaveMessageBox">Позициялар сәтті сақталды!</string>
+        <string name="SettingsActivity Language">Тілі</string>
+        <string name="SettingsActivity NetPrinterName">Желілік принтердің атауы</string>
+        <string name="SettingsActivity NetPrinterAddress">Толық мекен-жайы</string>
+        <string name="SettingsActivity ScannerPort">Сканер COM-Порты</string>
+        <string name="SettingsActivity Apply">Қолдану</string>
+        <string name="SettingsActivity Cancel">Шығу</string>
+        <string name="SettingsActivity CancelConfirmTitle">Әрекетті растаңыз</string>
+        <string name="SettingsActivity CancelConfirm">Параметрлерден шығу керек пе?</string>
+        <string name="BarcodeReader NotFoundExceptionTitle">Назар аударыңыздар!</string>
+        <string name="BarcodeReader NotFoundException">Сканермен әрекеттесуді ашу мүмкін болмады. Қосылымды тексеріп, негізгі мәзірден режимді қайта қосыңыз.</string>
+        <string name="Printer NotFoundExceptionTitle">Назар аударыңыздар!</string>
+        <string name="Printer NotFoundException">Принтер әрекеттесуі ашылмады. Қосылымды тексеріп, негізгі мәзірден режимді қайта қосыңыз.</string>
+        <string name="WareHouseActivity DeleteFromDBButton">Қоймадан алыңыз</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingErrorTitle">Қате</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingError">Жойылатын ештеңе жоқ</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionsTitle">Подтвердите действие</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositions">Осы элементтерді қоймадан алып тастағыңыз келе ме?</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPositionTitle">Әрекетті растаңыз</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingPosition">Бұл элементті қордан алып тастағыңыз келе ме?</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDBTitle">Назар аударыңыздар!</string>
+        <string name="WareHouseActivity DeleteFromDB DeletingNotInDB">Бұл зат қоймада жоқ.</string>
+    </strings>
+  </document>

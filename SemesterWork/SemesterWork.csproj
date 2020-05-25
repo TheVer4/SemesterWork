@@ -115,6 +115,7 @@
     <Compile Include="Logic\User.cs" />
     <Compile Include="Logic\Variables.cs" />
     <Compile Include="Views\Activity.cs" />
+    <Compile Include="Views\ActivityWithDynamics.cs" />
     <Compile Include="Views\FastInvoiceActivity.cs" />
     <Compile Include="Views\LoginActivity.cs" />
     <Compile Include="Views\MainMenuActivity.cs" />

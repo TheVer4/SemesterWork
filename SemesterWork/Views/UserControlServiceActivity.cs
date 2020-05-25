@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace SemesterWork
 {
-    public class UserControlServiceActivity : Activity
+    public class UserControlServiceActivity : ActivityWithDynamics
     {
         public UserControlServiceActivity(MainWindow window) : base(window)
         {
@@ -48,18 +48,18 @@ namespace SemesterWork
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
-            Window._textForm = new TextBox() { FontSize = 48 };
-            Window._textForm.KeyDown += (sender, args) =>
+            textForm = new TextBox() { FontSize = 48 };
+            textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    Window.AddPosition((a,b) => EventHandler.AddUserPosition(a), Window._textForm.Text, null);
+                    AddPosition((a,b) => EventHandler.AddUserPosition(a));
             };
 
             var findUser = new Button() { Content = "Найти", FontSize = 48 }; //TODO localize
             Button addNewUser = new Button() { Content = "Добавить", FontSize = 48 }; //TODO localize
-            findUser.Click += (sender, args) => Window.AddPosition((a,b) => EventHandler.AddUserPosition(a), Window._textForm.Text, null);
+            findUser.Click += (sender, args) => AddPosition((a,b) => EventHandler.AddUserPosition(a));
             addNewUser.Click += (sender, args) => EventHandler.AddNewUser();
-            userInput.Children.Add(Window._textForm);
+            userInput.Children.Add(textForm);
             Grid.SetColumn(userInput, 0);
             userInput.Children.Add(findUser);
             Grid.SetColumn(findUser, 1);
@@ -72,7 +72,7 @@ namespace SemesterWork
                 new Binding("Name") { Mode = BindingMode.Default },
                 new Binding("AccessLevel") { Mode = BindingMode.Default }
             };
-            Window._positions = new DataGrid()
+            positions = new DataGrid()
             {
                 ItemsSource = EventHandler.ItemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
@@ -85,10 +85,10 @@ namespace SemesterWork
                     new DataGridComboBoxColumn() { Header = "Уровень доступа" , TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } }, //TODO localize
                 }
             };
-            foreach (var column in Window._positions.Columns)
+            foreach (var column in positions.Columns)
                 column.CanUserSort = false;
-            userControls.Children.Add(Window._positions);
-            Grid.SetRow(Window._positions, 1);
+            userControls.Children.Add(positions);
+            Grid.SetRow(positions, 1);
 
             Grid controls = new Grid();
             controls.ColumnDefinitions.Add(new ColumnDefinition());
@@ -109,17 +109,17 @@ namespace SemesterWork
                 clear.Content = crossImage;
             };
             worker.RunWorkerAsync();
-            clear.Click += (sender, args) => Window.ClearOnClick();
+            clear.Click += (sender, args) => ClearOnClick();
             controls.Children.Add(clear);
             Grid.SetColumn(clear, 0);
 
             var deleteButton = new Button() { Content = "Удалить пользователя", FontSize = 40, Height = 100 }; //TODO localize
             deleteButton.Click += (sender, args) =>
             {
-                var selectedIndex = Window._positions.SelectedIndex;
+                var selectedIndex = positions.SelectedIndex;
                 var worker = new BackgroundWorker();
                 worker.DoWork += (sender, args) => EventHandler.DeleteUserFromDB(selectedIndex);
-                worker.RunWorkerCompleted += (sender, args) => Window.UpdateScreen();
+                worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
                 worker.RunWorkerAsync();
             };
             controls.Children.Add(deleteButton);

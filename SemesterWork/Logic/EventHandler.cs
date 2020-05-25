@@ -17,8 +17,9 @@ namespace SemesterWork
         public static List<object> ItemsPositions { get; } = new List<object>();
         public static User CurrentUser { get; set; }
         public static bool IsSettingsOK { get; set; } = true;
-        
+
         private static string _readBarcode;
+
         private static DispatcherTimer _timer;
         
         public static void Logout()
@@ -292,9 +293,8 @@ namespace SemesterWork
         }
 
         public static void StartScannerReceiver(
-            Action<Action<string, string>, string, string> action, 
-            Action<string, string> subAction, 
-            string number = null)
+            Action<Action<string, string>> action, 
+            Action<string, string> subAction)
         {
             _readBarcode = null;
             _timer = new DispatcherTimer();
@@ -302,7 +302,9 @@ namespace SemesterWork
             _timer.Tick += (sender, args) =>
             {
                 if (_readBarcode != null)
-                    action(subAction, _readBarcode, number);
+                {
+                    action((a,b) => subAction(_readBarcode, b));
+                }
                 _readBarcode = null;
             };
             _timer.Start();
