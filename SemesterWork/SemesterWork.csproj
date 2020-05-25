@@ -99,12 +99,12 @@
     <Compile Include="Logic\DBControls\UserDBController.cs" />
     <Compile Include="Logic\DBControls\WareHouseDBController.cs" />
     <Compile Include="Logic\DBProductData.cs" />
+    <Compile Include="Logic\Environment.cs" />
+    <Compile Include="Logic\EventHandler.cs" />
     <Compile Include="Logic\Hardware\BarcodeReader.cs" />
     <Compile Include="Logic\Hardware\Printer.cs" />
     <Compile Include="Logic\LanguageEngine.cs" />
-    <Compile Include="MainWindow\Activities.cs" />
-    <Compile Include="MainWindow\EventHandler.cs" />
-    <Compile Include="MainWindow\Environment.cs" />
+    <Compile Include="Views\Activities.cs" />
     <Compile Include="Logic\PrintInvoice.cs" />
     <Compile Include="Logic\ProductData.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -114,6 +114,14 @@
     </Compile>
     <Compile Include="Logic\User.cs" />
     <Compile Include="Logic\Variables.cs" />
+    <Compile Include="Views\Activity.cs" />
+    <Compile Include="Views\FastInvoiceActivity.cs" />
+    <Compile Include="Views\LoginActivity.cs" />
+    <Compile Include="Views\MainMenuActivity.cs" />
+    <Compile Include="Views\SettingsActivity.cs" />
+    <Compile Include="Views\StatisticsActivity.cs" />
+    <Compile Include="Views\UserControlServiceActivity.cs" />
+    <Compile Include="Views\WareHouseServiceActivity.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

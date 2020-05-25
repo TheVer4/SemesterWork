@@ -22,6 +22,8 @@
           </e>
           <e p="DBProductData.cs" t="Include" />
           <e p="Encoder866.cs" t="Include" />
+          <e p="Environment.cs" t="Include" />
+          <e p="EventHandler.cs" t="Include" />
           <e p="Hardware" t="Include">
             <e p="BarcodeReader.cs" t="Include" />
             <e p="Printer.cs" t="Include" />
@@ -31,11 +33,6 @@
           <e p="ProductData.cs" t="Include" />
           <e p="User.cs" t="Include" />
           <e p="Variables.cs" t="Include" />
-        </e>
-        <e p="MainWindow" t="Include">
-          <e p="Activities.cs" t="Include" />
-          <e p="Environment.cs" t="Include" />
-          <e p="EventHandler.cs" t="Include" />
         </e>
         <e p="MainWindow.xaml" t="Include" />
         <e p="MainWindow.xaml.cs" t="Include" />
@@ -54,6 +51,17 @@
           <e p="Settings.settings" t="Include" />
         </e>
         <e p="SemesterWork.csproj" t="IncludeRecursive" />
+        <e p="Views" t="Include">
+          <e p="Activities.cs" t="Include" />
+          <e p="Activity.cs" t="Include" />
+          <e p="FastInvoiceActivity.cs" t="Include" />
+          <e p="LoginActivity.cs" t="Include" />
+          <e p="MainMenuActivity.cs" t="Include" />
+          <e p="SettingsActivity.cs" t="Include" />
+          <e p="StatisticsActivity.cs" t="Include" />
+          <e p="UserControlServiceActivity.cs" t="Include" />
+          <e p="WareHouseServiceActivity.cs" t="Include" />
+        </e>
       </e>
       <e p="SemesterWork.sln" t="IncludeFlat" />
     </e>
