@@ -1,24 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using PrinterUtility;
 using PrinterUtility.EscPosEpsonCommands;
 
 namespace SemesterWork
 {
-    public class PrintInvoice
+    public static class PrintInvoice
     {
-        private Printer printer;
-
-        public PrintInvoice()
-        {
-            printer = new Printer();
-        }
-        
-        public bool Print(List<CheckLine> list)
+        public static void Print(List<CheckLine> list)
         {
             EscPosEpson epson = new EscPosEpson();
-            printer.Send(FormatPaper(
+            new Printer().Send(FormatPaper(
                 epson.Alignment.Center(),
                 Encoder866.Recode("КАССОВЫЙ ЧЕК"),
                 epson.Lf(),
@@ -28,7 +22,7 @@ namespace SemesterWork
                 epson.Lf(),
                 epson.Alignment.Left(),
                 epson.Lf(),
-                Encoder866.Recode(DateTime.Now.ToString()),
+                Encoder866.Recode(DateTime.Now.ToString(CultureInfo.InvariantCulture)),
                 epson.Lf(),
                 Encoder866.Recode("ПРИХОД"),
                 epson.Lf(),
@@ -38,22 +32,21 @@ namespace SemesterWork
                 epson.Lf(),
                 epson.Lf()
                 ));
-            return true;
         }
 
-        private byte[] FormatCheckLines(List<CheckLine> list)
+        private static byte[] FormatCheckLines(List<CheckLine> list)
         {
-            byte[] result = new byte[] {};
-            foreach (var line in list)
-                result = PrintExtensions.AddBytes(result, Encoder866.Recode(line.ToString()));
+            byte[] result = new byte[0];
+            foreach (CheckLine line in list)
+                result = result.AddBytes(Encoder866.Recode(line.ToString()));
             return result;
         }
         
-        private byte[] FormatPaper(params byte[][] byteset)
+        private static byte[] FormatPaper(params byte[][] byteset)
         {
-            byte[] data = new byte[] {};
-            foreach (var line in byteset)
-                data = PrintExtensions.AddBytes(data, line);
+            byte[] data = new byte[0];
+            foreach (byte[] line in byteset)
+                data = data.AddBytes(line);
             return data;
         }       
     }    

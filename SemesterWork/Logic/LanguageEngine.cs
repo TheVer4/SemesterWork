@@ -8,11 +8,13 @@ namespace SemesterWork
     public class LanguageEngine
     {
         private static Dictionary<string, XmlDocument> _languages = new Dictionary<string, XmlDocument>();
+        public static LanguageEngine Language { get; private set; }
         public static List<string> Languages => _languages.Keys.ToList();
         public static string Current { get; set; } = "English";
 
         public LanguageEngine()
         {
+            Language = this;
             XmlDocument defaultTranslation = new XmlDocument();
             defaultTranslation.LoadXml(DEFAULT_LANGUAGE);
             _languages["English"] = defaultTranslation;

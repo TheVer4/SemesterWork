@@ -8,15 +8,15 @@ using System.Windows;
 
 namespace SemesterWork
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         public MainWindow()
         {           
             InitializeComponent();
-            InitializeEnvironment();
+            Environment.Initialize();
+            LoginActivity();
+            Closed += (sender, args) => Environment.Destroy();
         }
+        
     }
 }

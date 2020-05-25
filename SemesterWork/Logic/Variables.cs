@@ -4,7 +4,7 @@ namespace SemesterWork
 {
     public static class Variables
     {
-        public static string MachineName { get => Environment.MachineName; }
+        public static string MachineName { get => System.Environment.MachineName; }
         public static string PrinterPath { get; set; } = @"\\WINDOWS\POS";
 
         private static string _welcomeMotd = "!НЕ ЯВЛЯЕТСЯ ДОКУМЕНТОМ!";

@@ -94,25 +94,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\DBProductData.cs" />
-    <Compile Include="Classes\LanguageEngine.cs" />
-    <Compile Include="DBControls\DocumentsDBController.cs" />
+    <Compile Include="Logic\DBControls\DBController.cs" />
+    <Compile Include="Logic\DBControls\DocumentsDBController.cs" />
+    <Compile Include="Logic\DBControls\UserDBController.cs" />
+    <Compile Include="Logic\DBControls\WareHouseDBController.cs" />
+    <Compile Include="Logic\DBProductData.cs" />
+    <Compile Include="Logic\Hardware\BarcodeReader.cs" />
+    <Compile Include="Logic\Hardware\Printer.cs" />
+    <Compile Include="Logic\LanguageEngine.cs" />
     <Compile Include="MainWindow\Activities.cs" />
-    <Compile Include="Classes\BarcodeReader.cs" />
-    <Compile Include="DBControls\DBController.cs" />
     <Compile Include="MainWindow\EventHandler.cs" />
-    <Compile Include="MainWindow\Initialize.cs" />
-    <Compile Include="Classes\PrintInvoice.cs" />
-    <Compile Include="Classes\ProductData.cs" />
+    <Compile Include="MainWindow\Environment.cs" />
+    <Compile Include="Logic\PrintInvoice.cs" />
+    <Compile Include="Logic\ProductData.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Classes\User.cs" />
-    <Compile Include="DBControls\UserDBController.cs" />
-    <Compile Include="Classes\Variables.cs" />
-    <Compile Include="DBControls\WareHouseDBController.cs" />
+    <Compile Include="Logic\User.cs" />
+    <Compile Include="Logic\Variables.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,15 +122,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\CheckLine.cs" />
-    <Compile Include="Classes\Encoder866.cs" />
+    <Compile Include="Logic\CheckLine.cs" />
+    <Compile Include="Logic\Encoder866.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Printer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -163,7 +163,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

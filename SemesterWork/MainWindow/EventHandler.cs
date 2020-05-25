@@ -7,20 +7,20 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Threading;
 using Newtonsoft.Json;
 
 namespace SemesterWork
 {
     public static class EventHandler
     {
-        public static List<object> ItemsPositions { get; set; } = new List<object>();
-        public static string ReadBarcode { get; set; }
-        public static LanguageEngine Lang { get; set; }
+        public static List<object> ItemsPositions { get; } = new List<object>();
         public static User CurrentUser { get; set; }
         public static bool IsSettingsOK { get; set; } = true;
-
-        private static PrintInvoice _printInvoice = new PrintInvoice();
-
+        
+        private static string _readBarcode;
+        private static DispatcherTimer _timer;
+        
         public static void Logout()
         {
             CurrentUser = null;
@@ -54,14 +54,9 @@ namespace SemesterWork
         {
             SerialPort e = (SerialPort)sender;
             var scanned = e.ReadTo("\r");
-            ReadBarcode = scanned;
+            _readBarcode = scanned;
         }
-
-        public static void AddPosition(string number)
-        {
-            AddPosition(ReadBarcode, number);
-        }
-
+        
         public static void AddPosition(string code, string number)
         {
             var info = WareHouseDBController.Find(code);
@@ -78,8 +73,8 @@ namespace SemesterWork
                     ItemsPositions.Add(item);
             }
             else
-                MessageBox.Show(String.Format(Lang["FastInvoiceActivity AddPositionErrorMessageBox"], code),
-                    Lang["FastInvoiceActivity AddPositionErrorMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(String.Format(LanguageEngine.Language["FastInvoiceActivity AddPositionErrorMessageBox"], code),
+                    LanguageEngine.Language["FastInvoiceActivity AddPositionErrorMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public static void AddPositionForSaving(string code)
@@ -88,22 +83,22 @@ namespace SemesterWork
             {
                 var availablePosition = ItemsPositions.Where(x => (x as DBProductData).Data.EAN13 == code);
                 if (availablePosition.Any())
-                    MessageBox.Show(String.Format(Lang["WareHouseActivity PositionContainsQuestion"], code),
-                        Lang["WareHouseActivity PositionContainsQuestionTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(String.Format(LanguageEngine.Language["WareHouseActivity PositionContainsQuestion"], code),
+                        LanguageEngine.Language["WareHouseActivity PositionContainsQuestionTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                 else 
                 {
                     var info = WareHouseDBController.Find(code);
                     if (!info.Any())
                         ItemsPositions.Add(new DBProductData(new ProductData(code), false));
-                    else if (MessageBox.Show(String.Format(Lang["WareHouseActivity ContainsQuestion"], code),
-                            Lang["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.YesNo,
+                    else if (MessageBox.Show(String.Format(LanguageEngine.Language["WareHouseActivity ContainsQuestion"], code),
+                            LanguageEngine.Language["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.YesNo,
                             MessageBoxImage.Question) == MessageBoxResult.Yes)
                         ItemsPositions.Add(new DBProductData(new ProductData(info), true));
                 }
             }
             else
-                MessageBox.Show(Lang["WareHouseActivity EAN13FormatError"],
-                    Lang["WareHouseActivity EAN13FormatErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LanguageEngine.Language["WareHouseActivity EAN13FormatError"],
+                    LanguageEngine.Language["WareHouseActivity EAN13FormatErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public static void AddUserPosition(string infoStr)
@@ -126,7 +121,7 @@ namespace SemesterWork
             }
         }
 
-        public static void AddNewUser()
+        public static void AddNewUser() //TODO Это, конечно же, появится в Activities (следующей серии :D)
         {
             //TODO
             //появление дополнительных окон ввода справа
@@ -153,8 +148,8 @@ namespace SemesterWork
                     UserDBController.Update(user);
             worker.RunWorkerCompleted += (sender, args) =>
             {
-                MessageBox.Show(Lang["WareHouseActivity SaveMessageBox"],
-                    Lang["WareHouseActivity SaveMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(LanguageEngine.Language["WareHouseActivity SaveMessageBox"],
+                    LanguageEngine.Language["WareHouseActivity SaveMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
             };
             worker.RunWorkerAsync();
         }
@@ -162,12 +157,12 @@ namespace SemesterWork
         public static void DeleteFromDB(int selectedIndex)
         {
             if (ItemsPositions.Count == 0)
-                MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingError"],
-                    Lang["WareHouseActivity DeleteFromDB DeletingErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingError"],
+                    LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             else if (selectedIndex == -1)
             {
-                if (MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingPositions"],
-                        Lang["WareHouseActivity DeleteFromDB DeletingPositionsTitle"], MessageBoxButton.YesNo,
+                if (MessageBox.Show(LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingPositions"],
+                        LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingPositionsTitle"], MessageBoxButton.YesNo,
                         MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     foreach (DBProductData position in ItemsPositions)
@@ -180,8 +175,8 @@ namespace SemesterWork
             {
                 if ((ItemsPositions[selectedIndex] as DBProductData).IsInDB)
                 {
-                    if (MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingPosition"],
-                            Lang["WareHouseActivity DeleteFromDB DeletingPositionTitle"], MessageBoxButton.YesNo,
+                    if (MessageBox.Show(LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingPosition"],
+                            LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingPositionTitle"], MessageBoxButton.YesNo,
                             MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
                         var code = (ItemsPositions[selectedIndex] as DBProductData).Data.EAN13;
@@ -190,8 +185,8 @@ namespace SemesterWork
                     }
                 }
                 else
-                    MessageBox.Show(Lang["WareHouseActivity DeleteFromDB DeletingNotInDB"],
-                        Lang["WareHouseActivity DeleteFromDB DeletingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingNotInDB"],
+                        LanguageEngine.Language["WareHouseActivity DeleteFromDB DeletingNotInDBTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -253,8 +248,6 @@ namespace SemesterWork
                 var printerPath = sr.ReadLine();
                 var barcodeScannerPort = sr.ReadLine();
 
-                Lang = new LanguageEngine();
-
                 if (LanguageEngine.Languages.Contains(language))
                     LanguageEngine.Current = language;
                 else
@@ -278,17 +271,17 @@ namespace SemesterWork
                 return true;
             }
             else
-                MessageBox.Show(Lang["LoginActivity AuthorizationMessageBox"],
-                    Lang["LoginActivity AuthorizationMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LanguageEngine.Language["LoginActivity AuthorizationMessageBox"],
+                    LanguageEngine.Language["LoginActivity AuthorizationMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
         
-        public static void PaymentOnClick()
+        public static void ProceedPayment()
         {
-            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'";
+            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'"; //TODO move to settings
             var currentUserName = CurrentUser.Name;
             var jsonStr = JsonConvert.SerializeObject(ItemsPositions);
-            _printInvoice.Print(ItemsPositions.Select(x => (CheckLine)x).ToList());
+            PrintInvoice.Print(ItemsPositions.Select(x => (CheckLine)x).ToList());
             DocumentsDBController.Add(
                 (int) DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
                 currentUserName, 
@@ -297,5 +290,26 @@ namespace SemesterWork
                 WareHouseDBController.DecreaseAmountBy(position.Data.EAN13, position.Amount);
             ItemsPositions.Clear();
         }
+
+        public static void StartScannerReceiver(
+            Action<Action<string, string>, string, string> action, 
+            Action<string, string> subAction, 
+            string number = null)
+        {
+            _readBarcode = null;
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromMilliseconds(500);
+            _timer.Tick += (sender, args) =>
+            {
+                if (_readBarcode != null)
+                    action(subAction, _readBarcode, number);
+                _readBarcode = null;
+            };
+            _timer.Start();
+        }
+
+        public static void StopScannerReceiver() 
+            => _timer?.Stop();
+        
     }
 }

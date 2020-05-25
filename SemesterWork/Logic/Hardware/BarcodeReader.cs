@@ -17,16 +17,13 @@ using System.Windows;
             catch
             {
                 MessageBox.Show(
-                    EventHandler.Lang["BarcodeReader NotFoundException"],
-                    EventHandler.Lang["BarcodeReader NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
+                    LanguageEngine.Language["BarcodeReader NotFoundException"],
+                    LanguageEngine.Language["BarcodeReader NotFoundExceptionTitle"], MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
+            _port.DataReceived += EventHandler.BarcodeRead;
         }
 
-        public void AddReader(SerialDataReceivedEventHandler deleg)
-        {
-            _port.DataReceived += deleg;
-        }
-        
         public void Dispose() 
         {
             _port.Close();
