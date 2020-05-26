@@ -104,7 +104,7 @@
     <Compile Include="Logic\Hardware\BarcodeReader.cs" />
     <Compile Include="Logic\Hardware\Printer.cs" />
     <Compile Include="Logic\LanguageEngine.cs" />
-    <Compile Include="Views\Activities.cs" />
+    <Compile Include="Views\MainWindow.cs" />
     <Compile Include="Logic\PrintInvoice.cs" />
     <Compile Include="Logic\ProductData.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

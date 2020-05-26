@@ -50,8 +50,7 @@ namespace SemesterWork
 
             if (!EventHandler.IsSettingsOK)
                 MessageBox.Show("An error occurred while loading the settings. Default settings were set.",  // не локализовано, потому что может появиться
-                    "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);                                // только с дефолтной (English) локализацией
-        
+                    "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);                                // только с дефолтной (English) локализацией       
         }
     }
 }

@@ -341,7 +341,6 @@ namespace SemesterWork
         }
 
         public static void StopScannerReceiver() 
-            => _timer?.Stop();
-        
+            => _timer?.Stop();      
     }
 }

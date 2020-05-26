@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace SemesterWork
+﻿namespace SemesterWork
 {
     public class Activity
     {

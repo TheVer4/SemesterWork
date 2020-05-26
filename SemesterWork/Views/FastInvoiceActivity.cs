@@ -35,7 +35,7 @@ namespace SemesterWork
             topBar.Children.Add(cashier);
             Grid.SetColumn(cashier, 2);
 
-            Window.InitClock(dateTime);
+            InitClock(dateTime);
 
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) });
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
@@ -51,7 +51,7 @@ namespace SemesterWork
             addPosition.Click += (sender, args) => AddPosition(EventHandler.AddPosition);
 
             _textForm = new TextBox() { FontSize = 48 };
-            _textForm.PreviewTextInput += Window.NumberValidationTextBox;
+            _textForm.PreviewTextInput += NumberValidationTextBox;
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
@@ -63,7 +63,7 @@ namespace SemesterWork
             invoiceControls.Children.Add(barcodeInput);
 
             _number = new TextBox() { FontSize = 48 };
-            _number.PreviewTextInput += Window.NumberValidationTextBox;
+            _number.PreviewTextInput += NumberValidationTextBox;
             Grid.SetColumn(_number, 1);
             invoiceControls.Children.Add(_number);
             Binding[] binds =
@@ -133,7 +133,7 @@ namespace SemesterWork
             var imageSourceWorker = new BackgroundWorker();
             imageSourceWorker.DoWork += (sender, args) =>
             {
-                source = Window.GetBitmapSource(@"images/cross.png");
+                source = GetBitmapSource(@"images/cross.png");
             };
             imageSourceWorker.RunWorkerCompleted += (sender, args) =>
             {
@@ -171,6 +171,7 @@ namespace SemesterWork
             Grid.SetRow(controls, 1);
 
             EventHandler.StartScannerReceiver(AddPosition, EventHandler.AddPosition);
+            Environment.InitBarcodeReader();
         }
         
         private void PaymentOnClick()

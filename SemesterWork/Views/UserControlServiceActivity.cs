@@ -37,7 +37,7 @@ namespace SemesterWork
             topBar.Children.Add(admin);
             Grid.SetColumn(admin, 2);
             
-            Window.InitClock(dateTime);
+            InitClock(dateTime);
 
             userControls.ColumnDefinitions.Add(new ColumnDefinition());
             userControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1.25, GridUnitType.Star) });
@@ -102,7 +102,7 @@ namespace SemesterWork
             Button clear = new Button() { Height = 100 };
             worker.DoWork += (sender, args) =>
             {
-                source = Window.GetBitmapSource(@"images/cross.png");
+                source = GetBitmapSource(@"images/cross.png");
             };
             worker.RunWorkerCompleted += (sender, args) =>
             {

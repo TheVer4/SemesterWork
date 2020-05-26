@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -32,14 +33,14 @@ namespace SemesterWork
             password.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    Window.Authorize(login.Text, password.Password);
+                    Authorize(login.Text, password.Password);
             };
             panel.Children.Add(password);
             Button enter = new Button() { Content = LanguageEngine.Language["LoginActivity Authorize"], FontSize = 20 };
             Button close = new Button() { Content = LanguageEngine.Language["LoginActivity Exit"], FontSize = 20 };
             panel.Children.Add(enter);
             panel.Children.Add(close);
-            enter.Click += (sender, args) => Window.Authorize(login.Text, password.Password);
+            enter.Click += (sender, args) => Authorize(login.Text, password.Password);
             close.Click += (sender, args) =>
             {
                 switch (MessageBox.Show(
@@ -59,6 +60,18 @@ namespace SemesterWork
             Grid.SetColumn(panel, 2);
             Grid.SetRow(panel, 1);
         }
-    }
-    
+
+        private void Authorize(string login, string password)
+        {
+            var worker = new BackgroundWorker();
+            var isAuthorized = false;
+            worker.DoWork += (sender, args) => isAuthorized = EventHandler.Authorize(login, password);
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (isAuthorized)
+                    new MainMenuActivity(Window);
+            };
+            worker.RunWorkerAsync();
+        }
+    } 
 }

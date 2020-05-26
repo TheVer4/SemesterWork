@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace SemesterWork
@@ -16,14 +19,12 @@ namespace SemesterWork
         protected static TextBox _number;
         protected static TextBlock _total; 
         
-        public ActivityWithDynamics(MainWindow window) : base(window)
+        protected ActivityWithDynamics(MainWindow window) : base(window)
         {
             _positions = null;
             _textForm = null;
             _number = null;
-            _total = null;
-
-            Environment.InitBarcodeReader();
+            _total = null;           
         }
         
         protected void UpdateDynamics()
@@ -65,6 +66,27 @@ namespace SemesterWork
             worker.DoWork += (sender, args) => action(textFormText, numberText);
             worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
             worker.RunWorkerAsync();
+        }
+
+        protected void InitClock(TextBlock dateTime)
+        {
+            DispatcherTimer dateTimeTimer = new DispatcherTimer();
+            dateTimeTimer.Interval = TimeSpan.FromSeconds(1);
+            dateTimeTimer.Tick += (sender, args) => { dateTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture); };
+            dateTimeTimer.Start();
+        }
+
+        protected void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        protected BitmapSource GetBitmapSource(string path)
+        {
+            Stream imageStreamSource = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            return decoder.Frames[0];
         }
     }
 }

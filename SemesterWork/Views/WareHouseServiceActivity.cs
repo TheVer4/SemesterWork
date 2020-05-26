@@ -37,7 +37,7 @@ namespace SemesterWork
             topBar.Children.Add(manager);
             Grid.SetColumn(manager, 2);
             
-            Window.InitClock(dateTime);
+            InitClock(dateTime);
 
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition());
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1.25, GridUnitType.Star) });
@@ -49,7 +49,7 @@ namespace SemesterWork
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
 
             _textForm = new TextBox() { FontSize = 48 };
-            _textForm.PreviewTextInput += Window.NumberValidationTextBox;
+            _textForm.PreviewTextInput += NumberValidationTextBox;
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
@@ -105,7 +105,7 @@ namespace SemesterWork
             Button clear = new Button() { Height = 100 };
             worker.DoWork += (sender, args) =>
             {
-                source = Window.GetBitmapSource(@"images/cross.png");
+                source = GetBitmapSource(@"images/cross.png");
             };
             worker.RunWorkerCompleted += (sender, args) =>
             {
@@ -146,6 +146,7 @@ namespace SemesterWork
             Grid.SetRow(controls, 2);
 
             EventHandler.StartScannerReceiver(AddPosition, (a, b) => EventHandler.AddPositionForSaving(a));
+            Environment.InitBarcodeReader();
         }
     }
 }
