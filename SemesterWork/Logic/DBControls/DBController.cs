@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
 
 namespace SemesterWork
 {
     static class DBController
     {      
-        public static List<string> SQLFind(string table, string column, object value)
+        public static List<List<string>> SQLFind(string table, string column, object value)
         {
-            var result = new List<string>();
+            var result = new List<List<string>>();
             using var connection = new SQLiteConnection(Variables.DBConnectionString);
             connection.Open();
             var command = new SQLiteCommand(
@@ -16,14 +17,23 @@ namespace SemesterWork
                 connection);
             var reader = command.ExecuteReader();
             while (reader.Read())
+            {
+                var list = new List<string>();
                 for (var i = 0; i < reader.FieldCount; i++)
-                    result.Add(reader.GetString(i));
+                    list.Add(reader.GetString(i));
+                result.Add(list);
+            }
             return result;
         }
 
-        public static List<string> SQLFindBetween(string table, string column, object first, object second)
+        public static List<string> SQLFindUnique(string table, string column, object value)
         {
-            var result = new List<string>();
+            return SQLFind(table, column, value).FirstOrDefault();
+        }
+
+        public static List<List<string>> SQLFindBetween(string table, string column, object first, object second)
+        {
+            var result = new List<List<string>>();
             using var connection = new SQLiteConnection(Variables.DBConnectionString);
             connection.Open();
             var command = new SQLiteCommand(
@@ -32,8 +42,12 @@ namespace SemesterWork
                 connection);
             var reader = command.ExecuteReader();
             while (reader.Read())
+            {
+                var list = new List<string>();
                 for (var i = 0; i < reader.FieldCount; i++)
-                    result.Add(reader.GetString(i));
+                    list.Add(reader.GetString(i));
+                result.Add(list);
+            }
             return result;
         }
 

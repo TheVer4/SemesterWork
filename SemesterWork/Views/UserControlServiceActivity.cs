@@ -48,8 +48,9 @@ namespace SemesterWork
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
-            textForm = new TextBox() { FontSize = 48 };
-            textForm.KeyDown += (sender, args) =>
+
+            _textForm = new TextBox() { FontSize = 48 };
+            _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
                     AddPosition((a,b) => EventHandler.AddUserPosition(a));
@@ -59,7 +60,7 @@ namespace SemesterWork
             Button addNewUser = new Button() { Content = "Добавить", FontSize = 48 }; //TODO localize
             findUser.Click += (sender, args) => AddPosition((a,b) => EventHandler.AddUserPosition(a));
             addNewUser.Click += (sender, args) => EventHandler.AddNewUser();
-            userInput.Children.Add(textForm);
+            userInput.Children.Add(_textForm);
             Grid.SetColumn(userInput, 0);
             userInput.Children.Add(findUser);
             Grid.SetColumn(findUser, 1);
@@ -72,7 +73,7 @@ namespace SemesterWork
                 new Binding("Name") { Mode = BindingMode.Default },
                 new Binding("AccessLevel") { Mode = BindingMode.Default }
             };
-            positions = new DataGrid()
+            _positions = new DataGrid()
             {
                 ItemsSource = EventHandler.ItemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
@@ -85,10 +86,10 @@ namespace SemesterWork
                     new DataGridComboBoxColumn() { Header = "Уровень доступа" , TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } }, //TODO localize
                 }
             };
-            foreach (var column in positions.Columns)
+            foreach (var column in _positions.Columns)
                 column.CanUserSort = false;
-            userControls.Children.Add(positions);
-            Grid.SetRow(positions, 1);
+            userControls.Children.Add(_positions);
+            Grid.SetRow(_positions, 1);
 
             Grid controls = new Grid();
             controls.ColumnDefinitions.Add(new ColumnDefinition());
@@ -116,7 +117,7 @@ namespace SemesterWork
             var deleteButton = new Button() { Content = "Удалить пользователя", FontSize = 40, Height = 100 }; //TODO localize
             deleteButton.Click += (sender, args) =>
             {
-                var selectedIndex = positions.SelectedIndex;
+                var selectedIndex = _positions.SelectedIndex;
                 var worker = new BackgroundWorker();
                 worker.DoWork += (sender, args) => EventHandler.DeleteUserFromDB(selectedIndex);
                 worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();

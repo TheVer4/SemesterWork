@@ -102,24 +102,54 @@ namespace SemesterWork
                     LanguageEngine.Language["WareHouseActivity EAN13FormatErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+        public static void AddAllUsers()
+        {
+            var info = new List<List<string>>();
+            info = info.Concat(UserDBController.FindByAccessLevel("Admin")).ToList();
+            info = info.Concat(UserDBController.FindByAccessLevel("Manager")).ToList();
+            info = info.Concat(UserDBController.FindByAccessLevel("Normal")).ToList();
+            foreach (var user in info)
+                ItemsPositions.Add(new User(user));
+        }
+
         public static void AddUserPosition(string infoStr)
         {
+            var info = new List<List<string>>();
             var availablePosition = ItemsPositions.Where(x => (x as User).Name == infoStr || (x as User).Id == infoStr);
             if (availablePosition.Any())
                 MessageBox.Show("Пользоавтель с такими данными уже есть в таблице", //TODO localize
                     "Внимание", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
             else
             {
-                var info = UserDBController.FindById(infoStr);
-                if (!info.Any())
-                    info = UserDBController.FindByName(infoStr);
-
-                if (info.Any())
-                    ItemsPositions.Add(new User(info));
+                var accessLevelUsers = UserDBController.FindByAccessLevel(infoStr);
+                if (accessLevelUsers.Any())
+                    info = accessLevelUsers
+                        .Where(x => !ItemsPositions
+                            .Select(x => (x as User).Id)
+                            .Contains(new User(x).Id))
+                        .ToList();
                 else
-                    MessageBox.Show("Пользователь с такими данными не найден", //TODO localize
-                        "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
-            }
+                {
+                    var nameUser = UserDBController.FindByName(infoStr) ?? new List<string>();
+                    if (nameUser.Any())
+                        info.Add(nameUser);
+                    else
+                    {
+                        var idUser = UserDBController.FindById(infoStr) ?? new List<string>();
+                        if (idUser.Any())
+                            info.Add(idUser);
+                        else
+                        {
+                            MessageBox.Show("Пользователь с такими данными не найден", //TODO localize
+                                "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
+                            return;
+                        }
+                    }
+
+                }
+            }                        
+            foreach (var user in info)                
+                ItemsPositions.Add(new User(user));
         }
 
         public static void AddNewUser() //TODO Это, конечно же, появится в Activities (следующей серии :D)

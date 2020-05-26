@@ -6,7 +6,7 @@ namespace SemesterWork
     {
         public static List<string> Find(string code)
         {
-            return DBController.SQLFind("WareHouse", "EAN13", code);
+            return DBController.SQLFindUnique("WareHouse", "EAN13", code);
         }
 
         public static void Insert(

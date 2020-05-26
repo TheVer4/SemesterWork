@@ -6,17 +6,22 @@ namespace SemesterWork
     {
         public static List<string> FindByName(string name)
         {
-            return DBController.SQLFind("Users", "Name", name);
+            return DBController.SQLFindUnique("Users", "Name", name);
         }
 
         public static List<string> FindById(string id)
         {
-            return DBController.SQLFind("Users", "id", id);
+            return DBController.SQLFindUnique("Users", "id", id);
         }
 
         public static List<string> FindByHash(string hash)
         {
-            return DBController.SQLFind("Users", "Hash", hash);
+            return DBController.SQLFindUnique("Users", "Hash", hash);
+        }
+
+        public static List<List<string>> FindByAccessLevel(string accessLevel)
+        {
+            return DBController.SQLFind("Users", "AccessLevel", accessLevel);
         }
 
         public static void Add(string id, string name, string accessLevel, string hash)

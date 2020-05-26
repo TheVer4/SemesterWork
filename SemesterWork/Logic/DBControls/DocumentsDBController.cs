@@ -6,17 +6,17 @@ namespace SemesterWork
     {
         public static List<string> FindById(int id)
         {
-            return DBController.SQLFind("documents", "id", id);
+            return DBController.SQLFindUnique("documents", "id", id);
         }
 
-        public static List<string> FindByDateTime(int first, int second)
+        public static List<List<string>> FindByDateTime(int first, int second)
         {
             return DBController.SQLFindBetween("documents", "DateTime", first, second);
         }
 
         public static List<string> FindByCashierName(string name)
         {
-            return DBController.SQLFind("documents", "Name", name);
+            return DBController.SQLFindUnique("documents", "Name", name);
         }
 
         public static void Add(int dateTime, string name, string checkLine)

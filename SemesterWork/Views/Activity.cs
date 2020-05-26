@@ -10,7 +10,6 @@ namespace SemesterWork
         {
             Window = window;
             Window.ClearScreen();
-        }
-        
+        }        
     }
 }

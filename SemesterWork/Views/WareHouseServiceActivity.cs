@@ -47,9 +47,10 @@ namespace SemesterWork
             Grid barcodeInput = new Grid();
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
             barcodeInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            textForm = new TextBox() { FontSize = 48 };
-            textForm.PreviewTextInput += Window.NumberValidationTextBox;
-            textForm.KeyDown += (sender, args) =>
+
+            _textForm = new TextBox() { FontSize = 48 };
+            _textForm.PreviewTextInput += Window.NumberValidationTextBox;
+            _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
                     AddPosition((a, b) => EventHandler.AddPositionForSaving(a));
@@ -57,7 +58,7 @@ namespace SemesterWork
 
             Button addPosition = new Button() { Content = LanguageEngine.Language["WareHouseActivity AddPosition"], FontSize = 48 };
             addPosition.Click += (sender, args) => AddPosition((a, b) => EventHandler.AddPositionForSaving(a));
-            barcodeInput.Children.Add(textForm);
+            barcodeInput.Children.Add(_textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
@@ -72,7 +73,7 @@ namespace SemesterWork
             };
             foreach (var bind in binds)
                 bind.Mode = BindingMode.Default;
-            positions = new DataGrid()
+            _positions = new DataGrid()
             {
                 ItemsSource = EventHandler.ItemsPositions,
                 SelectionMode = DataGridSelectionMode.Single,
@@ -88,10 +89,10 @@ namespace SemesterWork
                     new DataGridTextColumn() { Header = LanguageEngine.Language["WareHouseActivity ShortName"], Binding = binds[5] }
                 }
             };
-            foreach (var column in positions.Columns)
+            foreach (var column in _positions.Columns)
                 column.CanUserSort = false;
-            invoiceControls.Children.Add(positions);
-            Grid.SetRow(positions, 1);
+            invoiceControls.Children.Add(_positions);
+            Grid.SetRow(_positions, 1);
 
             Grid controls = new Grid();
             controls.ColumnDefinitions.Add(new ColumnDefinition());
@@ -119,7 +120,7 @@ namespace SemesterWork
             var deleteButton = new Button() { Content = LanguageEngine.Language["WareHouseActivity DeleteFromDBButton"], FontSize = 40, Height = 100 };
             deleteButton.Click += (sender, args) =>
             {
-                var selectedIndex = positions.SelectedIndex;
+                var selectedIndex = _positions.SelectedIndex;
                 var worker = new BackgroundWorker();
                 worker.DoWork += (sender, args) => EventHandler.DeleteFromDB(selectedIndex);
                 worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();

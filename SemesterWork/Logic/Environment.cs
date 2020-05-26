@@ -2,11 +2,16 @@
 {
     public static class Environment
     {
-        public static BarcodeReader _barcodeReader;
+        private static BarcodeReader _barcodeReader;
+
         public static void Initialize()
         {           
             new LanguageEngine(); //TODO пересмотреть механизм инициализации
-            EventHandler.UpdateFromCFG();
+            EventHandler.UpdateFromCFG();          
+        }
+
+        public static void InitBarcodeReader()
+        {
             _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
         }
 
