@@ -1,7 +1,6 @@
-﻿using System;
+﻿using SemesterWork.Views;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,38 +13,16 @@ namespace SemesterWork
     {
         public UserControlServiceActivity(MainWindow window) : base(window)
         {
-            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
-
-            Grid topBar = new Grid();
-            Window.Grid.Children.Add(topBar);
-            Grid.SetRow(topBar, 0);
             Grid userControls = new Grid();
             Window.Grid.Children.Add(userControls);
             Grid.SetRow(userControls, 1);
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-
-            TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
-            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock admin = new TextBlock() { Text = $"Администратор: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //TODO localize
-            topBar.Children.Add(programName);
-            Grid.SetColumn(programName, 0);
-            topBar.Children.Add(dateTime);
-            Grid.SetColumn(dateTime, 1);
-            topBar.Children.Add(admin);
-            Grid.SetColumn(admin, 2);
-            
-            InitClock(dateTime);
-
             userControls.ColumnDefinitions.Add(new ColumnDefinition());
             userControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1.25, GridUnitType.Star) });
             userControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
             userControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(2, GridUnitType.Star) });
 
             Grid userInput = new Grid();
-            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(10, GridUnitType.Star) });
+            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(7.5, GridUnitType.Star) });
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
 
@@ -53,30 +30,33 @@ namespace SemesterWork
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    AddPosition((a,b) => EventHandler.AddUserPosition(a));
+                    ThreadedAction((a, b) => EventHandler.AddUserPosition(a));
             };
 
             var findUser = new Button() { Content = "Найти", FontSize = 48 }; //TODO localize
-            Button addNewUser = new Button() { Content = "Добавить", FontSize = 48 }; //TODO localize
-            findUser.Click += (sender, args) => AddPosition((a,b) => EventHandler.AddUserPosition(a));
-            addNewUser.Click += (sender, args) => EventHandler.AddNewUser();
+            var allUsers = new Button() { Content = "Все", FontSize = 48 }; //TODO localize            
+            findUser.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddUserPosition(a));
+            allUsers.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddAllUsers());
             userInput.Children.Add(_textForm);
             Grid.SetColumn(userInput, 0);
             userInput.Children.Add(findUser);
             Grid.SetColumn(findUser, 1);
-            userInput.Children.Add(addNewUser);
-            Grid.SetColumn(addNewUser, 2);
+            userInput.Children.Add(allUsers);
+            Grid.SetColumn(allUsers, 2);
             userControls.Children.Add(userInput);
 
-            Binding[] binds = {
-                new Binding("Id") { Mode = BindingMode.OneTime },
-                new Binding("Name") { Mode = BindingMode.Default },
-                new Binding("AccessLevel") { Mode = BindingMode.Default }
+            Binding[] binds = 
+            {
+                new Binding("Id"),
+                new Binding("Name"),
+                new Binding("AccessLevel") 
             };
+            foreach (var bind in binds)
+                bind.Mode = BindingMode.OneWay;
             _positions = new DataGrid()
             {
                 ItemsSource = EventHandler.ItemsPositions,
-                SelectionMode = DataGridSelectionMode.Single,
+                SelectionMode = DataGridSelectionMode.Single,              
                 FontSize = 20,
                 AutoGenerateColumns = false,
                 Columns =
@@ -89,9 +69,17 @@ namespace SemesterWork
             foreach (var column in _positions.Columns)
                 column.CanUserSort = false;
             userControls.Children.Add(_positions);
+            _positions.MouseDoubleClick += (sender, args) =>
+            {
+                if (MessageBox.Show("Вы уверены, что хотите изменить этого пользователя?", //TODO localize 
+                        "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
+                         MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    new UserChangingActivity(Window, ((sender as DataGrid).SelectedItem as User));
+            };
             Grid.SetRow(_positions, 1);
 
             Grid controls = new Grid();
+            controls.ColumnDefinitions.Add(new ColumnDefinition());
             controls.ColumnDefinitions.Add(new ColumnDefinition());
             controls.ColumnDefinitions.Add(new ColumnDefinition());
             controls.ColumnDefinitions.Add(new ColumnDefinition());
@@ -126,13 +114,18 @@ namespace SemesterWork
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
 
+            var addNewUser = new Button() { Content = "Новый пользователь", FontSize = 40, Height = 100 }; //TODO localize
+            addNewUser.Click += (sender, args) => new NewUserActivity(Window);
+            controls.Children.Add(addNewUser);
+            Grid.SetColumn(addNewUser, 2);
+
             Button saveButton = new Button() { Content = "Сохранить", FontSize = 40, Height = 100 }; //TODO localize
-            saveButton.Click += (sender, args) => EventHandler.SaveUsersPositions();
+            saveButton.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.SaveUsersPositions());
             controls.Children.Add(saveButton);
-            Grid.SetColumn(saveButton, 2);
+            Grid.SetColumn(saveButton, 3);
 
             userControls.Children.Add(controls);
-            Grid.SetRow(controls, 2);
+            Grid.SetRow(controls, 4);
         }
     }
 }

@@ -32,9 +32,14 @@ namespace SemesterWork
                 $"'{id}', '{name}', '{accessLevel}', '{hash}'");
         }
 
-        public static void Update(string id, string column, string value)
+        public static void Update(User data, string hash)
         {
-            DBController.SQLUpdate("Users", column, value, "id", id);
+            DBController.SQLCommand(
+                $"UPDATE Users SET " +
+                $"Name = '{data.Name}', " +
+                $"AccessLevel = '{data.AccessLevel}', " +
+                $"Hash = '{hash}' " +
+                $"WHERE id = '{data.Id}'");
         }
 
         public static void Update(User data)

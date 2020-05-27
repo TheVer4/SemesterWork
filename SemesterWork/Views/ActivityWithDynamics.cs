@@ -14,17 +14,35 @@ namespace SemesterWork
 {
     public class ActivityWithDynamics : Activity
     {
-        protected static DataGrid _positions;
-        protected static TextBox _textForm;
-        protected static TextBox _number;
-        protected static TextBlock _total; 
+        protected DataGrid _positions;
+        protected TextBox _textForm;
+        protected TextBox _number;
+        protected TextBlock _total; 
         
         protected ActivityWithDynamics(MainWindow window) : base(window)
         {
-            _positions = null;
-            _textForm = null;
-            _number = null;
-            _total = null;           
+            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
+
+            Grid topBar = new Grid();
+            Window.Grid.Children.Add(topBar);
+            Grid.SetRow(topBar, 0);
+
+            topBar.ColumnDefinitions.Add(new ColumnDefinition());
+            topBar.ColumnDefinitions.Add(new ColumnDefinition());
+            topBar.ColumnDefinitions.Add(new ColumnDefinition());
+
+            TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
+            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
+            TextBlock admin = new TextBlock() { Text = $"Кассир: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //TODO localize
+            topBar.Children.Add(programName);
+            Grid.SetColumn(programName, 0);
+            topBar.Children.Add(dateTime);
+            Grid.SetColumn(dateTime, 1);
+            topBar.Children.Add(admin);
+            Grid.SetColumn(admin, 2);
+
+            InitClock(dateTime);
         }
         
         protected void UpdateDynamics()
@@ -59,7 +77,7 @@ namespace SemesterWork
             UpdateDynamics();
         }
 
-        protected void AddPosition(Action<string, string> action)
+        protected void ThreadedAction(Action<string, string> action)
         {
             var worker = new BackgroundWorker();
             string textFormText = _textForm.Text, numberText = _number?.Text;

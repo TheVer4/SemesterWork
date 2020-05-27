@@ -108,6 +108,7 @@ namespace SemesterWork
             info = info.Concat(UserDBController.FindByAccessLevel("Admin")).ToList();
             info = info.Concat(UserDBController.FindByAccessLevel("Manager")).ToList();
             info = info.Concat(UserDBController.FindByAccessLevel("Normal")).ToList();
+            ItemsPositions.Clear();
             foreach (var user in info)
                 ItemsPositions.Add(new User(user));
         }
@@ -152,11 +153,19 @@ namespace SemesterWork
                 ItemsPositions.Add(new User(user));
         }
 
-        public static void AddNewUser() //TODO Это, конечно же, появится в Activities (следующей серии :D)
+        public static bool AddNewUser(User newUser, string password)
         {
-            //TODO
-            //появление дополнительных окон ввода справа
-            //при нажатии конфирм добавление в таблицу
+            var newUserHash = GetHash(password);
+            try
+            {
+                UserDBController.Add(newUser.Id, newUser.Name, newUser.AccessLevel, newUserHash);
+            }
+            catch(System.Data.SQLite.SQLiteException)
+            {
+                return false;
+            }
+            ItemsPositions.Add(newUser);
+            return true;
         }
 
         public static void SavePositionsForWarehouse()
@@ -171,18 +180,19 @@ namespace SemesterWork
                 }
         }
 
+        public static void UpdateUser(User user, string password)
+        {
+            UserDBController.Update(user, GetHash(password));
+            var oldUser = ItemsPositions.FirstOrDefault(x => (x as User).Id == user.Id);
+            ItemsPositions[ItemsPositions.IndexOf(oldUser)] = user;
+        }
+
         public static void SaveUsersPositions()
         {
-            var worker = new BackgroundWorker();
             foreach (User user in ItemsPositions)
-                worker.DoWork += (sender, args) =>
-                    UserDBController.Update(user);
-            worker.RunWorkerCompleted += (sender, args) =>
-            {
-                MessageBox.Show(LanguageEngine.Language["WareHouseActivity SaveMessageBox"],
-                    LanguageEngine.Language["WareHouseActivity SaveMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
-            };
-            worker.RunWorkerAsync();
+                UserDBController.Update(user);
+            MessageBox.Show(LanguageEngine.Language["WareHouseActivity SaveMessageBox"],
+                LanguageEngine.Language["WareHouseActivity SaveMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public static void DeleteFromDB(int selectedIndex)
@@ -290,20 +300,23 @@ namespace SemesterWork
                 IsSettingsOK = false;
         }
 
+        public static string GetHash(string password)
+        {
+            using var hash = System.Security.Cryptography.SHA512.Create();
+            return BitConverter.ToString(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
+        }
+
         public static bool Authorize(string login, string password)
         {
             var userInfo = UserDBController.FindById(login);
-            string userHash;
-            using (var hash = System.Security.Cryptography.SHA512.Create())
-                userHash = BitConverter.ToString(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
+            string userHash = GetHash(password);
             if (userInfo.Any() && userInfo[3] == userHash)
             {
                 CurrentUser = new User(userInfo);
                 return true;
             }
-            else
-                MessageBox.Show(LanguageEngine.Language["LoginActivity AuthorizationMessageBox"],
-                    LanguageEngine.Language["LoginActivity AuthorizationMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(LanguageEngine.Language["LoginActivity AuthorizationMessageBox"],
+                LanguageEngine.Language["LoginActivity AuthorizationMessageBoxTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
         

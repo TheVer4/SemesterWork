@@ -14,31 +14,9 @@ namespace SemesterWork
     {
         public WareHouseServiceActivity(MainWindow window) : base(window)
         {
-            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
-
-            Grid topBar = new Grid();
-            Window.Grid.Children.Add(topBar);
-            Grid.SetRow(topBar, 0);
             Grid invoiceControls = new Grid();
             Window.Grid.Children.Add(invoiceControls);
             Grid.SetRow(invoiceControls, 1);
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-
-            TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
-            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock manager = new TextBlock() { Text = $"{LanguageEngine.Language["WareHouseActivity Manager"]}: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
-            topBar.Children.Add(programName);
-            Grid.SetColumn(programName, 0);
-            topBar.Children.Add(dateTime);
-            Grid.SetColumn(dateTime, 1);
-            topBar.Children.Add(manager);
-            Grid.SetColumn(manager, 2);
-            
-            InitClock(dateTime);
-
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition());
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1.25, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
@@ -53,17 +31,18 @@ namespace SemesterWork
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    AddPosition((a, b) => EventHandler.AddPositionForSaving(a));
+                    ThreadedAction((a, b) => EventHandler.AddPositionForSaving(a));
             };
 
             Button addPosition = new Button() { Content = LanguageEngine.Language["WareHouseActivity AddPosition"], FontSize = 48 };
-            addPosition.Click += (sender, args) => AddPosition((a, b) => EventHandler.AddPositionForSaving(a));
+            addPosition.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddPositionForSaving(a));
             barcodeInput.Children.Add(_textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
             invoiceControls.Children.Add(barcodeInput);
 
-            Binding[] binds = {
+            Binding[] binds = 
+            {
                 new Binding("Data.EAN13"),
                 new Binding("Data.Name"),
                 new Binding("Data.Price"),
@@ -145,7 +124,7 @@ namespace SemesterWork
             invoiceControls.Children.Add(controls);
             Grid.SetRow(controls, 2);
 
-            EventHandler.StartScannerReceiver(AddPosition, (a, b) => EventHandler.AddPositionForSaving(a));
+            EventHandler.StartScannerReceiver(ThreadedAction, (a, b) => EventHandler.AddPositionForSaving(a));
             Environment.InitBarcodeReader();
         }
     }

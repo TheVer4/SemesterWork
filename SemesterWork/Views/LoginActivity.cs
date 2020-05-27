@@ -24,8 +24,8 @@ namespace SemesterWork
             Grid.SetColumn(logo, 1);
 
             StackPanel panel = new StackPanel();
-            TextBox login = new TextBox() { FontSize = 20 };
-            PasswordBox password = new PasswordBox() { FontSize = 20 };
+            TextBox login = new TextBox() { FontSize = 20, Height = 30 };
+            PasswordBox password = new PasswordBox() { FontSize = 20, Height = 30 };
 
             panel.Children.Add(new TextBlock() { Text = LanguageEngine.Language["LoginActivity Account"], FontSize = 20 });
             panel.Children.Add(login);
