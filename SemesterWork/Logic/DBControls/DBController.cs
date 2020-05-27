@@ -28,7 +28,7 @@ namespace SemesterWork
 
         public static List<string> SQLFindUnique(string table, string column, object value)
         {
-            return SQLFind(table, column, value).FirstOrDefault();
+            return SQLFind(table, column, value).FirstOrDefault() ?? new List<string>();
         }
 
         public static List<List<string>> SQLFindBetween(string table, string column, object first, object second)

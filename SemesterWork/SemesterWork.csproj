@@ -103,6 +103,7 @@
     <Compile Include="Logic\EventHandler.cs" />
     <Compile Include="Logic\Hardware\BarcodeReader.cs" />
     <Compile Include="Logic\Hardware\Printer.cs" />
+    <Compile Include="Logic\Invoice.cs" />
     <Compile Include="Logic\LanguageEngine.cs" />
     <Compile Include="Views\MainWindow.cs" />
     <Compile Include="Logic\PrintInvoice.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Views\LoginActivity.cs" />
     <Compile Include="Views\MainMenuActivity.cs" />
     <Compile Include="Views\NewUserActivity.cs" />
+    <Compile Include="Views\PaymentActivity.cs" />
     <Compile Include="Views\UserChangingActivity.cs" />
     <Compile Include="Views\SettingsActivity.cs" />
     <Compile Include="Views\StatisticsActivity.cs" />

@@ -16,30 +16,11 @@ namespace SemesterWork
         private double _cash, _cashless, _rest;
         public PaymentActivity(MainWindow window) : base(window)
         {
-            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-            Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32, GridUnitType.Star) });
-            Grid topBar = new Grid();
-            Window.Grid.Children.Add(topBar);
-            Grid.SetRow(topBar, 0);
+
             Grid invoiceControls = new Grid();
             Window.Grid.Children.Add(invoiceControls);
             Grid.SetRow(invoiceControls, 1);
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-            topBar.ColumnDefinitions.Add(new ColumnDefinition());
-
-            TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
-            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock cashier = new TextBlock() { Text = $"{LanguageEngine.Language["FastInvoiceActivity Cashier"]}: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 };
-            topBar.Children.Add(programName);
-            Grid.SetColumn(programName, 0);
-            topBar.Children.Add(dateTime);
-            Grid.SetColumn(dateTime, 1);
-            topBar.Children.Add(cashier);
-            Grid.SetColumn(cashier, 2);
-
-            InitClock(dateTime);
-
+            
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(15, GridUnitType.Star) });
             invoiceControls.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
@@ -96,9 +77,6 @@ namespace SemesterWork
             
             invoiceControls.Children.Add(stackPanel);
             Grid.SetRow(stackPanel, 1);
-            
-            ChangeTotalSummary(0, 0, 0);
-
             
             _number = new TextBox() { FontSize = 48 };
             _number.PreviewTextInput += NumberValidationTextBox;
@@ -157,7 +135,7 @@ namespace SemesterWork
             addCash.Click += (sender, args) =>
             {
                 if (_number != null && _number.Text.Length != 0)
-                    ChangeTotalSummary(cash: double.Parse(_number.Text));
+                    ChangeTotalSummary(cash: double.Parse(_number.Text, CultureInfo.InvariantCulture));
                 else
                     ChangeTotalSummary(cash: _rest);
             };
@@ -165,7 +143,7 @@ namespace SemesterWork
             addCashless.Click += (sender, args) =>
             {
                 if (_number != null && _number.Text.Length != 0)
-                    ChangeTotalSummary(cashless: double.Parse(_number.Text));
+                    ChangeTotalSummary(cashless: double.Parse(_number.Text, CultureInfo.InvariantCulture));
                 else
                     ChangeTotalSummary(cashless: _rest);
             };
@@ -181,6 +159,7 @@ namespace SemesterWork
             Grid.SetColumn(controls, 1);
             Grid.SetRow(controls, 1);
             
+            ChangeTotalSummary(0, 0, 0);
         }
 
         private void CrossButton()

@@ -44,6 +44,8 @@ namespace SemesterWork
             Grid.SetColumn(admin, 2);
 
             InitClock(dateTime);
+            
+            finalTotal = EventHandler.ItemsPositions.OfType<CheckLine>().Select(x => x.FullPrice).Sum();
         }
         
         protected void UpdateDynamics()

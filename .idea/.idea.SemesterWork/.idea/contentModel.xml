@@ -59,9 +59,11 @@
           <e p="LoginActivity.cs" t="Include" />
           <e p="MainMenuActivity.cs" t="Include" />
           <e p="MainWindow.cs" t="Include" />
+          <e p="NewUserActivity.cs" t="Include" />
           <e p="PaymentActivity.cs" t="Include" />
           <e p="SettingsActivity.cs" t="Include" />
           <e p="StatisticsActivity.cs" t="Include" />
+          <e p="UserChangingActivity.cs" t="Include" />
           <e p="UserControlServiceActivity.cs" t="Include" />
           <e p="WareHouseServiceActivity.cs" t="Include" />
         </e>
