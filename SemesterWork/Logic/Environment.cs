@@ -2,7 +2,7 @@
 {
     public static class Environment
     {
-        private static BarcodeReader _barcodeReader;
+        public static BarcodeReader BarcodeReader { get; private set; }
 
         public static void Initialize()
         {           
@@ -12,12 +12,12 @@
 
         public static void InitBarcodeReader()
         {
-            _barcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
+            BarcodeReader = new BarcodeReader(Variables.BarcodeScannerPort, 9600);
         }
 
         public static void Destroy()
         {
-            _barcodeReader.Dispose();
+            BarcodeReader.Dispose();
         }
     }
 }

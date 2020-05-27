@@ -18,7 +18,8 @@ namespace SemesterWork
         protected TextBox _textForm;
         protected TextBox _number;
         protected TextBlock _total; 
-        
+        protected double finalTotal;
+
         protected ActivityWithDynamics(MainWindow window) : base(window)
         {
             Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
@@ -47,8 +48,9 @@ namespace SemesterWork
         
         protected void UpdateDynamics()
         {
+            finalTotal = EventHandler.ItemsPositions.OfType<CheckLine>().Select(x => x.FullPrice).Sum();
             if (_total != null)
-                _total.Text = $"{LanguageEngine.Language["FastInvoiceActivity Total"]}: {EventHandler.ItemsPositions.Select(x => (x as CheckLine).FullPrice).Sum()}";
+                _total.Text = $"{LanguageEngine.Language["FastInvoiceActivity Total"]}: {finalTotal}";
             if (_number != null)
                 _number.Text = null;
             if (_textForm != null)

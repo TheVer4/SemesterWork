@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Documents;
 using PrinterUtility;
 using PrinterUtility.EscPosEpsonCommands;
 
@@ -9,7 +10,7 @@ namespace SemesterWork
 {
     public static class PrintInvoice
     {
-        public static void Print(List<CheckLine> list)
+        public static void Print(Invoice invoice)
         {
             EscPosEpson epson = new EscPosEpson();
             new Printer().Send(FormatPaper(
@@ -26,9 +27,9 @@ namespace SemesterWork
                 epson.Lf(),
                 Encoder866.Recode("ПРИХОД"),
                 epson.Lf(),
-                FormatCheckLines(list),
+                FormatCheckLines(invoice.Positions),
                 epson.Lf(),
-                Encoder866.Recode($"ИТОГО: {list.Select(x => x.FullPrice).Sum()} руб."),
+                Encoder866.Recode($"ИТОГО: {invoice.Positions.Select(x => x.FullPrice).Sum()} руб."),
                 epson.Lf(),
                 epson.Lf()
                 ));

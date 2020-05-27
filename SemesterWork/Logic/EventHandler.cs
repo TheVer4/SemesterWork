@@ -320,17 +320,17 @@ namespace SemesterWork
             return false;
         }
         
-        public static void ProceedPayment()
+        public static void ProceedPayment(Invoice invoice)
         {
             Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'"; //TODO move to settings
             var currentUserName = CurrentUser.Name;
-            var jsonStr = JsonConvert.SerializeObject(ItemsPositions);
-            PrintInvoice.Print(ItemsPositions.Select(x => (CheckLine)x).ToList());
+            var jsonStr = JsonConvert.SerializeObject(invoice);
+            PrintInvoice.Print(invoice);
             DocumentsDBController.Add(
                 (int) DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
                 currentUserName, 
                 jsonStr);
-            foreach (CheckLine position in ItemsPositions)
+            foreach (CheckLine position in invoice.Positions)
                 WareHouseDBController.DecreaseAmountBy(position.Data.EAN13, position.Amount);
             ItemsPositions.Clear();
         }
@@ -346,14 +346,18 @@ namespace SemesterWork
             {
                 if (_readBarcode != null)
                 {
-                    action((a,b) => subAction(_readBarcode, b));
+                    string readBarcodeSync = _readBarcode;
+                    action((a,b) => subAction(readBarcodeSync, b));
                 }
                 _readBarcode = null;
             };
             _timer.Start();
         }
 
-        public static void StopScannerReceiver() 
-            => _timer?.Stop();      
+        public static void StopScannerReceiver()
+        {
+            _timer?.Stop();    
+            Environment.BarcodeReader?.Dispose();    
+        }  
     }
 }
