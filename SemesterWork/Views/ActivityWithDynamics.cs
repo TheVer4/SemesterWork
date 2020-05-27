@@ -14,23 +14,22 @@ namespace SemesterWork
 {
     public class ActivityWithDynamics : Activity
     {
-        protected static DataGrid _positions;
-        protected static TextBox _textForm;
-        protected static TextBox _number;
-        protected static TextBlock _total; 
-        
+        protected DataGrid _positions;
+        protected TextBox _textForm;
+        protected TextBox _number;
+        protected TextBlock _total; 
+        protected double finalTotal;
+
         protected ActivityWithDynamics(MainWindow window) : base(window)
         {
-            _positions = null;
-            _textForm = null;
-            _number = null;
-            _total = null;           
+            finalTotal = EventHandler.ItemsPositions.OfType<CheckLine>().Select(x => x.FullPrice).Sum();
         }
         
         protected void UpdateDynamics()
         {
+            finalTotal = EventHandler.ItemsPositions.OfType<CheckLine>().Select(x => x.FullPrice).Sum();
             if (_total != null)
-                _total.Text = $"{LanguageEngine.Language["FastInvoiceActivity Total"]}: {EventHandler.ItemsPositions.Select(x => (x as CheckLine).FullPrice).Sum()}";
+                _total.Text = $"{LanguageEngine.Language["FastInvoiceActivity Total"]}: {finalTotal}";
             if (_number != null)
                 _number.Text = null;
             if (_textForm != null)

@@ -176,12 +176,9 @@ namespace SemesterWork
         
         private void PaymentOnClick()
         {
-            //TODO сюда напиши уже что-нибудь
+            EventHandler.StopScannerReceiver();
+            new PaymentActivity(Window);
             //TODO проверка на наличие принтера (чтобы позиции не удалялись, если принтера нет)
-            var worker = new BackgroundWorker();
-            worker.DoWork += (sender, args) => EventHandler.ProceedPayment();
-            worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
-            worker.RunWorkerAsync();
         }
     }
 }
