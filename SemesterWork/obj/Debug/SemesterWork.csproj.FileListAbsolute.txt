@@ -1,5 +1,3 @@
-C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\DataBases\WareHouse.mdf
-C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\DataBases\WareHouse_log.ldf
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.exe.config
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.exe
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.pdb
@@ -7,7 +5,6 @@ C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\Printe
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csprojAssemblyReference.cache
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\MainWindow.g.cs
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\App.g.cs
-C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_Content.g.cs
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.cache
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.lref
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\MainWindow.baml
@@ -74,3 +71,14 @@ D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.dll
 D:\Projects\csharp\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.xml
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.dll
 C:\Users\BeeTwin\Source\Repos\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.xml
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\EntityFramework.dll
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.dll
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.dll
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\EntityFramework.xml
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.xml
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.xml
+C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.dll.config
