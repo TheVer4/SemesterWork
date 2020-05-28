@@ -76,8 +76,8 @@ namespace SemesterWork.Views
            
             _apply.IsEnabled = false;
             _apply.Click += (sender, args) => AddNewUser(
-                new User(_loginTBox.Text, _nameTBox.Text, _passwordPBox.Password),
-                _accessLevelSelector.SelectedItem.ToString());
+                new User(_loginTBox.Text, _nameTBox.Text, _accessLevelSelector.SelectedItem.ToString()),
+                _passwordPBox.Password);
             _panel.Children.Add(_apply);
 
             _cancel = new Button() { Content = LanguageEngine.Language["NewUserActivity Cancel"], Height = 50, FontSize = 20 };
