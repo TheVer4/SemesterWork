@@ -33,8 +33,8 @@ namespace SemesterWork
                     ThreadedAction((a, b) => EventHandler.AddUserPosition(a));
             };
 
-            var findUser = new Button() { Content = "Найти", FontSize = 48 }; //TODO localize
-            var allUsers = new Button() { Content = "Все", FontSize = 48 }; //TODO localize            
+            var findUser = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity SearchButton"], FontSize = 48 };
+            var allUsers = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity AllButton"], FontSize = 48 };          
             findUser.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddUserPosition(a));
             allUsers.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddAllUsers());
             userInput.Children.Add(_textForm);
@@ -61,9 +61,9 @@ namespace SemesterWork
                 AutoGenerateColumns = false,
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = "id", Binding = binds[0], MinWidth = 200 }, //TODO localize
-                    new DataGridTextColumn() { Header = "Имя", Binding = binds[1], MinWidth = 750 }, //TODO localize
-                    new DataGridComboBoxColumn() { Header = "Уровень доступа" , TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } }, //TODO localize
+                    new DataGridTextColumn() { Header = LanguageEngine.Language["UserControlServiceActivity ID"], Binding = binds[0], MinWidth = 200 }, 
+                    new DataGridTextColumn() { Header = LanguageEngine.Language["UserControlServiceActivity FullName"], Binding = binds[1], MinWidth = 750 },
+                    new DataGridComboBoxColumn() { Header = LanguageEngine.Language["UserControlServiceActivity AccessLevel"], TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } },
                 }
             };
             foreach (var column in _positions.Columns)
@@ -71,8 +71,8 @@ namespace SemesterWork
             userControls.Children.Add(_positions);
             _positions.MouseDoubleClick += (sender, args) =>
             {
-                if (MessageBox.Show("Вы уверены, что хотите изменить этого пользователя?", //TODO localize 
-                        "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
+                if (MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity ConfirmChangeUser"],
+                        LanguageEngine.Language["UserControlServiceActivity ConfirmChangeUserTitle"], MessageBoxButton.YesNo,
                          MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     new UserChangingActivity(Window, ((sender as DataGrid).SelectedItem as User));
             };
@@ -102,7 +102,7 @@ namespace SemesterWork
             controls.Children.Add(clear);
             Grid.SetColumn(clear, 0);
 
-            var deleteButton = new Button() { Content = "Удалить пользователя", FontSize = 40, Height = 100 }; //TODO localize
+            var deleteButton = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity DeleteUser"], FontSize = 40, Height = 100 };
             deleteButton.Click += (sender, args) =>
             {
                 var selectedIndex = _positions.SelectedIndex;
@@ -114,12 +114,12 @@ namespace SemesterWork
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
 
-            var addNewUser = new Button() { Content = "Новый пользователь", FontSize = 40, Height = 100 }; //TODO localize
+            var addNewUser = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity NewUser"], FontSize = 40, Height = 100 };
             addNewUser.Click += (sender, args) => new NewUserActivity(Window);
             controls.Children.Add(addNewUser);
             Grid.SetColumn(addNewUser, 2);
 
-            Button saveButton = new Button() { Content = "Сохранить", FontSize = 40, Height = 100 }; //TODO localize
+            Button saveButton = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity SaveAll"], FontSize = 40, Height = 100 };
             saveButton.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.SaveUsersPositions());
             controls.Children.Add(saveButton);
             Grid.SetColumn(saveButton, 3);

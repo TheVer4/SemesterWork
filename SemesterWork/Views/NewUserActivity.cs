@@ -31,10 +31,10 @@ namespace SemesterWork.Views
 
             _panel = new StackPanel();
 
-            _apply = new Button() { Content = "Добавить", Height = 50, FontSize = 20 }; //TODO localize
+            _apply = new Button() { Content = LanguageEngine.Language["NewUserActivity Add"], Height = 50, FontSize = 20 };
 
             var name = new StackPanel();
-            var nameTBlock = new TextBlock() { Text = "Full Name", FontSize = 20, Height = 30 }; //TODO localize
+            var nameTBlock = new TextBlock() { Text = LanguageEngine.Language["NewUserActivity FullName"], FontSize = 20, Height = 30 };
             _nameTBox = new TextBox() { FontSize = 20 };
             _nameTBox.TextChanged += (sender, args) => OnSomethingChange(_apply);
             name.Children.Add(nameTBlock);
@@ -42,7 +42,7 @@ namespace SemesterWork.Views
             _panel.Children.Add(name);
 
             var login = new StackPanel();
-            var loginTBlock = new TextBlock() { Text = "Login", FontSize = 20, Height = 30 }; //TODO localize
+            var loginTBlock = new TextBlock() { Text = LanguageEngine.Language["NewUserActivity Login"], FontSize = 20, Height = 30 };
             _loginTBox = new TextBox() { FontSize = 20 };
             _loginTBox.TextChanged += (sender, args) => OnSomethingChange(_apply);
             login.Children.Add(loginTBlock);
@@ -50,7 +50,7 @@ namespace SemesterWork.Views
             _panel.Children.Add(login);
 
             var password = new StackPanel();
-            var passwordTBlock = new TextBlock() { Text = "Password", FontSize = 20, Height = 30 }; //TODO localize
+            var passwordTBlock = new TextBlock() { Text = LanguageEngine.Language["NewUserActivity Password"], FontSize = 20, Height = 30 };
             _passwordPBox = new PasswordBox() { FontSize = 20 };
             _passwordPBox.PasswordChanged += (sender, args) => OnSomethingChange(_apply);
             password.Children.Add(passwordTBlock);
@@ -58,7 +58,7 @@ namespace SemesterWork.Views
             _panel.Children.Add(password);
 
             var rePassword = new StackPanel();
-            var rePasswordTBlock = new TextBlock() { Text = "Confirm the password", FontSize = 20, Height = 30 }; //TODO localize
+            var rePasswordTBlock = new TextBlock() { Text = LanguageEngine.Language["NewUserActivity PasswordConfirm"], FontSize = 20, Height = 30 };
             _rePasswordPBox = new PasswordBox() { FontSize = 20 };
             _rePasswordPBox.PasswordChanged += (sender, args) => OnSomethingChange(_apply);
             rePassword.Children.Add(rePasswordTBlock);
@@ -66,7 +66,7 @@ namespace SemesterWork.Views
             _panel.Children.Add(rePassword);
 
             var accessLevel = new StackPanel();
-            var accessLevelTBlock = new TextBlock() { Text = "Уровень доступа", FontSize = 20 }; //TODO localize
+            var accessLevelTBlock = new TextBlock() { Text = LanguageEngine.Language["NewUserActivity AccessLevel"], FontSize = 20 };
             _accessLevelSelector = new ComboBox() { FontSize = 20 };
             _accessLevelSelector.SelectedIndex = 0;
             _accessLevelSelector.ItemsSource = new List<string> { "Normal", "Manager", "Admin" }; //TODO localize
@@ -80,10 +80,10 @@ namespace SemesterWork.Views
                 _accessLevelSelector.SelectedItem.ToString());
             _panel.Children.Add(_apply);
 
-            _cancel = new Button() { Content = "Отмена", Height = 50, FontSize = 20 }; //TODO localize
+            _cancel = new Button() { Content = LanguageEngine.Language["NewUserActivity Cancel"], Height = 50, FontSize = 20 };
             _cancel.Click += (sender, args) =>
             {
-                if (MessageBox.Show("Вы уверены, что хотите выйти?", "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
+                if (MessageBox.Show(LanguageEngine.Language["NewUserActivity ConfirmExit"], LanguageEngine.Language["NewUserActivity ConfirmExitTitle"], MessageBoxButton.YesNo,
                         MessageBoxImage.Question) == MessageBoxResult.Yes)
                     new UserControlServiceActivity(Window);
             };
@@ -106,8 +106,8 @@ namespace SemesterWork.Views
                 else
                 {
                     _loginTBox.Text = "";
-                    MessageBox.Show($"Пользователь с таким логином уже существует, попробуйте {newUser.Id}{new Random().Next(0, 1000)} или _{newUser.Id}_", //TODO localize
-                        "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
+                    MessageBox.Show(String.Format(LanguageEngine.Language["NewUserActivity UserAlreadyExists"], $"{newUser.Id}{new Random().Next(0, 1000)}", $"_{newUser.Id}_"), //TODO localize
+                        LanguageEngine.Language["NewUserActivity UserAlreadyExistsTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             };
             worker.RunWorkerAsync();

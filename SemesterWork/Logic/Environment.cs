@@ -17,7 +17,7 @@
 
         public static void Destroy()
         {
-            BarcodeReader.Dispose();
+            BarcodeReader?.Dispose();
         }
     }
 }

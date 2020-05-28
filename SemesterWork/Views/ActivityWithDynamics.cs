@@ -35,7 +35,7 @@ namespace SemesterWork
 
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
             TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock admin = new TextBlock() { Text = $"Кассир: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //TODO localize
+            TextBlock admin = new TextBlock() { Text = $"{LanguageEngine.Language["ActivityWithDynamics Cashier"]}: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //TODO динамичные роли
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);

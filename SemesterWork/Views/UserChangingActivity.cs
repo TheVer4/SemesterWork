@@ -13,10 +13,12 @@ namespace SemesterWork.Views
     {
         public UserChangingActivity(MainWindow window, User user) : base(window)
         {
+            //TODO Kick if not admin
+            //TODO Reload current user's data
             _panel.Children.Remove(_apply);
             _panel.Children.Remove(_cancel);
 
-            _apply = new Button() { Content = "Сохранить", Height = 50, FontSize = 20 }; //TODO localize
+            _apply = new Button() { Content = LanguageEngine.Language["UserChangingActivity SaveButton"], Height = 50, FontSize = 20 };
             _loginTBox.Text = user.Id;
             _loginTBox.IsEnabled = false;
             _nameTBox.Text = user.Name;

@@ -118,8 +118,8 @@ namespace SemesterWork
             var info = new List<List<string>>();
             var availablePosition = ItemsPositions.Where(x => (x as User).Name == infoStr || (x as User).Id == infoStr);
             if (availablePosition.Any())
-                MessageBox.Show("Пользоавтель с такими данными уже есть в таблице", //TODO localize
-                    "Внимание", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
+                MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity UserAlreadyInDB"], 
+                    LanguageEngine.Language["UserControlServiceActivity Attention"], MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
                 var accessLevelUsers = UserDBController.FindByAccessLevel(infoStr);
@@ -141,8 +141,8 @@ namespace SemesterWork
                             info.Add(idUser);
                         else
                         {
-                            MessageBox.Show("Пользователь с такими данными не найден", //TODO localize
-                                "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
+                            MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity UserNotFound"],
+                                LanguageEngine.Language["UserControlServiceActivity UserNotFoundTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
                     }
@@ -234,14 +234,14 @@ namespace SemesterWork
         public static void DeleteUserFromDB(int selectedIndex)
         {
             if (ItemsPositions.Count == 0)
-                MessageBox.Show("Нечего удалять", //TODO localize
-                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
+                MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity NothingToRemove"],
+                    LanguageEngine.Language["UserControlServiceActivity NothingToRemoveTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             else if (ItemsPositions.Select(x => (x as User).Id).Contains(CurrentUser.Id))
-                MessageBox.Show("Вы не можете удалить себя.", //TODO localize
-                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
+                MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity SelfRemoveDisallowed"],
+                    LanguageEngine.Language["UserControlServiceActivity SelfRemoveDisallowedTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             else if (selectedIndex == -1)
             {
-                if (MessageBox.Show("Вы уверены, что хотите удалить все эти позиции?", //TODO localize
+                if (MessageBox.Show("Вы уверены, что хотите удалить все эти позиции из базы?", //TODO localize
                         "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
                         MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
@@ -252,8 +252,8 @@ namespace SemesterWork
             }
             else
             {
-                if (MessageBox.Show("Вы уверены, что хотите удалить эту позицию?", //TODO localize 
-                        "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
+                if (MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity ConfirmUserRemoving"],
+                        LanguageEngine.Language["UserControlServiceActivity ConfirmUserRemovingTitle"], MessageBoxButton.YesNo,
                          MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     var id = (ItemsPositions[selectedIndex] as User).Id;
