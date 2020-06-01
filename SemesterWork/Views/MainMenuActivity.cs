@@ -17,8 +17,8 @@ namespace SemesterWork
             StackPanel panel = new StackPanel();
             Button fastInvoice = new Button() { Content = LanguageEngine.Language["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
             Button warehouse = new Button() { Content = LanguageEngine.Language["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
-            Button statistics = new Button() { Content = "Статистика", Height = 50, FontSize = 20 }; //TODO localize
-            Button userControlService = new Button() { Content = "Менеджер аккаунтов", Height = 50, FontSize = 20 }; //TODO localize
+            Button statistics = new Button() { Content = LanguageEngine.Language["MainMenuActivity Statistics"], Height = 50, FontSize = 20 };
+            Button userControlService = new Button() { Content = LanguageEngine.Language["MainMenuActivity AccountManager"], Height = 50, FontSize = 20 };
             Button settings = new Button() { Content = LanguageEngine.Language["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
             Button logout = new Button() { Content = LanguageEngine.Language["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
 

@@ -13,7 +13,7 @@ namespace SemesterWork
     {
         private TextBlock _cashLabel, _cashlessLabel, _saleLabel, _changeLabel;
         private Button _clearOff;
-        private double _cash, _cashless, _rest;
+        private double _cash, _cashless, _rest, _change;
         public PaymentActivity(MainWindow window) : base(window)
         {
 
@@ -26,7 +26,7 @@ namespace SemesterWork
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
 
-            TextBlock fullTotal = new TextBlock() { Text = $"{"Сумма к оплате"}: {finalTotal}", FontSize = 48}; //TODO localize
+            TextBlock fullTotal = new TextBlock() { Text = $"{LanguageEngine.Language["PaymentActivity FullToPay"]}: {finalTotal}", FontSize = 48};
             invoiceControls.Children.Add(fullTotal);
             
             _cashLabel =  new TextBlock() { FontSize = 36};
@@ -131,7 +131,7 @@ namespace SemesterWork
 
             controls.Children.Add(keyboard);
             
-            Button addCash = new Button() { Content = "Наличные", FontSize = 40, Height = 100 };
+            Button addCash = new Button() { Content = LanguageEngine.Language["PaymentActivity CashButton"], FontSize = 40, Height = 100 };
             addCash.Click += (sender, args) =>
             {
                 if (_number != null && _number.Text.Length != 0)
@@ -139,7 +139,7 @@ namespace SemesterWork
                 else
                     ChangeTotalSummary(cash: _rest);
             };
-            Button addCashless = new Button() { Content = "Безнал", FontSize = 40, Height = 100 };
+            Button addCashless = new Button() { Content = LanguageEngine.Language["PaymentActivity CashlessButton"], FontSize = 40, Height = 100 };
             addCashless.Click += (sender, args) =>
             {
                 if (_number != null && _number.Text.Length != 0)
@@ -147,7 +147,7 @@ namespace SemesterWork
                 else
                     ChangeTotalSummary(cashless: _rest);
             };
-            _clearOff = new Button() { Content = "Расчёт", FontSize = 40, Height = 100, IsEnabled = false }; //TODO localize
+            _clearOff = new Button() { Content = LanguageEngine.Language["PaymentActivity ClearOffButton"], FontSize = 40, Height = 100, IsEnabled = false };
             _clearOff.Click += (sender, args) => PaymentOnClick();
             _total.FontSize = 40;
             _total.Margin = new Thickness(15, 20, 0, 0);
@@ -167,7 +167,7 @@ namespace SemesterWork
             if (_number != null && _number.Text.Length != 0)
                 _number.Text = "";
             else
-                if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
+                if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo, //TODO Проведите картой
                         MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                 {
                     EventHandler.ItemsPositions.Clear();
@@ -178,30 +178,30 @@ namespace SemesterWork
         
         private void PaymentOnClick()
         {
-            Invoice invoice = new Invoice(_cash, _cashless, 0, 0, EventHandler.ItemsPositions.OfType<CheckLine>().ToList(), EventHandler.CurrentUser.Name);
+            Invoice invoice = new Invoice(_cash, _cashless, 0, _change, EventHandler.ItemsPositions.OfType<CheckLine>().ToList(), EventHandler.CurrentUser.Name);
             var worker = new BackgroundWorker();
             worker.DoWork += (sender, args) => EventHandler.ProceedPayment(invoice);
             worker.RunWorkerCompleted += (sender, args) => new FastInvoiceActivity(Window);
             worker.RunWorkerAsync();
         }
 
-        public void ChangeTotalSummary(double cash = -1, double cashless = -1, double sale = -1) //TODO Localize
+        public void ChangeTotalSummary(double cash = -1, double cashless = -1, double sale = -1)
         {
             if (_number != null && _number.Text.Length != 0)
                 _number.Text = "";
             
             if (cash != -1) _cash += cash;
             if (cashless != -1) _cashless += cashless;
-            double change = finalTotal - _cash - _cashless;
-            _rest = change > 0 ? finalTotal - _cash - _cashless : 0;
+            _change = finalTotal - _cash - _cashless;
+            _rest = _change > 0 ? finalTotal - _cash - _cashless : 0;
 
             if (_rest == 0) _clearOff.IsEnabled = true;
             
-            _cashLabel.Text = $" {"Наличными"}: {_cash}";
-            _cashlessLabel.Text = $" {"Безналичными"}: {_cashless}";
-            if(sale != -1) _saleLabel.Text = $" {"Скидка"}: {sale}";
-            _changeLabel.Text = $" {"Сдача"}: {(change > 0 ? 0 : Math.Abs(change))}";
-            _total.Text = $"{"Остаток"}: {_rest}";
+            _cashLabel.Text = $" {LanguageEngine.Language["PaymentActivity CashLabel"]}: {_cash}";
+            _cashlessLabel.Text = $" {LanguageEngine.Language["PaymentActivity CashlessLabel"]}: {_cashless}";
+            if(sale != -1) _saleLabel.Text = $" {LanguageEngine.Language["PaymentActivity SaleLabel"]}: {sale}";
+            _changeLabel.Text = $" {LanguageEngine.Language["PaymentActivity ChangeLabel"]}: {(_change > 0 ? 0 : Math.Abs(_change))}";
+            _total.Text = $"{LanguageEngine.Language["PaymentActivity RestLabel"]}: {_rest}";
         }
         
     }
