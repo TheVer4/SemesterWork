@@ -4,11 +4,6 @@ namespace SemesterWork
 {
     static class UserDBController
     {
-        public static List<string> FindByName(string name)
-        {
-            return DBController.SQLFindUnique("Users", "Name", name);
-        }
-
         public static List<string> FindById(string id)
         {
             return DBController.SQLFindUnique("Users", "id", id);
@@ -23,6 +18,14 @@ namespace SemesterWork
         {
             return DBController.SQLFind("Users", "AccessLevel", accessLevel);
         }
+        public static List<List<string>> FindLike(string infoStr)
+        {
+            return DBController.SQLNonVoidCommand(
+                $"SELECT * FROM Users " +
+                $"WHERE id LIKE '%{infoStr}%' " +
+                $"OR Name LIKE '%{infoStr}%' " +
+                $"OR AccessLevel LIKE '%{infoStr}%'");
+        }
 
         public static void Add(string id, string name, string accessLevel, string hash)
         {
@@ -34,7 +37,7 @@ namespace SemesterWork
 
         public static void Update(User data, string hash)
         {
-            DBController.SQLCommand(
+            DBController.SQLVoidCommand(
                 $"UPDATE Users SET " +
                 $"Name = '{data.Name}', " +
                 $"AccessLevel = '{data.AccessLevel}', " +
@@ -44,7 +47,7 @@ namespace SemesterWork
 
         public static void Update(User data)
         {
-            DBController.SQLCommand(
+            DBController.SQLVoidCommand(
                 $"UPDATE Users SET " +
                 $"Name = '{data.Name}', " +
                 $"AccessLevel = '{data.AccessLevel}' " +

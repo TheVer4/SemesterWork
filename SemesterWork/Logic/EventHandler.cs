@@ -94,7 +94,8 @@ namespace SemesterWork
                     else if (MessageBox.Show(String.Format(LanguageEngine.Language["WareHouseActivity ContainsQuestion"], code),
                             LanguageEngine.Language["WareHouseActivity ContainsQuestionTitle"], MessageBoxButton.YesNo,
                             MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        ItemsPositions.Add(new DBProductData(new ProductData(info), true));
+                        if(!ItemsPositions.Where(x => (x as DBProductData).Data.EAN13 == code).Any())
+                            ItemsPositions.Add(new DBProductData(new ProductData(info), true));
                 }
             }
             else
@@ -102,55 +103,25 @@ namespace SemesterWork
                     LanguageEngine.Language["WareHouseActivity EAN13FormatErrorTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public static void AddAllUsers()
-        {
-            var info = new List<List<string>>();
-            info = info.Concat(UserDBController.FindByAccessLevel("Admin")).ToList();
-            info = info.Concat(UserDBController.FindByAccessLevel("Manager")).ToList();
-            info = info.Concat(UserDBController.FindByAccessLevel("Normal")).ToList();
-            ItemsPositions.Clear();
-            foreach (var user in info)
-                ItemsPositions.Add(new User(user));
-        }
-
         public static void AddUserPosition(string infoStr)
         {
-            var info = new List<List<string>>();
-            var availablePosition = ItemsPositions.Where(x => (x as User).Name == infoStr || (x as User).Id == infoStr);
-            if (availablePosition.Any())
-                MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity UserAlreadyInDB"], 
-                    LanguageEngine.Language["UserControlServiceActivity Attention"], MessageBoxButton.OK, MessageBoxImage.Error);
-            else
-            {
-                var accessLevelUsers = UserDBController.FindByAccessLevel(infoStr);
-                if (accessLevelUsers.Any())
-                    info = accessLevelUsers
-                        .Where(x => !ItemsPositions
-                            .Select(x => (x as User).Id)
-                            .Contains(new User(x).Id))
-                        .ToList();
-                else
+            var usersInfo = UserDBController.FindLike(infoStr);
+            if (usersInfo.Any())
+                foreach (var userInfo in usersInfo)
                 {
-                    var nameUser = UserDBController.FindByName(infoStr) ?? new List<string>();
-                    if (nameUser.Any())
-                        info.Add(nameUser);
-                    else
-                    {
-                        var idUser = UserDBController.FindById(infoStr) ?? new List<string>();
-                        if (idUser.Any())
-                            info.Add(idUser);
-                        else
-                        {
-                            MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity UserNotFound"],
-                                LanguageEngine.Language["UserControlServiceActivity UserNotFoundTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                    }
-
+                    var currentUser = new User(userInfo);
+                    if (!(ItemsPositions
+                            .Select(x => (x as User))
+                            .Where(x => x.Name == currentUser.Name || x.Id == currentUser.Id)
+                            .Any()))
+                        ItemsPositions.Add(currentUser);
+                    else if (usersInfo.Count == 1)
+                        MessageBox.Show("Пользоавтель с такими данными уже есть в таблице", //TODO localize
+                            "Внимание", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
                 }
-            }                        
-            foreach (var user in info)                
-                ItemsPositions.Add(new User(user));
+            else
+                MessageBox.Show("Пользователь с такими данными не найден", //TODO localize
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize                  
         }
 
         public static bool AddNewUser(User newUser, string password)
