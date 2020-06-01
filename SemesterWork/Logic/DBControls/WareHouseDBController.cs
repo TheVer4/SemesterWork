@@ -35,7 +35,7 @@ namespace SemesterWork
 
         public static void Update(ProductData data)
         {
-            DBController.SQLCommand(
+            DBController.SQLVoidCommand(
                 $"UPDATE WareHouse SET " +
                 $"Name = '{data.Name}', " +
                 $"Price = '{data.Price}', " +

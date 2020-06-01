@@ -23,8 +23,7 @@ namespace SemesterWork
 
             Grid userInput = new Grid();
             userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(7.5, GridUnitType.Star) });
-            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
-            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2.5, GridUnitType.Star) });
+            userInput.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
 
             _textForm = new TextBox() { FontSize = 48 };
             _textForm.KeyDown += (sender, args) =>
@@ -36,13 +35,10 @@ namespace SemesterWork
             var findUser = new Button() { Content = "Найти", FontSize = 48 }; //TODO localize
             var allUsers = new Button() { Content = "Все", FontSize = 48 }; //TODO localize            
             findUser.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddUserPosition(a));
-            allUsers.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddAllUsers());
             userInput.Children.Add(_textForm);
             Grid.SetColumn(userInput, 0);
             userInput.Children.Add(findUser);
             Grid.SetColumn(findUser, 1);
-            userInput.Children.Add(allUsers);
-            Grid.SetColumn(allUsers, 2);
             userControls.Children.Add(userInput);
 
             Binding[] binds = 
