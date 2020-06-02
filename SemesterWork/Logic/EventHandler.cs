@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -6,8 +7,10 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
 namespace SemesterWork
@@ -329,6 +332,62 @@ namespace SemesterWork
         {
             _timer?.Stop();    
             Environment.BarcodeReader?.Dispose();    
-        }  
+        }
+
+        public static void ExportOnClick(object sender, RoutedEventArgs e)
+        {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+ 
+            saveFileDialog1.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.FileName = $"Export {DateTime.Now.ToString().Replace(':', '-')}";
+            saveFileDialog1.RestoreDirectory = true ;
+ 
+            if(saveFileDialog1.ShowDialog() == true)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("Actual from;123;to;123");
+                    sb.AppendLine("Cashier;Invoices;Average;Total");
+                    foreach (var pos in ItemsPositions.OfType<EmployeeStatistic>())
+                        sb.AppendLine($"{pos.CashierName};{pos.Invoices};{pos.Average};{pos.Total}");
+                    byte[] data = Encoding.Default.GetBytes(sb.ToString());
+                    myStream.Write(data, 0, data.Length);
+                    myStream.Close();
+                }
+                //TODO localize
+            }
+        }
+
+        public static List<string> UsersList()
+        {
+            return DBController.SQLFindDistinct("documents", "CashierName");
+        }
+
+        private static void FillEmployeeStatistic(string cashierName, long fromTime, long toTime)
+        {
+            List<Invoice> data = new List<Invoice>();
+            var info = DBController.SQLNonVoidCommand(
+                $"SELECT Data FROM documents WHERE CashierName='{cashierName}' AND DateTime BETWEEN {fromTime} AND {toTime}");
+            var jsons = info.Select(x => x.First()).ToList();
+            foreach (var json in jsons)
+                data.Add(JsonConvert.DeserializeObject<Invoice>(json));
+            if(data.Count != 0) ItemsPositions.Add(new EmployeeStatistic(data));
+        }
+    
+        public static void AddStatisticsPositions(string name, long fromTime, long toTime)
+        { 
+            ItemsPositions.Clear();
+            if (name == "All")
+            {
+                foreach (var user in UsersList())
+                    FillEmployeeStatistic(user, fromTime, toTime);
+                ItemsPositions.Add(new EmployeeStatistic("Total", ItemsPositions.Select(x => ((EmployeeStatistic) x).Invoices).Sum(), ItemsPositions.Select(x => ((EmployeeStatistic) x).Total).Sum()));
+            }
+            else
+                FillEmployeeStatistic(name, fromTime, toTime);
+        }
     }
 }

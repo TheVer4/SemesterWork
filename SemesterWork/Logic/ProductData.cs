@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace SemesterWork
 {
@@ -11,15 +13,20 @@ namespace SemesterWork
         public string Units { get; set; }
         public string ShortName { get; set; }
 
-        public ProductData(List<string> data)
+        [JsonConstructor]
+        public ProductData(string EAN13, string name, double price, double amount, string units, string shortName) 
+            : this(EAN13)
         {
-            EAN13 = data[0];
-            Name = data[1];
-            Price = double.Parse(data[2]);
-            Amount = double.Parse(data[3]);
-            Units = data[4];
-            ShortName = data[5];
+            Name =  name;
+            Price = price;
+            Amount =  amount;
+            Units =  units;
+            ShortName =  shortName;
         }
+        
+        public ProductData(List<string> data) 
+            : this(data[0], data[1], double.Parse(data[2]), double.Parse(data[3]), data[4], data[5])
+        { }
 
         public ProductData(string code)
         {

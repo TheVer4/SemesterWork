@@ -2,7 +2,7 @@
 {
     public class CheckLine
     {
-        public ProductData Data { get; private set; }
+        public ProductData Data { get; set; }
 
         private double _amount;
         public double Amount

@@ -32,7 +32,7 @@ namespace SemesterWork
                 .Select(x => x.First())
                 .ToList();
         }
-
+        
         public static List<List<string>> SQLFindLike(string table, string column, object value)
         {
             return SQLNonVoidCommand(
@@ -85,7 +85,7 @@ namespace SemesterWork
             {
                 var list = new List<string>();
                 for (var i = 0; i < reader.FieldCount; i++)
-                    list.Add(reader.GetString(i));
+                    list.Add(reader.GetValue(i).ToString());
                 result.Add(list);
             }
             return result;
