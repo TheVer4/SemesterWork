@@ -1,15 +1,10 @@
-﻿using System;
-
-namespace SemesterWork
+﻿namespace SemesterWork
 {
     public static class Variables
     {
         public static string MachineName { get => System.Environment.MachineName; }
         public static string PrinterPath { get; set; } = @"\\WINDOWS\POS";
-
-        private static string _welcomeMotd = "!НЕ ЯВЛЯЕТСЯ ДОКУМЕНТОМ!";
-        public static string WelcomeMotd { get => _welcomeMotd; set => _welcomeMotd = value; }
-
+        public static string WelcomeMotd { get; set; } = "!НЕ ЯВЛЯЕТСЯ ДОКУМЕНТОМ!";
         public static string ProgramName { get => "SemesterWork"; }
         public static string BarcodeScannerPort { get; set; } = "COM4";
         public static string InstitutionName { get; set; }

@@ -34,8 +34,15 @@ namespace SemesterWork
             topBar.ColumnDefinitions.Add(new ColumnDefinition());
 
             TextBlock programName = new TextBlock() { Text = $" {Variables.ProgramName}", FontSize = 20 };
-            TextBlock dateTime = new TextBlock() { Text = DateTime.Now.ToString(CultureInfo.CurrentCulture), TextAlignment = TextAlignment.Center, FontSize = 20 };
-            TextBlock admin = new TextBlock() { Text = $"{LanguageEngine.Language["ActivityWithDynamics Cashier"]}: {EventHandler.CurrentUser.Name} ", TextAlignment = TextAlignment.Right, FontSize = 20 }; //TODO динамичные роли
+            TextBlock dateTime = new TextBlock() 
+            { 
+                Text = DateTime.Now.ToString(CultureInfo.CurrentCulture),
+                TextAlignment = TextAlignment.Center, FontSize = 20 };
+            TextBlock admin = new TextBlock() 
+            { 
+                Text = $"{LanguageEngine.Language["ActivityWithDynamics Cashier"]}: {EventHandler.CurrentUser.Name} ",
+                TextAlignment = TextAlignment.Right, FontSize = 20 
+            };
             topBar.Children.Add(programName);
             Grid.SetColumn(programName, 0);
             topBar.Children.Add(dateTime);
@@ -68,13 +75,15 @@ namespace SemesterWork
                 new MainMenuActivity(Window);
             else if (_positions.SelectedIndex == -1)
             {
-                if (MessageBox.Show(LanguageEngine.Language["WareHouseActivity DeleteConfirm"], LanguageEngine.Language["WareHouseActivity DeleteConfirmTitle"], MessageBoxButton.YesNo,
+                if (MessageBox.Show(LanguageEngine.Language["WareHouseActivity DeleteConfirm"],
+                    LanguageEngine.Language["WareHouseActivity DeleteConfirmTitle"], MessageBoxButton.YesNo,
                     MessageBoxImage.Question) == MessageBoxResult.Yes)
                     EventHandler.ItemsPositions.Clear();
             }
             else
             {
-                if (MessageBox.Show(LanguageEngine.Language["WareHouseActivity SingleDeleteConfirm"], LanguageEngine.Language["WareHouseActivity SingleDeleteConfirmTitle"], MessageBoxButton.YesNo,
+                if (MessageBox.Show(LanguageEngine.Language["WareHouseActivity SingleDeleteConfirm"],
+                    LanguageEngine.Language["WareHouseActivity SingleDeleteConfirmTitle"], MessageBoxButton.YesNo,
                     MessageBoxImage.Question) == MessageBoxResult.Yes)
                     EventHandler.ItemsPositions.RemoveAt(_positions.SelectedIndex);
             }
@@ -84,7 +93,7 @@ namespace SemesterWork
         protected void ThreadedAction(Action<string, string> action)
         {
             var worker = new BackgroundWorker();
-            string textFormText = _textForm.Text, numberText = _number?.Text;
+            string textFormText = _textForm?.Text, numberText = _number?.Text;
             worker.DoWork += (sender, args) => action(textFormText, numberText);
             worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
             worker.RunWorkerAsync();
@@ -107,7 +116,10 @@ namespace SemesterWork
         protected BitmapSource GetBitmapSource(string path)
         {
             Stream imageStreamSource = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            PngBitmapDecoder decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+            PngBitmapDecoder decoder = new PngBitmapDecoder(
+                imageStreamSource,
+                BitmapCreateOptions.PreservePixelFormat,
+                BitmapCacheOption.Default);
             return decoder.Frames[0];
         }
     }

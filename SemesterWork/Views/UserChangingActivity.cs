@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,8 +8,6 @@ namespace SemesterWork.Views
     {
         public UserChangingActivity(MainWindow window, User user) : base(window)
         {
-            //TODO Kick if not admin
-            //TODO Reload current user's data
             _panel.Children.Remove(_apply);
             _panel.Children.Remove(_cancel);
 
@@ -23,6 +16,13 @@ namespace SemesterWork.Views
             _loginTBox.IsEnabled = false;
             _nameTBox.Text = user.Name;
             _accessLevelSelector.SelectedItem = user.AccessLevel;
+            _accessLevelSelector.SelectionChanged += (sender, args) =>
+            {
+                if (user.Id == EventHandler.CurrentUser.Id && (sender as ComboBox).SelectedItem.ToString() != "Admin")
+                    MessageBox.Show(LanguageEngine.Language["UserChangingActivity ChangingAccessLevel"],
+                        LanguageEngine.Language["UserChangingActivity ChangingAccessLevelTitle"],
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+            };
             _apply.Click += (sender, args) => SaveUserChanges(
                 new User(user.Id, _nameTBox.Text, _accessLevelSelector.SelectedItem.ToString()),
                 _passwordPBox.Password);
@@ -35,7 +35,19 @@ namespace SemesterWork.Views
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (sender, args) => EventHandler.UpdateUser(user, password);
-            worker.RunWorkerCompleted += (sender, args) => new UserControlServiceActivity(Window);
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (EventHandler.CurrentUser.AccessLevel == "Admin")
+                    new UserControlServiceActivity(Window);
+                else
+                {
+                    EventHandler.ItemsPositions.Clear();
+                    new MainMenuActivity(Window);
+                    MessageBox.Show(LanguageEngine.Language["UserChangingActivity Kicked"],
+                        LanguageEngine.Language["UserChangingActivity KickedTitle"],
+                        MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+            };
             worker.RunWorkerAsync();
         }
     }

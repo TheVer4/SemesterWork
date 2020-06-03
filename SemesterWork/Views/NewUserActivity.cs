@@ -58,7 +58,8 @@ namespace SemesterWork.Views
             _panel.Children.Add(password);
 
             var rePassword = new StackPanel();
-            var rePasswordTBlock = new TextBlock() { Text = LanguageEngine.Language["NewUserActivity PasswordConfirm"], FontSize = 20, Height = 30 };
+            var rePasswordTBlock = new TextBlock() 
+                { Text = LanguageEngine.Language["NewUserActivity PasswordConfirm"], FontSize = 20, Height = 30 };
             _rePasswordPBox = new PasswordBox() { FontSize = 20 };
             _rePasswordPBox.PasswordChanged += (sender, args) => OnSomethingChange(_apply);
             rePassword.Children.Add(rePasswordTBlock);
@@ -69,7 +70,7 @@ namespace SemesterWork.Views
             var accessLevelTBlock = new TextBlock() { Text = LanguageEngine.Language["NewUserActivity AccessLevel"], FontSize = 20 };
             _accessLevelSelector = new ComboBox() { FontSize = 20 };
             _accessLevelSelector.SelectedIndex = 0;
-            _accessLevelSelector.ItemsSource = new List<string> { "Normal", "Manager", "Admin" }; //TODO localize
+            _accessLevelSelector.ItemsSource = new List<string> { "Normal", "Manager", "Admin" };
             accessLevel.Children.Add(accessLevelTBlock);
             accessLevel.Children.Add(_accessLevelSelector);
             _panel.Children.Add(accessLevel);
@@ -83,7 +84,8 @@ namespace SemesterWork.Views
             _cancel = new Button() { Content = LanguageEngine.Language["NewUserActivity Cancel"], Height = 50, FontSize = 20 };
             _cancel.Click += (sender, args) =>
             {
-                if (MessageBox.Show(LanguageEngine.Language["NewUserActivity ConfirmExit"], LanguageEngine.Language["NewUserActivity ConfirmExitTitle"], MessageBoxButton.YesNo,
+                if (MessageBox.Show(LanguageEngine.Language["NewUserActivity ConfirmExit"],
+                        LanguageEngine.Language["NewUserActivity ConfirmExitTitle"], MessageBoxButton.YesNo,
                         MessageBoxImage.Question) == MessageBoxResult.Yes)
                     new UserControlServiceActivity(Window);
             };
@@ -94,7 +96,7 @@ namespace SemesterWork.Views
             grid.Children.Add(_panel);
         }
 
-        protected void AddNewUser(User newUser, string password)
+        private void AddNewUser(User newUser, string password)
         {
             var worker = new BackgroundWorker();
             var isInputOk = false;
@@ -106,7 +108,8 @@ namespace SemesterWork.Views
                 else
                 {
                     _loginTBox.Text = "";
-                    MessageBox.Show(String.Format(LanguageEngine.Language["NewUserActivity UserAlreadyExists"], $"{newUser.Id}{new Random().Next(0, 1000)}", $"_{newUser.Id}_"), //TODO localize
+                    MessageBox.Show(String.Format(LanguageEngine.Language["NewUserActivity UserAlreadyExists"],
+                        $"{newUser.Id}{new Random().Next(0, 1000)}", $"_{newUser.Id}_"),
                         LanguageEngine.Language["NewUserActivity UserAlreadyExistsTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             };

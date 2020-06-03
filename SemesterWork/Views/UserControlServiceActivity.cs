@@ -29,12 +29,12 @@ namespace SemesterWork
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    ThreadedAction((a, b) => EventHandler.AddUserPosition(a));
+                    ThreadedAction((textFormText, b) => EventHandler.AddUserPosition(textFormText));
             };
 
             var findUser = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity SearchButton"], FontSize = 48 };
             var allUsers = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity AllButton"], FontSize = 48 };          
-            findUser.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddUserPosition(a));
+            findUser.Click += (sender, args) => ThreadedAction((textFromText, b) => EventHandler.AddUserPosition(textFromText));
             userInput.Children.Add(_textForm);
             Grid.SetColumn(userInput, 0);
             userInput.Children.Add(findUser);
@@ -57,9 +57,16 @@ namespace SemesterWork
                 AutoGenerateColumns = false,
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["UserControlServiceActivity ID"], Binding = binds[0], MinWidth = 200 }, 
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["UserControlServiceActivity FullName"], Binding = binds[1], MinWidth = 750 },
-                    new DataGridComboBoxColumn() { Header = LanguageEngine.Language["UserControlServiceActivity AccessLevel"], TextBinding = binds[2], MinWidth = 500, ItemsSource = new List<string> { "Normal", "Manager", "Admin" } },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["UserControlServiceActivity ID"], Binding = binds[0], MinWidth = 200 }, 
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["UserControlServiceActivity FullName"], Binding = binds[1], MinWidth = 750 },
+                    new DataGridComboBoxColumn() 
+                    {
+                        Header = LanguageEngine.Language["UserControlServiceActivity AccessLevel"], 
+                        TextBinding = binds[2], MinWidth = 500,
+                        ItemsSource = new List<string> { "Normal", "Manager", "Admin" } 
+                    }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -67,10 +74,13 @@ namespace SemesterWork
             userControls.Children.Add(_positions);
             _positions.MouseDoubleClick += (sender, args) =>
             {
-                if (MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity ConfirmChangeUser"],
-                        LanguageEngine.Language["UserControlServiceActivity ConfirmChangeUserTitle"], MessageBoxButton.YesNo,
-                         MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                    new UserChangingActivity(Window, ((sender as DataGrid).SelectedItem as User));
+                if (_positions.SelectedIndex != -1)
+                {
+                    if (MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity ConfirmChangeUser"],
+                            LanguageEngine.Language["UserControlServiceActivity ConfirmChangeUserTitle"], MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        new UserChangingActivity(Window, ((sender as DataGrid).SelectedItem as User));
+                }
             };
             Grid.SetRow(_positions, 1);
 
@@ -98,24 +108,24 @@ namespace SemesterWork
             controls.Children.Add(clear);
             Grid.SetColumn(clear, 0);
 
-            var deleteButton = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity DeleteUser"], FontSize = 40, Height = 100 };
+            var deleteButton = new Button()
+                { Content = LanguageEngine.Language["UserControlServiceActivity DeleteUser"], FontSize = 40, Height = 100 };
             deleteButton.Click += (sender, args) =>
             {
                 var selectedIndex = _positions.SelectedIndex;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (sender, args) => EventHandler.DeleteUserFromDB(selectedIndex);
-                worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
-                worker.RunWorkerAsync();
+                ThreadedAction((a, b) => EventHandler.DeleteUserFromDB(selectedIndex));
             };
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
 
-            var addNewUser = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity NewUser"], FontSize = 40, Height = 100 };
+            var addNewUser = new Button()
+                { Content = LanguageEngine.Language["UserControlServiceActivity NewUser"], FontSize = 40, Height = 100 };
             addNewUser.Click += (sender, args) => new NewUserActivity(Window);
             controls.Children.Add(addNewUser);
             Grid.SetColumn(addNewUser, 2);
 
-            Button saveButton = new Button() { Content = LanguageEngine.Language["UserControlServiceActivity SaveAll"], FontSize = 40, Height = 100 };
+            Button saveButton = new Button() 
+                { Content = LanguageEngine.Language["UserControlServiceActivity SaveAll"], FontSize = 40, Height = 100 };
             saveButton.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.SaveUsersPositions());
             controls.Children.Add(saveButton);
             Grid.SetColumn(saveButton, 3);

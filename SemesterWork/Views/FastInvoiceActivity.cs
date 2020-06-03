@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -64,11 +62,16 @@ namespace SemesterWork
                 AutoGenerateColumns = false,
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Position"], Binding = binds[0], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Count"], Binding = binds[2] },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Units"], Binding = binds[3] },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Position"], Binding = binds[0], MinWidth = 500 },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Count"], Binding = binds[2] },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Units"], Binding = binds[3] },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -126,17 +129,15 @@ namespace SemesterWork
             Grid.SetRow(clear, 3);
 
             controls.Children.Add(keyboard);
-            Button payment = new Button() { Content = LanguageEngine.Language["FastInvoiceActivity Payment"], FontSize = 40, Height = 100 };
+            Button payment = new Button() 
+                { Content = LanguageEngine.Language["FastInvoiceActivity Payment"], FontSize = 40, Height = 100 };
             payment.Click += (sender, args) => PaymentOnClick();
-            Button amount = new Button() { Content = LanguageEngine.Language["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
+            Button amount = new Button() 
+                { Content = LanguageEngine.Language["FastInvoiceActivity Amount"], FontSize = 40, Height = 100 };
             amount.Click += (sender, args) =>
             {
-                var numberText = _number.Text;
                 var selectedIndex = _positions.SelectedIndex;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (sender, args) => EventHandler.AmountOnClick(numberText, selectedIndex);
-                worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
-                worker.RunWorkerAsync();
+                ThreadedAction((a, numberText) => EventHandler.AmountOnClick(numberText, selectedIndex));
             };
             _total = new TextBlock();
             _total.Text = $"{LanguageEngine.Language["FastInvoiceActivity Total"]}: 0";
@@ -157,7 +158,6 @@ namespace SemesterWork
         {
             EventHandler.StopScannerReceiver();
             new PaymentActivity(Window);
-            //TODO проверка на наличие принтера (чтобы позиции не удалялись, если принтера нет)
         }
     }
 }

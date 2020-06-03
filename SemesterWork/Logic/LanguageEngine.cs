@@ -145,25 +145,55 @@ namespace SemesterWork
         <string name='PaymentActivity SaleLabel'>Sale</string>
         <string name='PaymentActivity ChangeLabel'>Change</string>
         <string name='PaymentActivity RestLabel'>Rest</string>
-        <string name='PaymentActivity RestLabel'>Rest</string>
         <string name='PaymentActivity CashButton'>Cash</string>
         <string name='PaymentActivity CashlessButton'>Cashless</string>
         <string name='PaymentActivity ClearOffButton'>Clear off</string>
         <string name='UserChangingActivity SaveButton'>Save</string>
         <string name='UserControlServiceActivity SearchButton'>Search</string>
-        <string name='UserControlServiceActivity AllButton'>All</string>
         <string name='UserControlServiceActivity ID'>ID</string>
         <string name='UserControlServiceActivity FullName'>Full name</string>
         <string name='UserControlServiceActivity AccessLevel'>Access level</string>
         <string name='UserControlServiceActivity ConfirmChangeUserTitle'>Confirm action</string>
-        <string name='UserControlServiceActivity ConfirmChangeUser'>Are you sure you want to delete this user?</string>
+        <string name='UserControlServiceActivity ConfirmChangeUser'>Are you sure you want to change this user?</string>
         <string name='UserControlServiceActivity DeleteUser'>Delete user</string>
         <string name='UserControlServiceActivity NewUser'>New user</string>
         <string name='UserControlServiceActivity SaveAll'>Save</string>
+        <string name='FastInvoiceActivity Decreasing'>Are you sure you want to do it?</string>
+        <string name='FastInvoiceActivity DecreasingTitle'>Confirm action</string>
+        <string name='UserControlServiceActivity AlreadyExist'>That user is already in the table</string>
+        <string name='UserControlServiceActivity AlreadyExistTitle'>Attention</string>
+        <string name='UserControlServiceActivity NotFound'>Can't found such user</string>
+        <string name='UserControlServiceActivity NotFoundTitle'>Error</string>
+        <string name='UserControlServiceActivity DeletingAll'>Are you sure you want to delete all these user from the database?</string>
+        <string name='UserControlServiceActivity DeletingAllTitle'>Confirm action</string>
+        <string name='StatisticsActivity From'>Actual from</string>
+        <string name='StatisticsActivity To'>to</string>
+        <string name='StatisticsActivity Titles'>Cashier;Invoices;Average;Total</string>
+        <string name='StatisticsActivity Total'>Total</string>
+        <string name='PaymentActivity Deleting'>Are you sure you want to clear the invoice?</string>
+        <string name='PaymentActivity DeletingTitle'>Confirm action</string>
+        <string name='StatisticsActivity Today'>Today</string>
+        <string name='StatisticsActivity Yesterday'>Yesterday</string>
+        <string name='StatisticsActivity Week'>Week</string>
+        <string name='StatisticsActivity Month'>Month</string>
+        <string name='StatisticsActivity Season'>Season</string>
+        <string name='StatisticsActivity Year'>Year</string>
+        <string name='StatisticsActivity AllTime'>All time</string>
+        <string name='StatisticsActivity Custom'>Custom...</string>
+        <string name='StatisticsActivity Cashier'>Cashier</string>
+        <string name='StatisticsActivity Invoices'>Invoices</string>
+        <string name='StatisticsActivity Average'>Average</string>
+        <string name='StatisticsActivity Total'>Total</string>
+        <string name='StatisticsActivity Export'>Export as</string>
+        <string name='StatisticsActivity All'>All</string>
+        <string name='UserChangingActivity ChangingAccessLevel'>Be careful when changing your access level. If your access level is lower than necessary, you will be returned to the main menu.</string>
+        <string name='UserChangingActivity ChangingAccessLevelTitle'>Warning.</string>
+        <string name='UserChangingActivity Kicked'>Since your access level is now lower than necessary to continue changing users, you have been returned to the main menu.</string>
+        <string name='UserChangingActivity KickedTitle'>Attention!</string>
     </strings>
 </document>
 ";
 
-        #endregion
+    #endregion
     }
 }

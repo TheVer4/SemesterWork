@@ -15,12 +15,18 @@ namespace SemesterWork
             Window.Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5, GridUnitType.Star) });
 
             StackPanel panel = new StackPanel();
-            Button fastInvoice = new Button() { Content = LanguageEngine.Language["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
-            Button warehouse = new Button() { Content = LanguageEngine.Language["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
-            Button statistics = new Button() { Content = LanguageEngine.Language["MainMenuActivity Statistics"], Height = 50, FontSize = 20 };
-            Button userControlService = new Button() { Content = LanguageEngine.Language["MainMenuActivity AccountManager"], Height = 50, FontSize = 20 };
-            Button settings = new Button() { Content = LanguageEngine.Language["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
-            Button logout = new Button() { Content = LanguageEngine.Language["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
+            Button fastInvoice = new Button() 
+                { Content = LanguageEngine.Language["MainMenuActivity FastInvoice"], Height = 50, FontSize = 20 };
+            Button warehouse = new Button() 
+                { Content = LanguageEngine.Language["MainMenuActivity WareHouse"], Height = 50, FontSize = 20 };
+            Button statistics = new Button() 
+                { Content = LanguageEngine.Language["MainMenuActivity Statistics"], Height = 50, FontSize = 20 };
+            Button userControlService = new Button() 
+                { Content = LanguageEngine.Language["MainMenuActivity AccountManager"], Height = 50, FontSize = 20 };
+            Button settings = new Button() 
+                { Content = LanguageEngine.Language["MainMenuActivity Settings"], Height = 50, FontSize = 20 };
+            Button logout = new Button() 
+                { Content = LanguageEngine.Language["MainMenuActivity Logout"], Height = 50, FontSize = 20 };
 
             panel.Children.Add(fastInvoice);
             if (EventHandler.CurrentUser.AccessLevel != "Normal")

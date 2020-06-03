@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Win32;
@@ -46,7 +45,8 @@ namespace SemesterWork
                     (ItemsPositions[selectedIndex] as CheckLine).Amount = units == "шт."
                         ? Math.Round(amount, mode: MidpointRounding.AwayFromZero)
                         : amount;
-                else if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo,
+                else if (MessageBox.Show(LanguageEngine.Language["FastInvoiceActivity Decreasing"],
+                        LanguageEngine.Language["FastInvoiceActivity DecreasingTitle"], MessageBoxButton.YesNo,
                         MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                     (ItemsPositions[selectedIndex] as CheckLine).Amount = units == "шт."
                         ? Math.Round(amount, mode: MidpointRounding.AwayFromZero)
@@ -119,12 +119,12 @@ namespace SemesterWork
                             .Any()))
                         ItemsPositions.Add(currentUser);
                     else if (usersInfo.Count == 1)
-                        MessageBox.Show("Пользоавтель с такими данными уже есть в таблице", //TODO localize
-                            "Внимание", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize
+                        MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity AlreadyExist"],
+                            LanguageEngine.Language["UserControlServiceActivity AlreadyExistTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             else
-                MessageBox.Show("Пользователь с такими данными не найден", //TODO localize
-                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); //TODO localize                  
+                MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity NotFound"],
+                    LanguageEngine.Language["UserControlServiceActivity NotFoundTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public static bool AddNewUser(User newUser, string password)
@@ -155,10 +155,12 @@ namespace SemesterWork
         }
 
         public static void UpdateUser(User user, string password)
-        {
+        {            
             UserDBController.Update(user, GetHash(password));
             var oldUser = ItemsPositions.FirstOrDefault(x => (x as User).Id == user.Id);
             ItemsPositions[ItemsPositions.IndexOf(oldUser)] = user;
+            if (user.Id == CurrentUser.Id)
+                CurrentUser = user;
         }
 
         public static void SaveUsersPositions()
@@ -215,8 +217,8 @@ namespace SemesterWork
                     LanguageEngine.Language["UserControlServiceActivity SelfRemoveDisallowedTitle"], MessageBoxButton.OK, MessageBoxImage.Error);
             else if (selectedIndex == -1)
             {
-                if (MessageBox.Show("Вы уверены, что хотите удалить все эти позиции из базы?", //TODO localize
-                        "Подтвердите действие", MessageBoxButton.YesNo, //TODO localize
+                if (MessageBox.Show(LanguageEngine.Language["UserControlServiceActivity DeletingAll"],
+                        LanguageEngine.Language["UserControlServiceActivity DeletingAllTitle"], MessageBoxButton.YesNo,
                         MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     foreach (User user in ItemsPositions)
@@ -334,34 +336,34 @@ namespace SemesterWork
             Environment.BarcodeReader?.Dispose();    
         }
 
-        public static void ExportOnClick(object sender, RoutedEventArgs e)
+        public static void ExportOnClick()
         {
-            Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            Stream stream;
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
  
-            saveFileDialog1.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.FileName = $"Export {DateTime.Now.ToString().Replace(':', '-')}";
-            saveFileDialog1.RestoreDirectory = true ;
+            saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.FileName = $"Export {DateTime.Now.ToString().Replace(':', '-')}";
+            saveFileDialog.RestoreDirectory = true ;
  
-            if(saveFileDialog1.ShowDialog() == true)
+            if(saveFileDialog.ShowDialog() == true)
             {
-                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                if ((stream = saveFileDialog.OpenFile()) != null)
                 {
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendLine("Actual from;123;to;123");
-                    sb.AppendLine("Cashier;Invoices;Average;Total");
+                    sb.AppendLine($"{LanguageEngine.Language["StatisticsActivity From"]};123;" +
+                        $"{LanguageEngine.Language["StatisticsActivity To"]};123");
+                    sb.AppendLine(LanguageEngine.Language["StatisticsActivity Titles"]);
                     foreach (var pos in ItemsPositions.OfType<EmployeeStatistic>())
                         sb.AppendLine($"{pos.CashierName};{pos.Invoices};{pos.Average};{pos.Total}");
                     byte[] data = Encoding.Default.GetBytes(sb.ToString());
-                    myStream.Write(data, 0, data.Length);
-                    myStream.Close();
+                    stream.Write(data, 0, data.Length);
+                    stream.Close();
                 }
-                //TODO localize
             }
         }
 
-        public static List<string> UsersList()
+        public static List<string> GetUsersList()
         {
             return DBController.SQLFindDistinct("documents", "CashierName");
         }
@@ -382,9 +384,12 @@ namespace SemesterWork
             ItemsPositions.Clear();
             if (name == "All")
             {
-                foreach (var user in UsersList())
+                foreach (var user in GetUsersList())
                     FillEmployeeStatistic(user, fromTime, toTime);
-                ItemsPositions.Add(new EmployeeStatistic("Total", ItemsPositions.Select(x => ((EmployeeStatistic) x).Invoices).Sum(), ItemsPositions.Select(x => ((EmployeeStatistic) x).Total).Sum()));
+                ItemsPositions.Add(new EmployeeStatistic(
+                    LanguageEngine.Language["StatisticsActivity Total"],
+                    ItemsPositions.Select(x => ((EmployeeStatistic) x).Invoices).Sum(),
+                    ItemsPositions.Select(x => ((EmployeeStatistic) x).Total).Sum()));
             }
             else
                 FillEmployeeStatistic(name, fromTime, toTime);

@@ -26,7 +26,8 @@ namespace SemesterWork
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
             invoiceControls.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(10, GridUnitType.Star) });
 
-            TextBlock fullTotal = new TextBlock() { Text = $"{LanguageEngine.Language["PaymentActivity FullToPay"]}: {finalTotal}", FontSize = 48};
+            TextBlock fullTotal = new TextBlock() 
+                { Text = $"{LanguageEngine.Language["PaymentActivity FullToPay"]}: {finalTotal}", FontSize = 48};
             invoiceControls.Children.Add(fullTotal);
             
             _cashLabel =  new TextBlock() { FontSize = 36};
@@ -60,11 +61,16 @@ namespace SemesterWork
                 AutoGenerateColumns = false,
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Position"], Binding = binds[0], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Count"], Binding = binds[2] },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity Units"], Binding = binds[3] },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Position"], Binding = binds[0], MinWidth = 500 },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Price"], Binding = binds[1], MinWidth = 150 },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Count"], Binding = binds[2] },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity Units"], Binding = binds[3] },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["FastInvoiceActivity FullPrice"], Binding = binds[4], MinWidth = 200 }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -139,7 +145,8 @@ namespace SemesterWork
                 else
                     ChangeTotalSummary(cash: _rest);
             };
-            Button addCashless = new Button() { Content = LanguageEngine.Language["PaymentActivity CashlessButton"], FontSize = 40, Height = 100 };
+            Button addCashless = new Button() 
+                { Content = LanguageEngine.Language["PaymentActivity CashlessButton"], FontSize = 40, Height = 100 };
             addCashless.Click += (sender, args) =>
             {
                 if (_number != null && _number.Text.Length != 0)
@@ -147,7 +154,8 @@ namespace SemesterWork
                 else
                     ChangeTotalSummary(cashless: _rest);
             };
-            _clearOff = new Button() { Content = LanguageEngine.Language["PaymentActivity ClearOffButton"], FontSize = 40, Height = 100, IsEnabled = false };
+            _clearOff = new Button() 
+                { Content = LanguageEngine.Language["PaymentActivity ClearOffButton"], FontSize = 40, Height = 100, IsEnabled = false };
             _clearOff.Click += (sender, args) => PaymentOnClick();
             _total.FontSize = 40;
             _total.Margin = new Thickness(15, 20, 0, 0);
@@ -167,7 +175,8 @@ namespace SemesterWork
             if (_number != null && _number.Text.Length != 0)
                 _number.Text = "";
             else
-                if (MessageBox.Show("Проведите картой", "Подтвердите действие", MessageBoxButton.YesNo, //TODO Проведите картой
+                if (MessageBox.Show(LanguageEngine.Language["PaymentActivity Deleting"],
+                        LanguageEngine.Language["PaymentActivity DeletingTitle"], MessageBoxButton.YesNo,
                         MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
                 {
                     EventHandler.ItemsPositions.Clear();
@@ -178,7 +187,10 @@ namespace SemesterWork
         
         private void PaymentOnClick()
         {
-            Invoice invoice = new Invoice(_cash, _cashless, 0, _change, EventHandler.ItemsPositions.OfType<CheckLine>().ToList(), EventHandler.CurrentUser.Name);
+            Invoice invoice = new Invoice(
+                _cash, _cashless, 0, _change,
+                EventHandler.ItemsPositions.OfType<CheckLine>().ToList(),
+                EventHandler.CurrentUser.Name);
             var worker = new BackgroundWorker();
             worker.DoWork += (sender, args) => EventHandler.ProceedPayment(invoice);
             worker.RunWorkerCompleted += (sender, args) => new FastInvoiceActivity(Window);
@@ -202,7 +214,6 @@ namespace SemesterWork
             if(sale != -1) _saleLabel.Text = $" {LanguageEngine.Language["PaymentActivity SaleLabel"]}: {sale}";
             _changeLabel.Text = $" {LanguageEngine.Language["PaymentActivity ChangeLabel"]}: {(_change > 0 ? 0 : Math.Abs(_change))}";
             _total.Text = $"{LanguageEngine.Language["PaymentActivity RestLabel"]}: {_rest}";
-        }
-        
+        }       
     }
 }

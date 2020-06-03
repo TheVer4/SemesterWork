@@ -1,12 +1,11 @@
 ﻿﻿using System;
- using System.Collections;
- using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel;
- using System.Linq;
- using System.Windows;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
- using System.Windows.Data;
- using System.Windows.Media.Imaging;
+using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace SemesterWork
 {
@@ -14,7 +13,17 @@ namespace SemesterWork
     {
         public StatisticsActivity(MainWindow window) : base(window)
         {
-            List<string> perTimeSource = new List<string>() { "Today", "Yesterday", "Week", "Month", "Season", "Year", "All time", "Custom..." };
+            List<string> perTimeSource = new List<string>() 
+            { 
+                LanguageEngine.Language["StatisticsActivity Today"],
+                LanguageEngine.Language["StatisticsActivity Yesterday"],
+                LanguageEngine.Language["StatisticsActivity Week"],
+                LanguageEngine.Language["StatisticsActivity Month"],
+                LanguageEngine.Language["StatisticsActivity Season"],
+                LanguageEngine.Language["StatisticsActivity Year"],
+                LanguageEngine.Language["StatisticsActivity AllTime"],
+                LanguageEngine.Language["StatisticsActivity Custom"]
+            };
 
             DatePicker start = new DatePicker() { FontSize = 40 };
             DatePicker end = new DatePicker() { FontSize = 40 };
@@ -55,10 +64,26 @@ namespace SemesterWork
                 AutoGenerateColumns = false,
                 Columns =
                 {
-                    new DataGridTextColumn() {Header = "Cashier", Binding = new Binding("CashierName"), CanUserSort = false, MinWidth = 300},
-                    new DataGridTextColumn() {Header = "Invoices", Binding = new Binding("Invoices"), CanUserSort = false },
-                    new DataGridTextColumn() {Header = "Average", Binding = new Binding("Average"), CanUserSort = false },
-                    new DataGridTextColumn() {Header = "Total", Binding = new Binding("Total"), CanUserSort = false },
+                    new DataGridTextColumn() 
+                    {
+                        Header = LanguageEngine.Language["StatisticsActivity Cashier"],
+                        Binding = new Binding("CashierName"), CanUserSort = false, MinWidth = 300
+                    },
+                    new DataGridTextColumn() 
+                    { 
+                        Header = LanguageEngine.Language["StatisticsActivity Invoices"], 
+                        Binding = new Binding("Invoices"), CanUserSort = false 
+                    }, 
+                    new DataGridTextColumn() 
+                    { 
+                        Header = LanguageEngine.Language["StatisticsActivity Average"], 
+                        Binding = new Binding("Average"), CanUserSort = false 
+                    }, 
+                    new DataGridTextColumn() 
+                    { 
+                        Header = LanguageEngine.Language["StatisticsActivity Total"], 
+                        Binding = new Binding("Total"), CanUserSort = false 
+                    }
                 }};
             grid.Children.Add(_positions);
             Grid.SetRow(_positions, 2);
@@ -86,13 +111,19 @@ namespace SemesterWork
             bottomControls.Children.Add(close);
             Grid.SetColumn(close, 1);
             
-            Button export = new Button() {Content = "Export as .CSV", FontSize = 20}; //TODO LOCALIZE
-            export.Click += EventHandler.ExportOnClick;
+            Button export = new Button() {Content = LanguageEngine.Language["StatisticsActivity Export"] + " .CSV", FontSize = 20};
+            export.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.ExportOnClick());
             bottomControls.Children.Add(export);
 
             ComboBox employee = new ComboBox() { FontSize = 40 };
-            employee.ItemsSource = EventHandler.UsersList().Append("All");
-            employee.SelectedItem = "All";
+            var worker = new BackgroundWorker();
+            var userList = new List<string>();
+            worker.DoWork += (sender, args) => 
+                userList = EventHandler.GetUsersList();
+            worker.RunWorkerCompleted += (sender, args) =>
+                employee.ItemsSource = userList.Append(LanguageEngine.Language["StatisticsActivity All"]);
+            worker.RunWorkerAsync();
+            employee.SelectedItem = LanguageEngine.Language["StatisticsActivity All"];
             employee.SelectedIndex = 0;
             employee.DropDownClosed += (sender, args) =>
             {
@@ -100,14 +131,7 @@ namespace SemesterWork
                 int oneDay = 24 * 60 * 60 - 1;
                 long startTime = new DateTimeOffset(start.SelectedDate ?? DateTime.Today).ToUnixTimeSeconds();
                 long endTime = new DateTimeOffset(end.SelectedDate ?? DateTime.Today).ToUnixTimeSeconds() + oneDay;
-                BackgroundWorker worker = new BackgroundWorker();
-                worker.DoWork += (o, eventArgs) => 
-                    EventHandler.AddStatisticsPositions(name,
-                        startTime,
-                        endTime);
-                worker.RunWorkerCompleted += (o, eventArgs) => 
-                    UpdateDynamics();
-                worker.RunWorkerAsync();
+                ThreadedAction((a, b) => EventHandler.AddStatisticsPositions(name, startTime, endTime));
             };
             topControls.Children.Add(employee);
             
@@ -131,6 +155,5 @@ namespace SemesterWork
             topControls.Children.Add(end);
             Grid.SetColumn(end, 3);
         }
-
     }
 }

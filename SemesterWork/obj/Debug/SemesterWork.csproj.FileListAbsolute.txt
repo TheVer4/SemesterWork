@@ -2,7 +2,6 @@ C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\Semest
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.exe
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\SemesterWork.pdb
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\PrinterUtility.dll
-C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csprojAssemblyReference.cache
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\MainWindow.g.cs
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\App.g.cs
 C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork_MarkupCompile.cache
@@ -82,3 +81,4 @@ C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\Entity
 C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\Newtonsoft.Json.xml
 C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.xml
 C:\Users\BeeTwin\Source\Repos\TheVer4\SemesterWork\SemesterWork\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\BeeTwin\source\repos\TheVer4\SemesterWork\SemesterWork\obj\Debug\SemesterWork.csprojAssemblyReference.cache

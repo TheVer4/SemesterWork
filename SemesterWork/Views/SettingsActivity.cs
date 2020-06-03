@@ -35,7 +35,8 @@ namespace SemesterWork
             var printerTBlock = new TextBlock() { Text = LanguageEngine.Language["SettingsActivity NetPrinterName"], FontSize = 20 };
             var printerTBox = new TextBox() { Text = Variables.PrinterPath.Substring(Variables.PrinterPath.LastIndexOf('\\') + 1, 
                 Variables.PrinterPath.Length - Variables.PrinterPath.LastIndexOf('\\') - 1), FontSize = 20 };
-            var printerNetTBlock = new TextBlock() { Text = $"{LanguageEngine.Language["SettingsActivity NetPrinterAddress"]}: {Variables.PrinterPath}"};
+            var printerNetTBlock = new TextBlock() 
+                { Text = $"{LanguageEngine.Language["SettingsActivity NetPrinterAddress"]}: {Variables.PrinterPath}"};
             printerSet.Children.Add(printerTBlock);
             printerSet.Children.Add(printerTBox);
             printerSet.Children.Add(printerNetTBlock);
@@ -81,8 +82,9 @@ namespace SemesterWork
             };
             cancel.Click += (sender, args) =>
             {
-                if (MessageBox.Show(LanguageEngine.Language["SettingsActivity CancelConfirm"], LanguageEngine.Language["SettingsActivity CancelConfirmTitle"], MessageBoxButton.YesNo,
-                MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show(LanguageEngine.Language["SettingsActivity CancelConfirm"],
+                        LanguageEngine.Language["SettingsActivity CancelConfirmTitle"], MessageBoxButton.YesNo,
+                        MessageBoxImage.Question) == MessageBoxResult.Yes)
                     new MainMenuActivity(Window);
             };
 

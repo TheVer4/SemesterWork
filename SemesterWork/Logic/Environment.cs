@@ -6,7 +6,7 @@
 
         public static void Initialize()
         {           
-            new LanguageEngine(); //TODO пересмотреть механизм инициализации
+            new LanguageEngine();
             EventHandler.UpdateFromCFG();          
         }
 

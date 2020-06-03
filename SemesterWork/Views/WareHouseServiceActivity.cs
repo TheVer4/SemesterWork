@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -31,11 +29,11 @@ namespace SemesterWork
             _textForm.KeyDown += (sender, args) =>
             {
                 if (args.Key == Key.Enter)
-                    ThreadedAction((a, b) => EventHandler.AddPositionForSaving(a));
+                    ThreadedAction((textFromText, b) => EventHandler.AddPositionForSaving(textFromText));
             };
 
             Button addPosition = new Button() { Content = LanguageEngine.Language["WareHouseActivity AddPosition"], FontSize = 48 };
-            addPosition.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.AddPositionForSaving(a));
+            addPosition.Click += (sender, args) => ThreadedAction((textFormText, b) => EventHandler.AddPositionForSaving(textFormText));
             barcodeInput.Children.Add(_textForm);
             Grid.SetColumn(addPosition, 1);
             barcodeInput.Children.Add(addPosition);
@@ -60,12 +58,22 @@ namespace SemesterWork
                 AutoGenerateColumns = false,
                 Columns =
                 {
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["WareHouseActivity EAN13"], Binding = binds[0], MinWidth = 250 },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["WareHouseActivity FullName"], Binding = binds[1], MinWidth = 500 },
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["WareHouseActivity Price"], Binding = binds[2], MinWidth = 150},
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["WareHouseActivity Amount"], Binding = binds[3] },
-                    new DataGridComboBoxColumn() { Header = LanguageEngine.Language["WareHouseActivity Units"], TextBinding = binds[4], ItemsSource = new List<string>() {"шт.", "кг."}},
-                    new DataGridTextColumn() { Header = LanguageEngine.Language["WareHouseActivity ShortName"], Binding = binds[5] }
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["WareHouseActivity EAN13"], Binding = binds[0], MinWidth = 250 },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["WareHouseActivity FullName"], Binding = binds[1], MinWidth = 500 },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["WareHouseActivity Price"], Binding = binds[2], MinWidth = 150},
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["WareHouseActivity Amount"], Binding = binds[3] },
+                    new DataGridComboBoxColumn()
+                    { 
+                        Header = LanguageEngine.Language["WareHouseActivity Units"], 
+                        TextBinding = binds[4], 
+                        ItemsSource = new List<string>() {"шт.", "кг."}
+                    },
+                    new DataGridTextColumn() 
+                        { Header = LanguageEngine.Language["WareHouseActivity ShortName"], Binding = binds[5] }
                 }
             };
             foreach (var column in _positions.Columns)
@@ -100,10 +108,7 @@ namespace SemesterWork
             deleteButton.Click += (sender, args) =>
             {
                 var selectedIndex = _positions.SelectedIndex;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (sender, args) => EventHandler.DeleteFromDB(selectedIndex);
-                worker.RunWorkerCompleted += (sender, args) => UpdateDynamics();
-                worker.RunWorkerAsync();
+                ThreadedAction((a, b) => EventHandler.DeleteFromDB(selectedIndex));
             };
             controls.Children.Add(deleteButton);
             Grid.SetColumn(deleteButton, 1);
@@ -124,7 +129,7 @@ namespace SemesterWork
             invoiceControls.Children.Add(controls);
             Grid.SetRow(controls, 2);
 
-            EventHandler.StartScannerReceiver(ThreadedAction, (a, b) => EventHandler.AddPositionForSaving(a));
+            EventHandler.StartScannerReceiver(ThreadedAction, (textFormText, b) => EventHandler.AddPositionForSaving(textFormText));
             Environment.InitBarcodeReader();
         }
     }
