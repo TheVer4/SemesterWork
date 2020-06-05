@@ -156,6 +156,7 @@ namespace SemesterWork
         
         private void PaymentOnClick()
         {
+            if(finalTotal <= 0) return;
             EventHandler.StopScannerReceiver();
             new PaymentActivity(Window);
         }

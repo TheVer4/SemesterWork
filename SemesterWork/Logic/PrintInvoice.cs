@@ -37,7 +37,7 @@ namespace SemesterWork
                 epson.Lf(),
                 Encoder866.Recode($"Наличными: {invoice.Cash} руб."),
                 epson.Lf(),
-                Encoder866.Recode($"Безналичными: {invoice.Cashless} руб."),
+                Encoder866.Recode($"Электронными: {invoice.Cashless} руб."),
                 epson.Lf(),
                 Encoder866.Recode($"Сдача: {invoice.Change} руб."),
                 epson.Lf(),

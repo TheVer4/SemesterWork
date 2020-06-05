@@ -190,6 +190,8 @@ namespace SemesterWork
         <string name='UserChangingActivity ChangingAccessLevelTitle'>Warning.</string>
         <string name='UserChangingActivity Kicked'>Since your access level is now lower than necessary to continue changing users, you have been returned to the main menu.</string>
         <string name='UserChangingActivity KickedTitle'>Attention!</string>
+        <string name='SettingsActivity CompanyName'>Company name</string>
+        <string name='SettingsActivity MotdLabel'>Invoice MOTD</string>
     </strings>
 </document>
 ";

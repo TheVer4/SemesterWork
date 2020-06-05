@@ -249,6 +249,8 @@ namespace SemesterWork
                 sw.WriteLine($"Language={LanguageEngine.Current}");
                 sw.WriteLine($"PrinterPath={Variables.PrinterPath}");
                 sw.WriteLine($"BarcodeScannerPort={Variables.BarcodeScannerPort}");
+                sw.WriteLine($"CompanyName={Variables.InstitutionName}");
+                sw.WriteLine($"InvoiceMOTD={Variables.WelcomeMotd}");
             };
             worker.RunWorkerAsync();
         }
@@ -264,6 +266,8 @@ namespace SemesterWork
                 var language = languageLine.Substring(languageLine.IndexOf('=') + 1);
                 var printerPath = sr.ReadLine();
                 var barcodeScannerPort = sr.ReadLine();
+                var companyName = sr.ReadLine();
+                var invoiceMotd = sr.ReadLine();
 
                 if (LanguageEngine.Languages.Contains(language))
                     LanguageEngine.Current = language;
@@ -271,6 +275,8 @@ namespace SemesterWork
                     IsSettingsOK = false;
                 Variables.PrinterPath = printerPath.Substring(printerPath.IndexOf('=') + 1);
                 Variables.BarcodeScannerPort = barcodeScannerPort.Substring(barcodeScannerPort.IndexOf('=') + 1);
+                Variables.InstitutionName = companyName.Substring(companyName.IndexOf('=') + 1);
+                Variables.WelcomeMotd = invoiceMotd.Substring(invoiceMotd.IndexOf('=') + 1);
             }
             else
                 IsSettingsOK = false;
@@ -298,7 +304,6 @@ namespace SemesterWork
         
         public static void ProceedPayment(Invoice invoice)
         {
-            Variables.InstitutionName = "ООО 'МОЯ ОБОРОНА'"; //TODO move to settings
             var currentUserName = CurrentUser.Name;
             var jsonStr = JsonConvert.SerializeObject(invoice);
             PrintInvoice.Print(invoice);
@@ -382,7 +387,7 @@ namespace SemesterWork
         public static void AddStatisticsPositions(string name, long fromTime, long toTime)
         { 
             ItemsPositions.Clear();
-            if (name == "All")
+            if (name == LanguageEngine.Language["StatisticsActivity All"])
             {
                 foreach (var user in GetUsersList())
                     FillEmployeeStatistic(user, fromTime, toTime);

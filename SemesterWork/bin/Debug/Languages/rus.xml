@@ -143,5 +143,7 @@
         <string name='UserChangingActivity ChangingAccessLevelTitle'>Предупреждение.</string>
         <string name='UserChangingActivity Kicked'>Теперь Ваш уровень доступа стал недостаточным для продолжения изменения пользователей. Вы были возвращены в главное меню.</string>
         <string name='UserChangingActivity KickedTitle'>Внимание!</string>
+        <string name='SettingsActivity CompanyName'>Название фирмы</string>
+        <string name='SettingsActivity MotdLabel'>Повестка чека</string>
     </strings>
   </document>

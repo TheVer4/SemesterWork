@@ -40,6 +40,18 @@ namespace SemesterWork
             printerSet.Children.Add(printerTBlock);
             printerSet.Children.Add(printerTBox);
             printerSet.Children.Add(printerNetTBlock);
+            
+            var companyNameSet = new StackPanel();
+            var companyNameTBlock = new TextBlock() { Text = LanguageEngine.Language["SettingsActivity CompanyName"], FontSize = 20 };
+            var companyNameTBox = new TextBox() { Text = Variables.InstitutionName, FontSize = 20 };
+            companyNameSet.Children.Add(companyNameTBlock);
+            companyNameSet.Children.Add(companyNameTBox);
+            
+            var motdSet = new StackPanel();
+            var motdTBlock = new TextBlock() { Text = LanguageEngine.Language["SettingsActivity MotdLabel"], FontSize = 20 };
+            var motdTBox = new TextBox() { Text = Variables.WelcomeMotd, FontSize = 20 };
+            motdSet.Children.Add(motdTBlock);
+            motdSet.Children.Add(motdTBox);
 
             var apply = new Button() { Content = LanguageEngine.Language["SettingsActivity Apply"], Height = 50, FontSize = 20 };
             var cancel = new Button() { Content = LanguageEngine.Language["SettingsActivity Cancel"], Height = 50, FontSize = 20 };
@@ -47,6 +59,8 @@ namespace SemesterWork
             panel.Children.Add(languageSet);
             panel.Children.Add(printerSet);
             panel.Children.Add(scannerSet);
+            panel.Children.Add(companyNameSet);
+            panel.Children.Add(motdSet);
             panel.Children.Add(apply);
             panel.Children.Add(cancel);
 
@@ -76,6 +90,8 @@ namespace SemesterWork
                 LanguageEngine.Current = ((TextBlock) languageSelector.SelectedItem).Text;
                 Variables.PrinterPath = printerPath;
                 Variables.BarcodeScannerPort = scanner;
+                Variables.InstitutionName = companyNameTBox.Text;
+                Variables.WelcomeMotd = motdTBox.Text;
                 EventHandler.IsSettingsOK = true;
                 new SettingsActivity(Window);
                 EventHandler.SaveSettings();

@@ -143,5 +143,7 @@
         <string name='UserChangingActivity ChangingAccessLevelTitle'>Averto.</string>
         <string name='UserChangingActivity Kicked'>Nun via alira nivelo fariĝis nesufiĉa por plu ŝanĝi uzantojn. Vi estis revenita al la menuo.</string>
         <string name='UserChangingActivity KickedTitle'>Atenton!</string>
+        <string name='SettingsActivity CompanyName'>Nomo de firmo</string>
+        <string name='SettingsActivity MotdLabel'>La ĉeko aliĝo</string>
     </strings>
   </document>

@@ -124,36 +124,99 @@ namespace SemesterWork
                 employee.ItemsSource = userList.Append(LanguageEngine.Language["StatisticsActivity All"]);
             worker.RunWorkerAsync();
             employee.SelectedItem = LanguageEngine.Language["StatisticsActivity All"];
-            employee.SelectedIndex = 0;
-            employee.DropDownClosed += (sender, args) =>
-            {
-                string name = ((ComboBox) sender).Text;
-                int oneDay = 24 * 60 * 60 - 1;
-                long startTime = new DateTimeOffset(start.SelectedDate ?? DateTime.Today).ToUnixTimeSeconds();
-                long endTime = new DateTimeOffset(end.SelectedDate ?? DateTime.Today).ToUnixTimeSeconds() + oneDay;
-                ThreadedAction((a, b) => EventHandler.AddStatisticsPositions(name, startTime, endTime));
-            };
+            employee.DropDownClosed += (sender, args) => ShowStatistics(employee, start, end);
             topControls.Children.Add(employee);
             
             ComboBox pertime = new ComboBox() { FontSize = 40 };
             pertime.ItemsSource = perTimeSource;
-            pertime.DropDownClosed += (sender, args) => { };
+            pertime.DropDownClosed += (sender, args) => ChooseTimeLimits(sender as ComboBox, employee, start, end);
+            pertime.SelectedIndex = (int) SelectedDate.AllTime;
             topControls.Children.Add(pertime);
             Grid.SetColumn(pertime, 1);
 
             start.Focusable = false;
-            start.DisplayDateStart = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateLeftLimit).DateTime;
-            start.DisplayDateEnd = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateRightLimit).DateTime;
-            start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateLeftLimit).DateTime;
+            start.DisplayDateStart = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateLeftLimit).LocalDateTime;
+            start.DisplayDateEnd = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateRightLimit).LocalDateTime;
+            start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateLeftLimit).LocalDateTime;
+            start.IsEnabled = false;
+            start.CalendarClosed += (sender, args) => ShowStatistics(employee, start, end);
             topControls.Children.Add(start);
             Grid.SetColumn(start, 2);
             
             end.Focusable = false;
-            end.DisplayDateStart = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateLeftLimit).DateTime;
-            end.DisplayDateEnd = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateRightLimit).DateTime;
-            end.SelectedDate = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateRightLimit).DateTime;
+            end.DisplayDateStart = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateLeftLimit).LocalDateTime;
+            end.DisplayDateEnd = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateRightLimit).LocalDateTime;
+            end.SelectedDate = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateRightLimit).LocalDateTime;
+            end.IsEnabled = false;
+            end.CalendarClosed += (sender, args) => ShowStatistics(employee, start, end);
             topControls.Children.Add(end);
             Grid.SetColumn(end, 3);
         }
+
+        private void ChooseTimeLimits(ComboBox sender, ComboBox employee, DatePicker start, DatePicker end)
+        {
+            start.IsEnabled = false;
+            end.IsEnabled = false;
+            switch ((SelectedDate) sender.SelectedIndex)
+            {
+                case SelectedDate.Today:
+                    if (DocumentsDBController.DateRightLimit < new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds())
+                    {
+                        MessageBox.Show("Невозможно показать статистику за это время, поскольку продаж не было",
+                            "Предупреждение!", MessageBoxButton.OK, MessageBoxImage.Hand);
+                    }
+                    start.SelectedDate = DateTime.Today;
+                    end.SelectedDate = DateTime.Today;
+                    break;
+                case SelectedDate.Yesterday:
+                    if (DocumentsDBController.DateRightLimit < new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds() - 24*60*60)
+                    {
+                        MessageBox.Show("Невозможно показать статистику за это время, поскольку продаж не было",
+                            "Предупреждение!", MessageBoxButton.OK, MessageBoxImage.Hand);
+                    }
+                    start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds((new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds() - 24*60*60)).LocalDateTime;
+                    end.SelectedDate = DateTimeOffset.FromUnixTimeSeconds((new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds() - 24*60*60)).LocalDateTime;
+                    break;
+                case SelectedDate.Week:
+                    start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds((new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds() - 7*24*60*60)).LocalDateTime;
+                    end.SelectedDate = DateTime.Today;
+                    break;
+                case SelectedDate.Month:
+                    start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds((new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds() - 30*24*60*60)).LocalDateTime;
+                    end.SelectedDate = DateTime.Today;
+                    break;
+                case SelectedDate.Season:
+                    start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds((new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds() - 3*30*24*60*60)).LocalDateTime;
+                    end.SelectedDate = DateTime.Today;
+                    break;
+                case SelectedDate.Year: 
+                    start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds((new DateTimeOffset(DateTime.Today).ToUnixTimeSeconds() - 365*24*60*60)).LocalDateTime;
+                    end.SelectedDate = DateTime.Today;
+                    break;
+                case SelectedDate.AllTime: 
+                    start.SelectedDate = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateLeftLimit).LocalDateTime;
+                    end.SelectedDate = DateTimeOffset.FromUnixTimeSeconds(DocumentsDBController.DateRightLimit).LocalDateTime;
+                    break;
+                case SelectedDate.Custom:
+                    start.IsEnabled = true;
+                    end.IsEnabled = true;
+                    break;
+            }
+            ShowStatistics(employee, start, end);
+        }
+
+        private void ShowStatistics(ComboBox employee, DatePicker start, DatePicker end)
+        {
+            string name = employee.Text;
+            int oneDay = 24 * 60 * 60 - 1;
+            long startTime = new DateTimeOffset(start.SelectedDate ?? DateTime.Today).ToUnixTimeSeconds();
+            long endTime = new DateTimeOffset(end.SelectedDate ?? DateTime.Today).ToUnixTimeSeconds() + oneDay;
+            ThreadedAction((a, b) => EventHandler.AddStatisticsPositions(name, startTime, endTime));
+        }
+    }
+
+    enum SelectedDate
+    {
+        Today, Yesterday, Week, Month, Season, Year, AllTime, Custom
     }
 }
