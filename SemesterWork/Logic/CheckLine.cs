@@ -29,7 +29,7 @@
 
         public override string ToString()
         {
-            var firstLine = Data.ShortName + " " + Data.Price + " руб.";
+            var firstLine = Data.ShortName.Substring(0, 16) + " " + Data.Price + " руб.";
             var secondLine = "x" + Amount + ' ' + Data.Units + " = " + FullPrice + " руб.";
             return firstLine + new string(' ', 32 - firstLine.Length)
                 + new string(' ', 32 - secondLine.Length) + secondLine;
