@@ -1,4 +1,6 @@
-﻿namespace SemesterWork
+﻿using System;
+
+namespace SemesterWork
 {
     public class CheckLine
     {
@@ -10,14 +12,14 @@
             get => _amount;
             set
             {
-                FullPrice = Data.Price * value;
-                _amount = value;
+                FullPrice = Math.Round(Data.Price * value, 2);
+                _amount = Math.Round(value, 3);
             }
         }
 
         public double FullPrice 
         { 
-            get => Data.Price * Amount;
+            get => Math.Round(Data.Price * Amount, 2);
             private set { }
         }
 
@@ -29,7 +31,7 @@
 
         public override string ToString()
         {
-            var firstLine = Data.ShortName.Substring(0, 16) + " " + Data.Price + " руб.";
+            var firstLine = Data.ShortName.Substring(0, Data.ShortName.Length > 16 ? 16 : Data.ShortName.Length ) + " " + Data.Price + " руб.";
             var secondLine = "x" + Amount + ' ' + Data.Units + " = " + FullPrice + " руб.";
             return firstLine + new string(' ', 32 - firstLine.Length)
                 + new string(' ', 32 - secondLine.Length) + secondLine;

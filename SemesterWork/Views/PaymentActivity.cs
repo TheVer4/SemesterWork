@@ -202,10 +202,10 @@ namespace SemesterWork
             if (_number != null && _number.Text.Length != 0)
                 _number.Text = "";
             
-            if (cash != -1) _cash += cash;
-            if (cashless != -1) _cashless += cashless;
-            _change = finalTotal - _cash - _cashless;
-            _rest = _change > 0 ? finalTotal - _cash - _cashless : 0;
+            if (cash != -1) _cash += Math.Round(cash, 2);
+            if (cashless != -1) _cashless += Math.Round(cashless, 2);
+            _change = Math.Round(finalTotal - _cash - _cashless, 2);
+            _rest = _change > 0 ? Math.Round(finalTotal - _cash - _cashless, 2) : 0;
 
             if (_rest == 0) _clearOff.IsEnabled = true;
             

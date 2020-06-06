@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SemesterWork
@@ -7,7 +8,7 @@ namespace SemesterWork
     {
         public string CashierName { get; set; }
         public int Invoices { get; set; }
-        public double Average { get => Total / Invoices; set {} }
+        public double Average { get => Math.Round(Total / Invoices, 2); set {} }
         public double Total { get; set; }
 
         public EmployeeStatistic(string name, int invoices, double total)
