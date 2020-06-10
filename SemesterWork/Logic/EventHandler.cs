@@ -341,7 +341,7 @@ namespace SemesterWork
             Environment.BarcodeReader?.Dispose();    
         }
 
-        public static void ExportOnClick()
+        public static void ExportOnClick(DateTime from, DateTime to)
         {
             Stream stream;
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -349,15 +349,16 @@ namespace SemesterWork
             saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
             saveFileDialog.FilterIndex = 1;
             saveFileDialog.FileName = $"Export {DateTime.Now.ToString().Replace(':', '-')}";
-            saveFileDialog.RestoreDirectory = true ;
+            saveFileDialog.RestoreDirectory = true;
  
             if(saveFileDialog.ShowDialog() == true)
             {
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if ((stream = saveFileDialog.OpenFile()) != null)
                 {
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendLine($"{LanguageEngine.Language["StatisticsActivity From"]};123;" +
-                        $"{LanguageEngine.Language["StatisticsActivity To"]};123");
+                    sb.AppendLine($"{LanguageEngine.Language["StatisticsActivity From"]};{from.ToString(CultureInfo.CurrentCulture)};" +
+                        $"{LanguageEngine.Language["StatisticsActivity To"]};{to.ToString(CultureInfo.CurrentCulture)}");
                     sb.AppendLine(LanguageEngine.Language["StatisticsActivity Titles"]);
                     foreach (var pos in ItemsPositions.OfType<EmployeeStatistic>())
                         sb.AppendLine($"{pos.CashierName};{pos.Invoices};{pos.Average};{pos.Total}");

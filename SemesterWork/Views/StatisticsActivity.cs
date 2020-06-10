@@ -112,7 +112,13 @@ namespace SemesterWork
             Grid.SetColumn(close, 1);
             
             Button export = new Button() {Content = LanguageEngine.Language["StatisticsActivity Export"] + " .CSV", FontSize = 20};
-            export.Click += (sender, args) => ThreadedAction((a, b) => EventHandler.ExportOnClick());
+            export.Click += (sender, args) =>
+            {
+                DateTime startDate = start.SelectedDate.Value;
+                DateTime endDate = end.SelectedDate.Value;
+                ThreadedAction((a, b) =>
+                    EventHandler.ExportOnClick(startDate, endDate));
+            };
             bottomControls.Children.Add(export);
 
             ComboBox employee = new ComboBox() { FontSize = 40 };
