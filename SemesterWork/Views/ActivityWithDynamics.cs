@@ -12,7 +12,7 @@ using System.Windows.Threading;
 
 namespace SemesterWork
 {
-    public class ActivityWithDynamics : Activity
+    public abstract class ActivityWithDynamics : Activity
     {
         protected DataGrid _positions;
         protected TextBox _textForm;

@@ -50,12 +50,6 @@ namespace SemesterWork
             DBController.SQLRemove("WareHouse", "EAN13", code);
         }
 
-        public static void IncreaseAmountBy(string code, double amount)
-        {
-            var data = new ProductData(Find(code));
-            Update(code, "Amount", data.Amount + amount);
-        }
-
         public static void DecreaseAmountBy(string code, double amount)
         {
             var data = new ProductData(Find(code));

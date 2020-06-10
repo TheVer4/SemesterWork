@@ -1,6 +1,6 @@
 ﻿namespace SemesterWork
 {
-    public class Activity
+    public abstract class Activity
     {
         protected readonly MainWindow Window;
 

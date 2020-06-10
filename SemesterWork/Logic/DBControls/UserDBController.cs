@@ -9,15 +9,6 @@ namespace SemesterWork
             return DBController.SQLFindUnique("Users", "id", id);
         }
 
-        public static List<string> FindByHash(string hash)
-        {
-            return DBController.SQLFindUnique("Users", "Hash", hash);
-        }
-
-        public static List<List<string>> FindByAccessLevel(string accessLevel)
-        {
-            return DBController.SQLFind("Users", "AccessLevel", accessLevel);
-        }
         public static List<List<string>> FindLike(string infoStr)
         {
             return DBController.SQLNonVoidCommand(

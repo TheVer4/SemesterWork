@@ -31,14 +31,7 @@ namespace SemesterWork
                 $"SELECT DISTINCT {column} FROM {table}")
                 .Select(x => x.First())
                 .ToList();
-        }
-        
-        public static List<List<string>> SQLFindLike(string table, string column, object value)
-        {
-            return SQLNonVoidCommand(
-                $"SELECT * FROM {table} " +
-                $"WHERE {column} LIKE '{value}'");
-        }
+        }      
 
         public static void SQLInsert(string table, string columns, string values)
         {
